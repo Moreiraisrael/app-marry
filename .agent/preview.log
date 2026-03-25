@@ -1,0 +1,999 @@
+
+> style-app@0.1.0 dev
+> next dev --port 3000
+
+▲ Next.js 16.2.1 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://192.168.1.2:3000
+- Environments: .env.local, .env
+✓ Ready in 646ms
+⚠ The "middleware" file convention is deprecated. Please use "proxy" instead. Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
+
+ GET /consultant/dashboard 200 in 4.0s (next.js: 1728ms, proxy.ts: 395ms, application-code: 1832ms)
+⨯ ./src/lib/actions/index.ts:7:1
+Only async functions are allowed to be exported in a "use server" file.
+  [90m 5 |[0m [36mimport[0m { revalidatePath } [36mfrom[0m [32m'next/cache'[0m
+  [90m 6 |[0m
+[31m[1m>[0m [90m 7 |[0m [36mexport[0m { getClients, getClientById } [36mfrom[0m [32m'./clients'[0m
+  [90m   |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m 8 |[0m [36mexport[0m { getColorAnalysisRequests, createColorAnalysisRequest, analyzeColorWithAI, approve...
+  [90m 9 |[0m [36mexport[0m { getShoppingLists, createShoppingList } [36mfrom[0m [32m'./shopping-lists'[0m
+  [90m10 |[0m [36mexport[0m { getEbooks, generateEbook } [36mfrom[0m [32m'./ebooks'[0m
+
+Ecmascript file had an error
+
+Import trace:
+  Server Component:
+    ./src/lib/actions/index.ts
+    ./src/app/consultant/appointments/page.tsx
+
+
+
+./src/app/consultant/appointments/page.tsx:5:1
+Export getAppointments doesn't exist in target module
+  [90m3 |[0m [36mimport[0m { [33mBadge[0m } [36mfrom[0m [32m"@/components/ui/badge"[0m
+  [90m4 |[0m [36mimport[0m { [33mCalendar[0m [36mas[0m [33mCalendarIcon[0m, [33mClock[0m, [33mPlus[0m, [33mMoreHorizontal[0m, [33mUser[0m, [33mSparkles[0m } [36mfrom[0m [32m"luci...[0m
+[31m[1m>[0m [90m5 |[0m [36mimport[0m { getAppointments } [36mfrom[0m [32m"@/lib/actions"[0m
+  [90m  |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m6 |[0m [36mimport[0m { format } [36mfrom[0m [32m"date-fns"[0m
+  [90m7 |[0m [36mimport[0m { ptBR } [36mfrom[0m [32m"date-fns/locale"[0m
+  [90m8 |[0m
+
+The export getAppointments was not found in module [project]/src/lib/actions/index.ts [app-rsc] (ecmascript).
+The module has no exports at all.
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+
+ GET /consultant/appointments 500 in 7.2s (next.js: 2.8s, proxy.ts: 411ms, application-code: 3.9s)
+[browser] ./src/lib/actions/index.ts:7:1
+Only async functions are allowed to be exported in a "use server" file.
+   5 | import { revalidatePath } from 'next/cache'
+   6 |
+>  7 | export { getClients, getClientById } from './clients'
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   8 | export { getColorAnalysisRequests, createColorAnalysisRequest, analyzeColorWithAI, approve...
+   9 | export { getShoppingLists, createShoppingList } from './shopping-lists'
+  10 | export { getEbooks, generateEbook } from './ebooks'
+
+Ecmascript file had an error
+
+Import trace:
+  Server Component:
+    ./src/lib/actions/index.ts
+    ./src/app/consultant/appointments/page.tsx 
+    at handleErrors (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13828:21)
+    at processMessage (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13891:21)
+    at WebSocket.handleMessage (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13335:52) (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13828:21)
+[browser] ./src/app/consultant/appointments/page.tsx:5:1
+Export getAppointments doesn't exist in target module
+  3 | import { Badge } from "@/components/ui/badge"
+  4 | import { Calendar as CalendarIcon, Clock, Plus, MoreHorizontal, User, Sparkles } from "luci...
+> 5 | import { getAppointments } from "@/lib/actions"
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  6 | import { format } from "date-fns"
+  7 | import { ptBR } from "date-fns/locale"
+  8 |
+
+The export getAppointments was not found in module [project]/src/lib/actions/index.ts [app-rsc] (ecmascript).
+The module has no exports at all.
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist. 
+    at handleErrors (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13828:21)
+    at processMessage (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13891:21)
+    at WebSocket.handleMessage (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13335:52) (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13828:21)
+[browser] ./src/lib/actions/index.ts:7:1
+Only async functions are allowed to be exported in a "use server" file.
+   5 | import { revalidatePath } from 'next/cache'
+   6 |
+>  7 | export { getClients, getClientById } from './clients'
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   8 | export { getColorAnalysisRequests, createColorAnalysisRequest, analyzeColorWithAI, approve...
+   9 | export { getShoppingLists, createShoppingList } from './shopping-lists'
+  10 | export { getEbooks, generateEbook } from './ebooks'
+
+Ecmascript file had an error
+
+Import trace:
+  Server Component:
+    ./src/lib/actions/index.ts
+    ./src/app/consultant/appointments/page.tsx 
+    at handleErrors (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13828:21)
+    at processMessage (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13891:21)
+    at WebSocket.handleMessage (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13335:52) (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13828:21)
+[browser] ./src/app/consultant/appointments/page.tsx:5:1
+Export getAppointments doesn't exist in target module
+  3 | import { Badge } from "@/components/ui/badge"
+  4 | import { Calendar as CalendarIcon, Clock, Plus, MoreHorizontal, User, Sparkles } from "luci...
+> 5 | import { getAppointments } from "@/lib/actions"
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  6 | import { format } from "date-fns"
+  7 | import { ptBR } from "date-fns/locale"
+  8 |
+
+The export getAppointments was not found in module [project]/src/lib/actions/index.ts [app-rsc] (ecmascript).
+The module has no exports at all.
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist. 
+    at handleErrors (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13828:21)
+    at processMessage (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13891:21)
+    at WebSocket.handleMessage (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13335:52) (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13828:21)
+[browser] ./src/lib/actions/index.ts:7:1
+Only async functions are allowed to be exported in a "use server" file.
+   5 | import { revalidatePath } from 'next/cache'
+   6 |
+>  7 | export { getClients, getClientById } from './clients'
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   8 | export { getColorAnalysisRequests, createColorAnalysisRequest, analyzeColorWithAI, approve...
+   9 | export { getShoppingLists, createShoppingList } from './shopping-lists'
+  10 | export { getEbooks, generateEbook } from './ebooks'
+
+Ecmascript file had an error
+
+Import trace:
+  Server Component:
+    ./src/lib/actions/index.ts
+    ./src/app/consultant/appointments/page.tsx 
+    at handleErrors (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13828:21)
+    at processMessage (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13891:21)
+    at WebSocket.handleMessage (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13335:52) (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13828:21)
+[browser] ./src/app/consultant/appointments/page.tsx:5:1
+Export getAppointments doesn't exist in target module
+  3 | import { Badge } from "@/components/ui/badge"
+  4 | import { Calendar as CalendarIcon, Clock, Plus, MoreHorizontal, User, Sparkles } from "luci...
+> 5 | import { getAppointments } from "@/lib/actions"
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  6 | import { format } from "date-fns"
+  7 | import { ptBR } from "date-fns/locale"
+  8 |
+
+The export getAppointments was not found in module [project]/src/lib/actions/index.ts [app-rsc] (ecmascript).
+The module has no exports at all.
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist. 
+    at handleErrors (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13828:21)
+    at processMessage (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13891:21)
+    at WebSocket.handleMessage (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13335:52) (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13828:21)
+[browser] ./src/lib/actions/index.ts:7:1
+Only async functions are allowed to be exported in a "use server" file.
+   5 | import { revalidatePath } from 'next/cache'
+   6 |
+>  7 | export { getClients, getClientById } from './clients'
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   8 | export { getColorAnalysisRequests, createColorAnalysisRequest, analyzeColorWithAI, approve...
+   9 | export { getShoppingLists, createShoppingList } from './shopping-lists'
+  10 | export { getEbooks, generateEbook } from './ebooks'
+
+Ecmascript file had an error
+
+Import trace:
+  Server Component:
+    ./src/lib/actions/index.ts
+    ./src/app/consultant/appointments/page.tsx 
+    at handleErrors (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13828:21)
+    at processMessage (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13891:21)
+    at WebSocket.handleMessage (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13335:52) (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13828:21)
+[browser] ./src/app/consultant/appointments/page.tsx:5:1
+Export getAppointments doesn't exist in target module
+  3 | import { Badge } from "@/components/ui/badge"
+  4 | import { Calendar as CalendarIcon, Clock, Plus, MoreHorizontal, User, Sparkles } from "luci...
+> 5 | import { getAppointments } from "@/lib/actions"
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  6 | import { format } from "date-fns"
+  7 | import { ptBR } from "date-fns/locale"
+  8 |
+
+The export getAppointments was not found in module [project]/src/lib/actions/index.ts [app-rsc] (ecmascript).
+The module has no exports at all.
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist. 
+    at handleErrors (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13828:21)
+    at processMessage (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13891:21)
+    at WebSocket.handleMessage (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13335:52) (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13828:21)
+⨯ ./src/lib/actions/index.ts:7:1
+Only async functions are allowed to be exported in a "use server" file.
+  [90m 5 |[0m [36mimport[0m { revalidatePath } [36mfrom[0m [32m'next/cache'[0m
+  [90m 6 |[0m
+[31m[1m>[0m [90m 7 |[0m [36mexport[0m { getClients, getClientById } [36mfrom[0m [32m'./clients'[0m
+  [90m   |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m 8 |[0m [36mexport[0m { getColorAnalysisRequests, createColorAnalysisRequest, analyzeColorWithAI, approve...
+  [90m 9 |[0m [36mexport[0m { getShoppingLists, createShoppingList } [36mfrom[0m [32m'./shopping-lists'[0m
+  [90m10 |[0m [36mexport[0m { getEbooks, generateEbook } [36mfrom[0m [32m'./ebooks'[0m
+
+Ecmascript file had an error
+
+Import trace:
+  Server Component:
+    ./src/lib/actions/index.ts
+    ./src/app/consultant/appointments/page.tsx
+
+
+
+./src/app/consultant/appointments/page.tsx:5:1
+Export getAppointments doesn't exist in target module
+  [90m3 |[0m [36mimport[0m { [33mBadge[0m } [36mfrom[0m [32m"@/components/ui/badge"[0m
+  [90m4 |[0m [36mimport[0m { [33mCalendar[0m [36mas[0m [33mCalendarIcon[0m, [33mClock[0m, [33mPlus[0m, [33mMoreHorizontal[0m, [33mUser[0m, [33mSparkles[0m } [36mfrom[0m [32m"luci...[0m
+[31m[1m>[0m [90m5 |[0m [36mimport[0m { getAppointments } [36mfrom[0m [32m"@/lib/actions"[0m
+  [90m  |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m6 |[0m [36mimport[0m { format } [36mfrom[0m [32m"date-fns"[0m
+  [90m7 |[0m [36mimport[0m { ptBR } [36mfrom[0m [32m"date-fns/locale"[0m
+  [90m8 |[0m
+
+The export getAppointments was not found in module [project]/src/lib/actions/index.ts [app-rsc] (ecmascript).
+The module has no exports at all.
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+
+[browser] ./src/lib/actions/index.ts:7:1
+Only async functions are allowed to be exported in a "use server" file.
+   5 | import { revalidatePath } from 'next/cache'
+   6 |
+>  7 | export { getClients, getClientById } from './clients'
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   8 | export { getColorAnalysisRequests, createColorAnalysisRequest, analyzeColorWithAI, approve...
+   9 | export { getShoppingLists, createShoppingList } from './shopping-lists'
+  10 | export { getEbooks, generateEbook } from './ebooks'
+
+Ecmascript file had an error
+
+Import trace:
+  Server Component:
+    ./src/lib/actions/index.ts
+    ./src/app/consultant/appointments/page.tsx 
+    at handleErrors (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13828:21)
+    at processMessage (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13891:21)
+    at WebSocket.handleMessage (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13335:52) (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13828:21)
+[browser] ./src/app/consultant/appointments/page.tsx:5:1
+Export getAppointments doesn't exist in target module
+  3 | import { Badge } from "@/components/ui/badge"
+  4 | import { Calendar as CalendarIcon, Clock, Plus, MoreHorizontal, User, Sparkles } from "luci...
+> 5 | import { getAppointments } from "@/lib/actions"
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  6 | import { format } from "date-fns"
+  7 | import { ptBR } from "date-fns/locale"
+  8 |
+
+The export getAppointments was not found in module [project]/src/lib/actions/index.ts [app-rsc] (ecmascript).
+The module has no exports at all.
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist. 
+    at handleErrors (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13828:21)
+    at processMessage (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13891:21)
+    at WebSocket.handleMessage (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13335:52) (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13828:21)
+[browser] ./src/lib/actions/index.ts:7:1
+Only async functions are allowed to be exported in a "use server" file.
+   5 | import { revalidatePath } from 'next/cache'
+   6 |
+>  7 | export { getClients, getClientById } from './clients'
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   8 | export { getColorAnalysisRequests, createColorAnalysisRequest, analyzeColorWithAI, approve...
+   9 | export { getShoppingLists, createShoppingList } from './shopping-lists'
+  10 | export { getEbooks, generateEbook } from './ebooks'
+
+Ecmascript file had an error
+
+Import trace:
+  Server Component:
+    ./src/lib/actions/index.ts
+    ./src/app/consultant/appointments/page.tsx 
+    at handleErrors (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13828:21)
+    at processMessage (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13891:21)
+    at WebSocket.handleMessage (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13335:52) (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13828:21)
+[browser] ./src/app/consultant/appointments/page.tsx:5:1
+Export getAppointments doesn't exist in target module
+  3 | import { Badge } from "@/components/ui/badge"
+  4 | import { Calendar as CalendarIcon, Clock, Plus, MoreHorizontal, User, Sparkles } from "luci...
+> 5 | import { getAppointments } from "@/lib/actions"
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  6 | import { format } from "date-fns"
+  7 | import { ptBR } from "date-fns/locale"
+  8 |
+
+The export getAppointments was not found in module [project]/src/lib/actions/index.ts [app-rsc] (ecmascript).
+The module has no exports at all.
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist. 
+    at handleErrors (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13828:21)
+    at processMessage (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13891:21)
+    at WebSocket.handleMessage (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13335:52) (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13828:21)
+ GET /consultant/appointments 500 in 1580ms (next.js: 451ms, proxy.ts: 162ms, application-code: 966ms)
+[browser] Uncaught Error: ./src/lib/actions/index.ts:7:1
+Only async functions are allowed to be exported in a "use server" file.
+   5 | import { revalidatePath } from 'next/cache'
+   6 |
+>  7 | export { getClients, getClientById } from './clients'
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   8 | export { getColorAnalysisRequests, createColorAnalysisRequest, analyzeColorWithAI, approve...
+   9 | export { getShoppingLists, createShoppingList } from './shopping-lists'
+  10 | export { getEbooks, generateEbook } from './ebooks'
+
+Ecmascript file had an error
+
+Import trace:
+  Server Component:
+    ./src/lib/actions/index.ts
+    ./src/app/consultant/appointments/page.tsx
+
+
+    at <unknown> (Error: ./src/lib/actions/index.ts:7:1)
+    at <unknown> (Error: (./src/lib/actions/index.ts:7:1)
+[browser] ./src/lib/actions/index.ts:7:1
+Only async functions are allowed to be exported in a "use server" file.
+   5 | import { revalidatePath } from 'next/cache'
+   6 |
+>  7 | export { getClients, getClientById } from './clients'
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   8 | export { getColorAnalysisRequests, createColorAnalysisRequest, analyzeColorWithAI, approve...
+   9 | export { getShoppingLists, createShoppingList } from './shopping-lists'
+  10 | export { getEbooks, generateEbook } from './ebooks'
+
+Ecmascript file had an error
+
+Import trace:
+  Server Component:
+    ./src/lib/actions/index.ts
+    ./src/app/consultant/appointments/page.tsx 
+    at handleErrors (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+    at processMessage (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2834:28)
+    at <unknown> (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2679:13)
+    at WebSocket.handleMessage (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2324:17) (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+[browser] ./src/app/consultant/appointments/page.tsx:5:1
+Export getAppointments doesn't exist in target module
+  3 | import { Badge } from "@/components/ui/badge"
+  4 | import { Calendar as CalendarIcon, Clock, Plus, MoreHorizontal, User, Sparkles } from "luci...
+> 5 | import { getAppointments } from "@/lib/actions"
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  6 | import { format } from "date-fns"
+  7 | import { ptBR } from "date-fns/locale"
+  8 |
+
+The export getAppointments was not found in module [project]/src/lib/actions/index.ts [app-rsc] (ecmascript).
+The module has no exports at all.
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist. 
+    at handleErrors (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+    at processMessage (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2834:28)
+    at <unknown> (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2679:13)
+    at WebSocket.handleMessage (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2324:17) (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+[browser] ./src/lib/actions/index.ts:7:1
+Only async functions are allowed to be exported in a "use server" file.
+   5 | import { revalidatePath } from 'next/cache'
+   6 |
+>  7 | export { getClients, getClientById } from './clients'
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   8 | export { getColorAnalysisRequests, createColorAnalysisRequest, analyzeColorWithAI, approve...
+   9 | export { getShoppingLists, createShoppingList } from './shopping-lists'
+  10 | export { getEbooks, generateEbook } from './ebooks'
+
+Ecmascript file had an error
+
+Import trace:
+  Server Component:
+    ./src/lib/actions/index.ts
+    ./src/app/consultant/appointments/page.tsx 
+    at handleErrors (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+    at processMessage (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2834:28)
+    at <unknown> (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2679:13)
+    at WebSocket.handleMessage (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2324:17) (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+[browser] ./src/app/consultant/appointments/page.tsx:5:1
+Export getAppointments doesn't exist in target module
+  3 | import { Badge } from "@/components/ui/badge"
+  4 | import { Calendar as CalendarIcon, Clock, Plus, MoreHorizontal, User, Sparkles } from "luci...
+> 5 | import { getAppointments } from "@/lib/actions"
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  6 | import { format } from "date-fns"
+  7 | import { ptBR } from "date-fns/locale"
+  8 |
+
+The export getAppointments was not found in module [project]/src/lib/actions/index.ts [app-rsc] (ecmascript).
+The module has no exports at all.
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist. 
+    at handleErrors (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+    at processMessage (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2834:28)
+    at <unknown> (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2679:13)
+    at WebSocket.handleMessage (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2324:17) (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+[browser] ./src/lib/actions/index.ts:7:1
+Only async functions are allowed to be exported in a "use server" file.
+   5 | import { revalidatePath } from 'next/cache'
+   6 |
+>  7 | export { getClients, getClientById } from './clients'
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   8 | export { getColorAnalysisRequests, createColorAnalysisRequest, analyzeColorWithAI, approve...
+   9 | export { getShoppingLists, createShoppingList } from './shopping-lists'
+  10 | export { getEbooks, generateEbook } from './ebooks'
+
+Ecmascript file had an error
+
+Import trace:
+  Server Component:
+    ./src/lib/actions/index.ts
+    ./src/app/consultant/appointments/page.tsx 
+    at handleErrors (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+    at processMessage (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2834:28)
+    at <unknown> (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2679:13)
+    at WebSocket.handleMessage (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2324:17) (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+[browser] ./src/app/consultant/appointments/page.tsx:5:1
+Export getAppointments doesn't exist in target module
+  3 | import { Badge } from "@/components/ui/badge"
+  4 | import { Calendar as CalendarIcon, Clock, Plus, MoreHorizontal, User, Sparkles } from "luci...
+> 5 | import { getAppointments } from "@/lib/actions"
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  6 | import { format } from "date-fns"
+  7 | import { ptBR } from "date-fns/locale"
+  8 |
+
+The export getAppointments was not found in module [project]/src/lib/actions/index.ts [app-rsc] (ecmascript).
+The module has no exports at all.
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist. 
+    at handleErrors (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+    at processMessage (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2834:28)
+    at <unknown> (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2679:13)
+    at WebSocket.handleMessage (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2324:17) (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+⨯ ./src/lib/actions/index.ts:7:1
+Only async functions are allowed to be exported in a "use server" file.
+  [90m 5 |[0m [36mimport[0m { revalidatePath } [36mfrom[0m [32m'next/cache'[0m
+  [90m 6 |[0m
+[31m[1m>[0m [90m 7 |[0m [36mexport[0m { getClients, getClientById } [36mfrom[0m [32m'./clients'[0m
+  [90m   |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m 8 |[0m [36mexport[0m { getColorAnalysisRequests, createColorAnalysisRequest, analyzeColorWithAI, approve...
+  [90m 9 |[0m [36mexport[0m { getShoppingLists, createShoppingList } [36mfrom[0m [32m'./shopping-lists'[0m
+  [90m10 |[0m [36mexport[0m { getEbooks, generateEbook } [36mfrom[0m [32m'./ebooks'[0m
+
+Ecmascript file had an error
+
+Import trace:
+  Server Component:
+    ./src/lib/actions/index.ts
+    ./src/app/consultant/appointments/page.tsx
+
+
+
+./src/app/consultant/appointments/page.tsx:5:1
+Export getAppointments doesn't exist in target module
+  [90m3 |[0m [36mimport[0m { [33mBadge[0m } [36mfrom[0m [32m"@/components/ui/badge"[0m
+  [90m4 |[0m [36mimport[0m { [33mCalendar[0m [36mas[0m [33mCalendarIcon[0m, [33mClock[0m, [33mPlus[0m, [33mMoreHorizontal[0m, [33mUser[0m, [33mSparkles[0m } [36mfrom[0m [32m"luci...[0m
+[31m[1m>[0m [90m5 |[0m [36mimport[0m { getAppointments } [36mfrom[0m [32m"@/lib/actions"[0m
+  [90m  |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m6 |[0m [36mimport[0m { format } [36mfrom[0m [32m"date-fns"[0m
+  [90m7 |[0m [36mimport[0m { ptBR } [36mfrom[0m [32m"date-fns/locale"[0m
+  [90m8 |[0m
+
+The export getAppointments was not found in module [project]/src/lib/actions/index.ts [app-rsc] (ecmascript).
+The module has no exports at all.
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+
+ GET /consultant/appointments 500 in 110ms (next.js: 52ms, proxy.ts: 22ms, application-code: 35ms)
+[browser] ./src/lib/actions/index.ts:7:1
+Only async functions are allowed to be exported in a "use server" file.
+   5 | import { revalidatePath } from 'next/cache'
+   6 |
+>  7 | export { getClients, getClientById } from './clients'
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   8 | export { getColorAnalysisRequests, createColorAnalysisRequest, analyzeColorWithAI, approve...
+   9 | export { getShoppingLists, createShoppingList } from './shopping-lists'
+  10 | export { getEbooks, generateEbook } from './ebooks'
+
+Ecmascript file had an error
+
+Import trace:
+  Server Component:
+    ./src/lib/actions/index.ts
+    ./src/app/consultant/appointments/page.tsx 
+    at handleErrors (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+    at processMessage (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2834:28)
+    at <unknown> (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2679:13)
+    at WebSocket.handleMessage (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2324:17) (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+[browser] ./src/app/consultant/appointments/page.tsx:5:1
+Export getAppointments doesn't exist in target module
+  3 | import { Badge } from "@/components/ui/badge"
+  4 | import { Calendar as CalendarIcon, Clock, Plus, MoreHorizontal, User, Sparkles } from "luci...
+> 5 | import { getAppointments } from "@/lib/actions"
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  6 | import { format } from "date-fns"
+  7 | import { ptBR } from "date-fns/locale"
+  8 |
+
+The export getAppointments was not found in module [project]/src/lib/actions/index.ts [app-rsc] (ecmascript).
+The module has no exports at all.
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist. 
+    at handleErrors (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+    at processMessage (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2834:28)
+    at <unknown> (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2679:13)
+    at WebSocket.handleMessage (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2324:17) (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+[browser] Uncaught Error: ./src/lib/actions/index.ts:7:1
+Only async functions are allowed to be exported in a "use server" file.
+   5 | import { revalidatePath } from 'next/cache'
+   6 |
+>  7 | export { getClients, getClientById } from './clients'
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   8 | export { getColorAnalysisRequests, createColorAnalysisRequest, analyzeColorWithAI, approve...
+   9 | export { getShoppingLists, createShoppingList } from './shopping-lists'
+  10 | export { getEbooks, generateEbook } from './ebooks'
+
+Ecmascript file had an error
+
+Import trace:
+  Server Component:
+    ./src/lib/actions/index.ts
+    ./src/app/consultant/appointments/page.tsx
+
+
+    at <unknown> (Error: ./src/lib/actions/index.ts:7:1)
+    at <unknown> (Error: (./src/lib/actions/index.ts:7:1)
+[browser] ./src/lib/actions/index.ts:7:1
+Only async functions are allowed to be exported in a "use server" file.
+   5 | import { revalidatePath } from 'next/cache'
+   6 |
+>  7 | export { getClients, getClientById } from './clients'
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   8 | export { getColorAnalysisRequests, createColorAnalysisRequest, analyzeColorWithAI, approve...
+   9 | export { getShoppingLists, createShoppingList } from './shopping-lists'
+  10 | export { getEbooks, generateEbook } from './ebooks'
+
+Ecmascript file had an error
+
+Import trace:
+  Server Component:
+    ./src/lib/actions/index.ts
+    ./src/app/consultant/appointments/page.tsx 
+    at handleErrors (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+    at processMessage (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2834:28)
+    at <unknown> (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2679:13)
+    at WebSocket.handleMessage (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2324:17) (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+[browser] ./src/app/consultant/appointments/page.tsx:5:1
+Export getAppointments doesn't exist in target module
+  3 | import { Badge } from "@/components/ui/badge"
+  4 | import { Calendar as CalendarIcon, Clock, Plus, MoreHorizontal, User, Sparkles } from "luci...
+> 5 | import { getAppointments } from "@/lib/actions"
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  6 | import { format } from "date-fns"
+  7 | import { ptBR } from "date-fns/locale"
+  8 |
+
+The export getAppointments was not found in module [project]/src/lib/actions/index.ts [app-rsc] (ecmascript).
+The module has no exports at all.
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist. 
+    at handleErrors (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+    at processMessage (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2834:28)
+    at <unknown> (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2679:13)
+    at WebSocket.handleMessage (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2324:17) (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+[browser] ./src/lib/actions/index.ts:7:1
+Only async functions are allowed to be exported in a "use server" file.
+   5 | import { revalidatePath } from 'next/cache'
+   6 |
+>  7 | export { getClients, getClientById } from './clients'
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   8 | export { getColorAnalysisRequests, createColorAnalysisRequest, analyzeColorWithAI, approve...
+   9 | export { getShoppingLists, createShoppingList } from './shopping-lists'
+  10 | export { getEbooks, generateEbook } from './ebooks'
+
+Ecmascript file had an error
+
+Import trace:
+  Server Component:
+    ./src/lib/actions/index.ts
+    ./src/app/consultant/appointments/page.tsx 
+    at handleErrors (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+    at processMessage (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2834:28)
+    at <unknown> (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2679:13)
+    at WebSocket.handleMessage (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2324:17) (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+[browser] ./src/app/consultant/appointments/page.tsx:5:1
+Export getAppointments doesn't exist in target module
+  3 | import { Badge } from "@/components/ui/badge"
+  4 | import { Calendar as CalendarIcon, Clock, Plus, MoreHorizontal, User, Sparkles } from "luci...
+> 5 | import { getAppointments } from "@/lib/actions"
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  6 | import { format } from "date-fns"
+  7 | import { ptBR } from "date-fns/locale"
+  8 |
+
+The export getAppointments was not found in module [project]/src/lib/actions/index.ts [app-rsc] (ecmascript).
+The module has no exports at all.
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist. 
+    at handleErrors (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+    at processMessage (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2834:28)
+    at <unknown> (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2679:13)
+    at WebSocket.handleMessage (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2324:17) (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+ GET /client/shop 500 in 1878ms (next.js: 1802ms, proxy.ts: 34ms, application-code: 43ms)
+[browser] Uncaught Error: ./src/lib/actions/index.ts:7:1
+Only async functions are allowed to be exported in a "use server" file.
+   5 | import { revalidatePath } from 'next/cache'
+   6 |
+>  7 | export { getClients, getClientById } from './clients'
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   8 | export { getColorAnalysisRequests, createColorAnalysisRequest, analyzeColorWithAI, approve...
+   9 | export { getShoppingLists, createShoppingList } from './shopping-lists'
+  10 | export { getEbooks, generateEbook } from './ebooks'
+
+Ecmascript file had an error
+
+Import trace:
+  Server Component:
+    ./src/lib/actions/index.ts
+    ./src/app/consultant/appointments/page.tsx
+
+
+    at <unknown> (Error: ./src/lib/actions/index.ts:7:1)
+    at <unknown> (Error: (./src/lib/actions/index.ts:7:1)
+[browser] ./src/lib/actions/index.ts:7:1
+Only async functions are allowed to be exported in a "use server" file.
+   5 | import { revalidatePath } from 'next/cache'
+   6 |
+>  7 | export { getClients, getClientById } from './clients'
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   8 | export { getColorAnalysisRequests, createColorAnalysisRequest, analyzeColorWithAI, approve...
+   9 | export { getShoppingLists, createShoppingList } from './shopping-lists'
+  10 | export { getEbooks, generateEbook } from './ebooks'
+
+Ecmascript file had an error
+
+Import trace:
+  Server Component:
+    ./src/lib/actions/index.ts
+    ./src/app/consultant/appointments/page.tsx 
+    at handleErrors (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+    at processMessage (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2834:28)
+    at <unknown> (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2679:13)
+    at WebSocket.handleMessage (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2324:17) (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+[browser] ./src/app/consultant/appointments/page.tsx:5:1
+Export getAppointments doesn't exist in target module
+  3 | import { Badge } from "@/components/ui/badge"
+  4 | import { Calendar as CalendarIcon, Clock, Plus, MoreHorizontal, User, Sparkles } from "luci...
+> 5 | import { getAppointments } from "@/lib/actions"
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  6 | import { format } from "date-fns"
+  7 | import { ptBR } from "date-fns/locale"
+  8 |
+
+The export getAppointments was not found in module [project]/src/lib/actions/index.ts [app-rsc] (ecmascript).
+The module has no exports at all.
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist. 
+    at handleErrors (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+    at processMessage (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2834:28)
+    at <unknown> (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2679:13)
+    at WebSocket.handleMessage (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2324:17) (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+[browser] ./src/lib/actions/index.ts:7:1
+Only async functions are allowed to be exported in a "use server" file.
+   5 | import { revalidatePath } from 'next/cache'
+   6 |
+>  7 | export { getClients, getClientById } from './clients'
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   8 | export { getColorAnalysisRequests, createColorAnalysisRequest, analyzeColorWithAI, approve...
+   9 | export { getShoppingLists, createShoppingList } from './shopping-lists'
+  10 | export { getEbooks, generateEbook } from './ebooks'
+
+Ecmascript file had an error
+
+Import trace:
+  Server Component:
+    ./src/lib/actions/index.ts
+    ./src/app/consultant/appointments/page.tsx 
+    at handleErrors (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+    at processMessage (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2834:28)
+    at <unknown> (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2679:13)
+    at WebSocket.handleMessage (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2324:17) (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+[browser] ./src/app/consultant/appointments/page.tsx:5:1
+Export getAppointments doesn't exist in target module
+  3 | import { Badge } from "@/components/ui/badge"
+  4 | import { Calendar as CalendarIcon, Clock, Plus, MoreHorizontal, User, Sparkles } from "luci...
+> 5 | import { getAppointments } from "@/lib/actions"
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  6 | import { format } from "date-fns"
+  7 | import { ptBR } from "date-fns/locale"
+  8 |
+
+The export getAppointments was not found in module [project]/src/lib/actions/index.ts [app-rsc] (ecmascript).
+The module has no exports at all.
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist. 
+    at handleErrors (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+    at processMessage (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2834:28)
+    at <unknown> (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2679:13)
+    at WebSocket.handleMessage (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2324:17) (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+ GET /consultant/dashboard 500 in 63ms (next.js: 21ms, proxy.ts: 17ms, application-code: 24ms)
+[browser] Uncaught Error: ./src/lib/actions/index.ts:7:1
+Only async functions are allowed to be exported in a "use server" file.
+   5 | import { revalidatePath } from 'next/cache'
+   6 |
+>  7 | export { getClients, getClientById } from './clients'
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   8 | export { getColorAnalysisRequests, createColorAnalysisRequest, analyzeColorWithAI, approve...
+   9 | export { getShoppingLists, createShoppingList } from './shopping-lists'
+  10 | export { getEbooks, generateEbook } from './ebooks'
+
+Ecmascript file had an error
+
+Import trace:
+  Server Component:
+    ./src/lib/actions/index.ts
+    ./src/app/consultant/appointments/page.tsx
+
+
+    at <unknown> (Error: ./src/lib/actions/index.ts:7:1)
+    at <unknown> (Error: (./src/lib/actions/index.ts:7:1)
+[browser] ./src/lib/actions/index.ts:7:1
+Only async functions are allowed to be exported in a "use server" file.
+   5 | import { revalidatePath } from 'next/cache'
+   6 |
+>  7 | export { getClients, getClientById } from './clients'
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   8 | export { getColorAnalysisRequests, createColorAnalysisRequest, analyzeColorWithAI, approve...
+   9 | export { getShoppingLists, createShoppingList } from './shopping-lists'
+  10 | export { getEbooks, generateEbook } from './ebooks'
+
+Ecmascript file had an error
+
+Import trace:
+  Server Component:
+    ./src/lib/actions/index.ts
+    ./src/app/consultant/appointments/page.tsx 
+    at handleErrors (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+    at processMessage (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2834:28)
+    at <unknown> (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2679:13)
+    at WebSocket.handleMessage (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2324:17) (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+[browser] ./src/app/consultant/appointments/page.tsx:5:1
+Export getAppointments doesn't exist in target module
+  3 | import { Badge } from "@/components/ui/badge"
+  4 | import { Calendar as CalendarIcon, Clock, Plus, MoreHorizontal, User, Sparkles } from "luci...
+> 5 | import { getAppointments } from "@/lib/actions"
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  6 | import { format } from "date-fns"
+  7 | import { ptBR } from "date-fns/locale"
+  8 |
+
+The export getAppointments was not found in module [project]/src/lib/actions/index.ts [app-rsc] (ecmascript).
+The module has no exports at all.
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist. 
+    at handleErrors (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+    at processMessage (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2834:28)
+    at <unknown> (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2679:13)
+    at WebSocket.handleMessage (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2324:17) (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+[browser] ./src/lib/actions/index.ts:7:1
+Only async functions are allowed to be exported in a "use server" file.
+   5 | import { revalidatePath } from 'next/cache'
+   6 |
+>  7 | export { getClients, getClientById } from './clients'
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   8 | export { getColorAnalysisRequests, createColorAnalysisRequest, analyzeColorWithAI, approve...
+   9 | export { getShoppingLists, createShoppingList } from './shopping-lists'
+  10 | export { getEbooks, generateEbook } from './ebooks'
+
+Ecmascript file had an error
+
+Import trace:
+  Server Component:
+    ./src/lib/actions/index.ts
+    ./src/app/consultant/appointments/page.tsx 
+    at handleErrors (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+    at processMessage (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2834:28)
+    at <unknown> (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2679:13)
+    at WebSocket.handleMessage (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2324:17) (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+[browser] ./src/app/consultant/appointments/page.tsx:5:1
+Export getAppointments doesn't exist in target module
+  3 | import { Badge } from "@/components/ui/badge"
+  4 | import { Calendar as CalendarIcon, Clock, Plus, MoreHorizontal, User, Sparkles } from "luci...
+> 5 | import { getAppointments } from "@/lib/actions"
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  6 | import { format } from "date-fns"
+  7 | import { ptBR } from "date-fns/locale"
+  8 |
+
+The export getAppointments was not found in module [project]/src/lib/actions/index.ts [app-rsc] (ecmascript).
+The module has no exports at all.
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist. 
+    at handleErrors (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+    at processMessage (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2834:28)
+    at <unknown> (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2679:13)
+    at WebSocket.handleMessage (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2324:17) (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+[browser] ./src/lib/actions/index.ts:7:1
+Only async functions are allowed to be exported in a "use server" file.
+   5 | import { revalidatePath } from 'next/cache'
+   6 |
+>  7 | export { getClients, getClientById } from './clients'
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   8 | export { getColorAnalysisRequests, createColorAnalysisRequest, analyzeColorWithAI, approve...
+   9 | export { getShoppingLists, createShoppingList } from './shopping-lists'
+  10 | export { getEbooks, generateEbook } from './ebooks'
+
+Ecmascript file had an error
+
+Import trace:
+  Server Component:
+    ./src/lib/actions/index.ts
+    ./src/app/consultant/appointments/page.tsx 
+    at handleErrors (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+    at processMessage (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2834:28)
+    at <unknown> (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2679:13)
+    at WebSocket.handleMessage (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2324:17) (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+[browser] ./src/app/consultant/appointments/page.tsx:5:1
+Export getAppointments doesn't exist in target module
+  3 | import { Badge } from "@/components/ui/badge"
+  4 | import { Calendar as CalendarIcon, Clock, Plus, MoreHorizontal, User, Sparkles } from "luci...
+> 5 | import { getAppointments } from "@/lib/actions"
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  6 | import { format } from "date-fns"
+  7 | import { ptBR } from "date-fns/locale"
+  8 |
+
+The export getAppointments was not found in module [project]/src/lib/actions/index.ts [app-rsc] (ecmascript).
+The module has no exports at all.
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist. 
+    at handleErrors (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+    at processMessage (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2834:28)
+    at <unknown> (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2679:13)
+    at WebSocket.handleMessage (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2324:17) (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+[browser] ./src/lib/actions/index.ts:7:1
+Only async functions are allowed to be exported in a "use server" file.
+   5 | import { revalidatePath } from 'next/cache'
+   6 |
+>  7 | export { getClients, getClientById } from './clients'
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   8 | export { getColorAnalysisRequests, createColorAnalysisRequest, analyzeColorWithAI, approve...
+   9 | export { getShoppingLists, createShoppingList } from './shopping-lists'
+  10 | export { getEbooks, generateEbook } from './ebooks'
+
+Ecmascript file had an error
+
+Import trace:
+  Server Component:
+    ./src/lib/actions/index.ts
+    ./src/app/consultant/appointments/page.tsx 
+    at handleErrors (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+    at processMessage (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2834:28)
+    at <unknown> (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2679:13)
+    at WebSocket.handleMessage (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2324:17) (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+[browser] ./src/app/consultant/appointments/page.tsx:5:1
+Export getAppointments doesn't exist in target module
+  3 | import { Badge } from "@/components/ui/badge"
+  4 | import { Calendar as CalendarIcon, Clock, Plus, MoreHorizontal, User, Sparkles } from "luci...
+> 5 | import { getAppointments } from "@/lib/actions"
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  6 | import { format } from "date-fns"
+  7 | import { ptBR } from "date-fns/locale"
+  8 |
+
+The export getAppointments was not found in module [project]/src/lib/actions/index.ts [app-rsc] (ecmascript).
+The module has no exports at all.
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist. 
+    at handleErrors (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+    at processMessage (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2834:28)
+    at <unknown> (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2679:13)
+    at WebSocket.handleMessage (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2324:17) (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+✓ Compiled in 542ms
+✓ Compiled in 222ms
+ GET /consultant/dashboard 200 in 927ms (next.js: 195ms, proxy.ts: 118ms, application-code: 614ms)
+ GET /consultant/appointments 200 in 844ms (next.js: 502ms, proxy.ts: 28ms, application-code: 315ms)
+ GET /consultant/orders 404 in 477ms (next.js: 224ms, proxy.ts: 15ms, application-code: 238ms)
+ GET /consultant/orders 404 in 435ms (next.js: 75ms, proxy.ts: 21ms, application-code: 338ms)
+[browser] Uncaught Error: ./src/lib/actions/index.ts:7:1
+Only async functions are allowed to be exported in a "use server" file.
+   5 | import { revalidatePath } from 'next/cache'
+   6 |
+>  7 | export { getClients, getClientById } from './clients'
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   8 | export { getColorAnalysisRequests, createColorAnalysisRequest, analyzeColorWithAI, approve...
+   9 | export { getShoppingLists, createShoppingList } from './shopping-lists'
+  10 | export { getEbooks, generateEbook } from './ebooks'
+
+Ecmascript file had an error
+
+Import trace:
+  Server Component:
+    ./src/lib/actions/index.ts
+    ./src/app/consultant/appointments/page.tsx
+
+
+    at <unknown> (Error: ./src/lib/actions/index.ts:7:1)
+    at <unknown> (Error: (./src/lib/actions/index.ts:7:1)
+ GET /consultant/dashboard 200 in 621ms (next.js: 14ms, proxy.ts: 26ms, application-code: 581ms)
+ GET /consultant/appointments 200 in 490ms (next.js: 15ms, proxy.ts: 24ms, application-code: 451ms)
+ GET /consultant/orders 404 in 444ms (next.js: 66ms, proxy.ts: 20ms, application-code: 358ms)
+ GET /consultant/orders 404 in 460ms (next.js: 137ms, proxy.ts: 100ms, application-code: 224ms)
+ GET /consultant/dashboard 200 in 986ms (next.js: 384ms, proxy.ts: 208ms, application-code: 394ms)
+○ Compiling /consultant/clients ...
+⨯ Error: {"message":"TypeError: fetch failed","details":"TypeError: fetch failed\n\nCaused by: AggregateError:  (ECONNREFUSED)\nAggregateError: \n    at internalConnectMultiple (node:net:1134:18)\n    at afterConnectMultiple (node:net:1715:7)\n    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)","hint":"","code":""}
+    at ignore-listed frames {
+  digest: '1006289934@E394'
+}
+ GET /consultant/clients 200 in 5.2s (next.js: 3.4s, proxy.ts: 22ms, application-code: 1736ms)
+[browser] Uncaught Error: {message: ..., details: ..., hint: "", code: ...}
+    at resolveErrorDev (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_0p3wegg._.js:1919:150)
+    at processFullStringRow (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_0p3wegg._.js:2434:29)
+    at processFullBinaryRow (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_0p3wegg._.js:2393:9)
+    at processBinaryChunk (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_0p3wegg._.js:2502:221)
+    at progress (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_0p3wegg._.js:2689:13)
+ GET /consultant/dashboard 200 in 226ms (next.js: 14ms, proxy.ts: 25ms, application-code: 188ms)
+ GET /consultant/dashboard 200 in 305ms (next.js: 32ms, proxy.ts: 35ms, application-code: 238ms)
+ GET /consultant/appointments 200 in 1021ms (next.js: 348ms, proxy.ts: 17ms, application-code: 656ms)
+ GET /consultant/orders 200 in 2.7s (next.js: 2.4s, proxy.ts: 19ms, application-code: 191ms)
+○ Compiling /consultant/color-analysis ...
+ GET /consultant/color-analysis 200 in 3.9s (next.js: 3.8s, proxy.ts: 26ms, application-code: 71ms)
+⨯ Error: {"message":"TypeError: fetch failed","details":"TypeError: fetch failed\n\nCaused by: AggregateError:  (ECONNREFUSED)\nAggregateError: \n    at internalConnectMultiple (node:net:1134:18)\n    at afterConnectMultiple (node:net:1715:7)\n    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)","hint":"","code":""}
+    at ignore-listed frames {
+  digest: '1298706900@E394'
+}
+ POST /consultant/color-analysis 500 in 1104ms (next.js: 18ms, proxy.ts: 35ms, application-code: 1051ms)
+  └─ ƒ getColorAnalysisRequests() in 43ms src/lib/actions/index.ts
+[browser] Error: {message: ..., details: ..., hint: "", code: ...}
+    at resolveErrorDev (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_0p3wegg._.js:1919:105)
+    at processFullStringRow (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_0p3wegg._.js:2434:29)
+    at processFullBinaryRow (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_0p3wegg._.js:2393:9)
+    at processBinaryChunk (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_0p3wegg._.js:2502:221)
+    at progress (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_0p3wegg._.js:2689:13) (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/src_0cmagj.._.js:768:29)
+⨯ Error: {"message":"TypeError: fetch failed","details":"TypeError: fetch failed\n\nCaused by: AggregateError:  (ECONNREFUSED)\nAggregateError: \n    at internalConnectMultiple (node:net:1134:18)\n    at afterConnectMultiple (node:net:1715:7)\n    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)","hint":"","code":""}
+    at ignore-listed frames {
+  digest: '1298706900@E394'
+}
+ POST /consultant/color-analysis 500 in 1086ms (next.js: 94ms, proxy.ts: 161ms, application-code: 831ms)
+  └─ ƒ getClients() in 21ms src/lib/actions/index.ts
+⨯ Error: {"message":"TypeError: fetch failed","details":"TypeError: fetch failed\n\nCaused by: AggregateError:  (ECONNREFUSED)\nAggregateError: \n    at internalConnectMultiple (node:net:1134:18)\n    at afterConnectMultiple (node:net:1715:7)\n    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)","hint":"","code":""}
+    at ignore-listed frames {
+  digest: '1298706900@E394'
+}
+ POST /consultant/color-analysis 500 in 1051ms (next.js: 17ms, proxy.ts: 20ms, application-code: 1013ms)
+  └─ ƒ getColorAnalysisRequests() in 31ms src/lib/actions/index.ts
+[browser] Error: {message: ..., details: ..., hint: "", code: ...}
+    at resolveErrorDev (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_0p3wegg._.js:1919:105)
+    at processFullStringRow (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_0p3wegg._.js:2434:29)
+    at processFullBinaryRow (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_0p3wegg._.js:2393:9)
+    at processBinaryChunk (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_0p3wegg._.js:2502:221)
+    at progress (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_0p3wegg._.js:2689:13) (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/src_0cmagj.._.js:768:29)
+⨯ Error: {"message":"TypeError: fetch failed","details":"TypeError: fetch failed\n\nCaused by: AggregateError:  (ECONNREFUSED)\nAggregateError: \n    at internalConnectMultiple (node:net:1134:18)\n    at afterConnectMultiple (node:net:1715:7)\n    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)","hint":"","code":""}
+    at ignore-listed frames {
+  digest: '1298706900@E394'
+}
+ POST /consultant/color-analysis 500 in 957ms (next.js: 21ms, proxy.ts: 40ms, application-code: 896ms)
+  └─ ƒ getClients() in 66ms src/lib/actions/index.ts
+⨯ Error: {"message":"TypeError: fetch failed","details":"TypeError: fetch failed\n\nCaused by: AggregateError:  (ECONNREFUSED)\nAggregateError: \n    at internalConnectMultiple (node:net:1134:18)\n    at afterConnectMultiple (node:net:1715:7)\n    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)","hint":"","code":""}
+    at ignore-listed frames {
+  digest: '1006289934@E394'
+}
+ GET /consultant/virtual-wardrobe 200 in 3.3s (next.js: 2.4s, proxy.ts: 14ms, application-code: 876ms)
+[browser] Uncaught Error: {message: ..., details: ..., hint: "", code: ...}
+    at resolveErrorDev (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_0p3wegg._.js:1919:150)
+    at processFullStringRow (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_0p3wegg._.js:2434:29)
+    at processFullBinaryRow (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_0p3wegg._.js:2393:9)
+    at processBinaryChunk (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_0p3wegg._.js:2502:221)
+    at progress (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_0p3wegg._.js:2689:13)
+ GET /consultant/dashboard 200 in 695ms (next.js: 44ms, proxy.ts: 26ms, application-code: 625ms)
+ GET /consultant/color-analysis 200 in 248ms (next.js: 39ms, proxy.ts: 38ms, application-code: 170ms)
+⨯ Error: {"message":"TypeError: fetch failed","details":"TypeError: fetch failed\n\nCaused by: AggregateError:  (ECONNREFUSED)\nAggregateError: \n    at internalConnectMultiple (node:net:1134:18)\n    at afterConnectMultiple (node:net:1715:7)\n    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)","hint":"","code":""}
+    at ignore-listed frames {
+  digest: '1298706900@E394'
+}
+ POST /consultant/color-analysis 500 in 2.9s (next.js: 16ms, proxy.ts: 28ms, application-code: 2.8s)
+  └─ ƒ getColorAnalysisRequests() in 48ms src/lib/actions/index.ts
+[browser] Error: {message: ..., details: ..., hint: "", code: ...}
+    at resolveErrorDev (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_0p3wegg._.js:1919:105)
+    at processFullStringRow (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_0p3wegg._.js:2434:29)
+    at processFullBinaryRow (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_0p3wegg._.js:2393:9)
+    at processBinaryChunk (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_0p3wegg._.js:2502:221)
+    at progress (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_0p3wegg._.js:2689:13) (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/src_0cmagj.._.js:768:29)
+⨯ Error: {"message":"TypeError: fetch failed","details":"TypeError: fetch failed\n\nCaused by: AggregateError:  (ECONNREFUSED)\nAggregateError: \n    at internalConnectMultiple (node:net:1134:18)\n    at afterConnectMultiple (node:net:1715:7)\n    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)","hint":"","code":""}
+    at ignore-listed frames {
+  digest: '1298706900@E394'
+}
+ POST /consultant/color-analysis 500 in 2.6s (next.js: 42ms, proxy.ts: 30ms, application-code: 2.6s)
+  └─ ƒ getClients() in 283ms src/lib/actions/index.ts
+⨯ Error: {"message":"TypeError: fetch failed","details":"TypeError: fetch failed\n\nCaused by: AggregateError:  (ECONNREFUSED)\nAggregateError: \n    at internalConnectMultiple (node:net:1134:18)\n    at afterConnectMultiple (node:net:1715:7)\n    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)","hint":"","code":""}
+    at ignore-listed frames {
+  digest: '1006289934@E394'
+}
+⨯ Error: {"message":"TypeError: fetch failed","details":"TypeError: fetch failed\n\nCaused by: AggregateError:  (ECONNREFUSED)\nAggregateError: \n    at internalConnectMultiple (node:net:1134:18)\n    at afterConnectMultiple (node:net:1715:7)\n    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)","hint":"","code":""}
+    at ignore-listed frames {
+  digest: '1298706900@E394'
+}
+[browser] Uncaught Error: {message: ..., details: ..., hint: "", code: ...}
+    at resolveErrorDev (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_0p3wegg._.js:1919:150)
+    at processFullStringRow (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_0p3wegg._.js:2434:29)
+    at processFullBinaryRow (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_0p3wegg._.js:2393:9)
+    at processBinaryChunk (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_0p3wegg._.js:2502:221)
+    at progress (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_0p3wegg._.js:2689:13)
+ GET /consultant/virtual-wardrobe 200 in 3.7s (next.js: 36ms, proxy.ts: 20ms, application-code: 3.6s)
+ POST /consultant/color-analysis 500 in 3.6s (next.js: 340ms, proxy.ts: 191ms, application-code: 3.1s)
+  └─ ƒ getColorAnalysisRequests() in 2104ms src/lib/actions/index.ts
+[browser] Error: {message: ..., details: ..., hint: "", code: ...}
+    at resolveErrorDev (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_0p3wegg._.js:1919:105)
+    at processFullStringRow (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_0p3wegg._.js:2434:29)
+    at processFullBinaryRow (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_0p3wegg._.js:2393:9)
+    at processBinaryChunk (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_0p3wegg._.js:2502:221)
+    at progress (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_0p3wegg._.js:2689:13) (file://C:/Users/israe/aplicatvo marry/.next/dev/static/chunks/src_0cmagj.._.js:768:29)
+⨯ Error: {"message":"TypeError: fetch failed","details":"TypeError: fetch failed\n\nCaused by: AggregateError:  (ECONNREFUSED)\nAggregateError: \n    at internalConnectMultiple (node:net:1134:18)\n    at afterConnectMultiple (node:net:1715:7)\n    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17)","hint":"","code":""}
+    at ignore-listed frames {
+  digest: '1298706900@E394'
+}
+ POST /consultant/virtual-wardrobe 500 in 3.8s (next.js: 2.2s, proxy.ts: 61ms, application-code: 1595ms)
+  └─ ƒ getClients() in 970ms src/lib/actions/index.ts
+[?25h
