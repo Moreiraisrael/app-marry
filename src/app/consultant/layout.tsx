@@ -1,7 +1,19 @@
 import { ConsultantSidebar } from "@/components/layout/ConsultantSidebar"
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
+import { createClient } from "@/lib/supabase/server"
+import Image from "next/image"
 
-export default function ConsultantLayout({ children }: { children: React.ReactNode }) {
+export default async function ConsultantLayout({ children }: { children: React.ReactNode }) {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  let profile = null
+  if (user) {
+    const { data } = await supabase.from("profiles").select("*").eq("id", user.id).single()
+    profile = data
+  }
+
+  const initial = profile?.full_name ? profile.full_name.charAt(0).toUpperCase() : 'U'
+
   return (
     <SidebarProvider>
       <div className="flex min-h-screen w-full bg-background font-sans text-foreground relative Selection:bg-primary/20">
@@ -25,12 +37,16 @@ export default function ConsultantLayout({ children }: { children: React.ReactNo
             <div className="flex items-center gap-3 relative z-10">
                <div className="flex items-center gap-3 hover:bg-secondary/80 rounded-2xl px-4 py-2 transition-all duration-300 backdrop-blur-sm border border-transparent hover:border-border/50 cursor-pointer">
                   <div className="relative">
-                    <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-primary-foreground text-sm font-bold shadow-md shadow-primary/20 ring-2 ring-background">
-                      MM
+                    <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-primary-foreground text-sm font-bold shadow-md shadow-primary/20 ring-2 ring-background overflow-hidden relative">
+                      {profile?.avatar_url ? (
+                        <Image src={profile.avatar_url} alt="Avatar" fill className="object-cover" />
+                      ) : (
+                        initial
+                      )}
                     </div>
                   </div>
                   <span className="hidden sm:block text-sm font-bold text-foreground tracking-wide">
-                    Marry Miele
+                    {profile?.full_name || 'Usuário'}
                   </span>
                </div>
             </div>

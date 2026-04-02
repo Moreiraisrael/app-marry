@@ -93,23 +93,23 @@ export default function StyleQuizPage() {
 
   if (isFinished) {
     return (
-      <div className="max-w-2xl mx-auto py-12 px-4 text-center animate-in zoom-in duration-500">
-        <div className="mx-auto w-24 h-24 bg-rose-100 text-rose-600 rounded-full flex items-center justify-center mb-6 shadow-inner">
+      <div className="max-w-2xl mx-auto py-16 px-4 text-center animate-in zoom-in duration-700">
+        <div className="mx-auto w-24 h-24 bg-[#B48D6C]/10 text-[#B48D6C] rounded-full flex items-center justify-center mb-8 shadow-inner border border-[#B48D6C]/20">
           <CheckCircle2 className="w-12 h-12" />
         </div>
-        <h2 className="text-3xl font-serif font-bold text-neutral-900 mb-4">Estilo Identificado!</h2>
-        <p className="text-neutral-500 text-lg mb-8 italic">
-          Suas preferências revelam um radar refinado para a moda. Seus resultados foram enviados para análise da consultora.
+        <h2 className="text-4xl font-serif font-bold text-stone-900 mb-4 tracking-tight">Estilo Identificado!</h2>
+        <p className="text-stone-500 text-lg mb-10 leading-relaxed max-w-md mx-auto">
+          Suas preferências revelam um radar refinado e autêntico. Seus resultados foram processados com sucesso.
         </p>
-        <div className="flex flex-col gap-3">
+        <div className="flex flex-col gap-4 max-w-sm mx-auto">
           <Button 
-            className="bg-neutral-900 hover:bg-black text-white h-14 rounded-2xl font-bold text-lg shadow-xl"
+            className="bg-stone-900 hover:bg-stone-800 text-stone-50 h-16 rounded-2xl font-bold text-lg shadow-2xl transition-all hover:scale-[1.02] active:scale-95"
             onClick={() => router.push('/client/dashboard')}
           >
             Voltar ao Dashboard
           </Button>
-          <Button variant="ghost" className="text-neutral-400 group" onClick={() => window.location.reload()}>
-            <RefreshCw className="w-4 h-4 mr-2 group-hover:rotate-180 transition-transform duration-500" /> Refazer Quiz
+          <Button variant="ghost" className="text-stone-400 group h-12 hover:bg-stone-50 hover:text-stone-900" onClick={() => window.location.reload()}>
+            <RefreshCw className="w-4 h-4 mr-2 group-hover:rotate-180 transition-transform duration-700" /> Refazer Quiz
           </Button>
         </div>
       </div>
@@ -117,52 +117,61 @@ export default function StyleQuizPage() {
   }
 
   return (
-    <div className="max-w-3xl mx-auto py-8 px-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
-      <div className="mb-10 text-center">
-        <Button variant="ghost" className="mb-6 text-neutral-400 hover:text-neutral-900" onClick={() => router.push('/client/quiz')}>
-          <ArrowLeft className="w-4 h-4 mr-2" /> Encerrar Autoconhecimento
+    <div className="max-w-3xl mx-auto py-12 px-4 min-h-[90vh] flex flex-col animate-in fade-in slide-in-from-bottom-6 duration-700">
+      <div className="mb-12 text-center">
+        <Button variant="ghost" className="mb-8 text-stone-400 hover:text-stone-900 hover:bg-stone-50 transition-colors" onClick={() => router.push('/client/quiz')}>
+          <ArrowLeft className="w-4 h-4 mr-2" /> Encerrar Jornada
         </Button>
-        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-rose-50 text-rose-600 text-[10px] font-bold uppercase tracking-widest mb-4">
-          <Sparkles className="w-4 h-4" />
+        <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#B48D6C]/10 text-[#B48D6C] text-[10px] font-bold uppercase tracking-[0.2em] mb-6 border border-[#B48D6C]/10">
+          <Sparkles className="w-4 h-4 animate-pulse" />
           Análise de Estilo Pessoal
         </div>
-        <h1 className="text-4xl font-serif font-bold text-neutral-900 mb-2">Desvende seu Olhar</h1>
-        <p className="text-neutral-500">Escolha as opções que mais fazem seu coração vibrar.</p>
+        <h1 className="text-5xl font-serif font-bold text-stone-900 mb-3 tracking-tight">Desvende seu Olhar</h1>
+        <p className="text-stone-500 text-lg max-w-lg mx-auto">Sintonize com sua essência e escolha as opções que mais fazem seu coração vibrar.</p>
       </div>
 
-      <div className="mb-8 max-w-md mx-auto">
-        <div className="flex justify-between text-[10px] font-bold text-neutral-400 uppercase tracking-widest mb-3">
-          <span>Progresso: {step + 1} / {questions.length}</span>
+      <div className="mb-10 max-w-md mx-auto w-full">
+        <div className="flex justify-between text-[10px] font-bold text-stone-400 uppercase tracking-widest mb-3">
+          <span>Pergunta {step + 1} de {questions.length}</span>
           <span>{Math.round(progress)}%</span>
         </div>
-        <Progress value={progress} className="h-1.5 bg-neutral-100" />
+        <Progress value={progress} className="h-2 bg-stone-100 rounded-full overflow-hidden">
+          {/* eslint-disable-next-line react/no-inline-styles */}
+          <div className="h-full bg-[#B48D6C] transition-all duration-700" style={{ width: `${progress}%` }} />
+        </Progress>
       </div>
 
-      <Card className="border-neutral-200/40 shadow-2xl bg-white/80 backdrop-blur-xl rounded-[2.5rem] overflow-hidden border-b-[6px] border-rose-100">
-        <CardHeader className="pb-8 pt-12 px-10 text-center">
-          <CardTitle className="text-2xl md:text-3xl font-serif font-bold leading-tight text-neutral-900">
+      <Card className="border-stone-200/50 shadow-[0_32px_64px_-16px_rgba(0,0,0,0.1)] bg-white/95 backdrop-blur-2xl rounded-[3rem] overflow-hidden border-b-[8px] border-stone-100/80 transition-all duration-500">
+        <CardHeader className="pb-8 pt-16 px-8 md:px-14 text-center">
+          <CardTitle className="text-3xl md:text-4xl font-serif font-bold leading-tight text-stone-900 tracking-tight">
             {currentQ.question}
           </CardTitle>
         </CardHeader>
-        <CardContent className="px-10 pb-12">
-          <div className="grid grid-cols-1 gap-3">
+        <CardContent className="px-8 md:px-14 pb-16">
+          <div className="grid grid-cols-1 gap-4">
             {currentQ.options.map((opt) => (
               <button
                 key={opt.value}
                 onClick={() => setAnswers({...answers, [currentQ.id]: opt.value})}
-                className={`flex items-center justify-between p-6 rounded-2xl border-2 transition-all duration-300 group
+                className={`flex items-center justify-between p-8 rounded-[2rem] border-2 transition-all duration-500 group relative overflow-hidden
                   ${answers[currentQ.id] === opt.value 
-                    ? 'border-rose-500 bg-rose-50/50 shadow-lg shadow-rose-500/10' 
-                    : 'border-neutral-100 bg-white hover:border-rose-200 hover:shadow-md'
+                    ? 'border-[#B48D6C] bg-[#B48D6C]/5 shadow-xl shadow-[#B48D6C]/10' 
+                    : 'border-stone-100 bg-white hover:border-stone-200 hover:shadow-lg'
                   }`}
               >
-                <div className="flex items-center gap-4">
-                   <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all
-                    ${answers[currentQ.id] === opt.value ? 'border-rose-500 bg-rose-500' : 'border-neutral-200'}
+                {answers[currentQ.id] === opt.value && (
+                  <motion.div 
+                    layoutId="active-bg"
+                    className="absolute inset-0 bg-gradient-to-r from-[#B48D6C]/5 to-transparent z-0"
+                  />
+                )}
+                <div className="flex items-center gap-6 relative z-10">
+                   <div className={`w-8 h-8 rounded-full border-2 flex items-center justify-center transition-all duration-500
+                    ${answers[currentQ.id] === opt.value ? 'border-[#B48D6C] bg-[#B48D6C]' : 'border-stone-200 group-hover:border-stone-300'}
                    `}>
-                     {answers[currentQ.id] === opt.value && <Check className="w-4 h-4 text-white" />}
+                     {answers[currentQ.id] === opt.value && <Check className="w-5 h-5 text-white" />}
                    </div>
-                   <span className={`text-left text-lg font-medium transition-colors ${answers[currentQ.id] === opt.value ? 'text-rose-950 font-bold' : 'text-neutral-600'}`}>
+                   <span className={`text-left text-xl transition-all duration-500 ${answers[currentQ.id] === opt.value ? 'text-stone-900 font-bold tracking-tight transform translate-x-1' : 'text-stone-600 font-medium'}`}>
                      {opt.label}
                    </span>
                 </div>
@@ -170,17 +179,23 @@ export default function StyleQuizPage() {
             ))}
           </div>
         </CardContent>
-        <CardFooter className="px-10 py-8 flex justify-between bg-neutral-50/50 border-t border-neutral-100">
-          <Button variant="ghost" size="lg" onClick={() => step > 0 && setStep(step - 1)} disabled={step === 0} className="text-neutral-400 font-bold text-xs uppercase tracking-widest">
+        <CardFooter className="px-8 md:px-14 py-10 flex flex-col md:flex-row gap-4 justify-between bg-stone-50/40 border-t border-stone-100/60 mt-auto">
+          <Button 
+            variant="ghost" 
+            size="lg" 
+            onClick={() => step > 0 && setStep(step - 1)} 
+            disabled={step === 0} 
+            className="text-stone-400 font-bold text-[10px] uppercase tracking-[0.2em] h-14 px-8 hover:bg-white hover:text-stone-900 rounded-2xl disabled:opacity-30"
+          >
             Anterior
           </Button>
           <Button 
             size="lg"
             onClick={handleNext} 
             disabled={!answers[currentQ.id] || isSaving}
-            className="bg-neutral-900 text-white hover:bg-black transition-all shadow-xl px-10 rounded-xl font-bold h-14"
+            className="bg-stone-900 text-stone-50 hover:bg-stone-800 transition-all shadow-2xl px-12 rounded-2xl font-bold h-16 text-lg min-w-[200px] active:scale-95 disabled:bg-stone-200"
           >
-            {isSaving ? 'Enviando...' : step === questions.length - 1 ? 'Finalizar Análise' : 'Próxima'} <ArrowRight className="w-5 h-5 ml-2" />
+            {isSaving ? 'Enviando...' : step === questions.length - 1 ? 'Finalizar Análise' : 'Próxima'} <ArrowRight className="w-5 h-5 ml-3" />
           </Button>
         </CardFooter>
       </Card>

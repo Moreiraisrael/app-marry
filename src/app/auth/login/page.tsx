@@ -11,7 +11,7 @@ import Link from "next/link"
 
 export default function LoginPage() {
   const [state, formAction, isPending] = useActionState(async (_prevState: { error?: string } | null, formData: FormData) => {
-    return await signIn(formData)
+    return await signIn(formData) || null
   }, null)
 
   return (

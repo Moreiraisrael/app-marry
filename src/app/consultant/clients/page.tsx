@@ -1,6 +1,8 @@
 import { getClients } from "@/lib/actions/clients"
 import { ClientsTable } from "@/components/clients/ClientsTable"
 
+export const dynamic = 'force-dynamic'
+
 export default async function ClientsCRM() {
   const clients = await getClients()
 

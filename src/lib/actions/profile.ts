@@ -3,7 +3,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { revalidatePath } from 'next/cache'
 
-export async function updateProfile(formData: FormData) {
+export async function updateProfile(formData: FormData): Promise<{ error?: string; success?: string }> {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
 
@@ -12,14 +12,12 @@ export async function updateProfile(formData: FormData) {
   }
 
   const fullName = formData.get('fullName') as string
-  const bio = formData.get('bio') as string
   const avatarUrl = formData.get('avatarUrl') as string
 
   const { error } = await supabase
     .from('profiles')
     .update({
       full_name: fullName,
-      bio: bio,
       avatar_url: avatarUrl,
     })
     .eq('id', user.id)

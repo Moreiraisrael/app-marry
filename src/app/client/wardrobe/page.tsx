@@ -1,99 +1,101 @@
-import { Card, CardContent } from "@/components/ui/card"
+import { WardrobeGrid } from "@/components/wardrobe/WardrobeGrid"
+import { Shirt, Sparkles, Search, Filter } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Badge } from "@/components/ui/badge"
-import { Plus, Camera, Shirt, Wand2 } from "lucide-react"
+import { createClient } from "@/lib/supabase/server"
+import { getWardrobeItems } from "@/lib/actions/wardrobe"
+import { AddWardrobeItemModal } from "@/components/wardrobe/AddWardrobeItemModal"
 
-// Mock data for the wardrobe
-const wardrobeItems = [
-  { id: 1, name: "Blazer Alongado Off-White", category: "Terceira Peça", color: "Off-White", image: "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=500&auto=format&fit=crop&q=60" },
-  { id: 2, name: "Calça Pantalona Alfaiataria", category: "Parte de Baixo", color: "Preto", image: "https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=500&auto=format&fit=crop&q=60" },
-  { id: 3, name: "Camisa de Seda Pura", category: "Parte de Cima", color: "Esmeralda", image: "https://images.unsplash.com/photo-1604695573706-53170668f6a6?w=500&auto=format&fit=crop&q=60" },
-  { id: 4, name: "Scarpin Couro Bico Fino", category: "Calçados", color: "Nude", image: "https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=500&auto=format&fit=crop&q=60" },
-  { id: 5, name: "Vestido Midi Fluido", category: "Peça Única", color: "Azul Marinho", image: "https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=500&auto=format&fit=crop&q=60" },
-  { id: 6, name: "Bolsa Estruturada Couro", category: "Acessórios", color: "Caramelo", image: "https://images.unsplash.com/photo-1584916201218-f4242ceb4809?w=500&auto=format&fit=crop&q=60" },
-]
+import Link from "next/link"
 
-export default function VirtualWardrobe() {
+export const dynamic = 'force-dynamic'
+
+export default async function ClientWardrobePage({ searchParams }: { searchParams: Promise<{ category?: string }> }) {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return null
+
+  const searchParamsValue = await searchParams
+  const categoryFilter = searchParamsValue?.category
+
+  const allItems = await getWardrobeItems()
+  const items = categoryFilter && categoryFilter !== 'Todos' 
+    ? allItems.filter(i => i.category === categoryFilter)
+    : allItems
+
+  const categories = [
+    { label: "Todos", value: "Todos", count: allItems.length },
+    { label: "Partes de Cima", value: "Top", count: allItems.filter(i => i.category === 'Top').length },
+    { label: "Partes de Baixo", value: "Bottom", count: allItems.filter(i => i.category === 'Bottom').length },
+    { label: "Peça Única", value: "OnePiece", count: allItems.filter(i => i.category === 'OnePiece').length },
+    { label: "Sapatos", value: "Shoes", count: allItems.filter(i => i.category === 'Shoes').length }
+  ]
+
   return (
-    <div className="max-w-6xl mx-auto animate-in fade-in duration-500">
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
-        <div>
-          <h1 className="text-3xl font-serif font-bold text-neutral-900 mb-2">Guarda-Roupa Digital</h1>
-          <p className="text-neutral-500 text-lg">Suas peças digitalizadas para multiplicações inteligentes.</p>
+    <div className="max-w-7xl mx-auto space-y-12 pb-20 animate-in fade-in slide-in-from-bottom-4 duration-1000">
+      <div className="flex flex-col md:flex-row items-start md:items-end justify-between gap-8">
+        <div className="space-y-4">
+           <div className="flex items-center gap-2 mb-3 text-primary font-bold tracking-[0.2em] uppercase text-xs">
+            <Shirt className="w-4 h-4" />
+            Seu Acervo Digital
+          </div>
+           <h1 className="text-5xl font-bold text-foreground leading-tight tracking-tight">Closet <span className="text-primary italic">Inteligente</span></h1>
+           <p className="text-muted-foreground text-xl max-w-xl font-light leading-relaxed">Visualize e gerencie suas peças. Sua consultora utiliza este acervo para criar seus looks.</p>
         </div>
-        <Button className="bg-rose-600 hover:bg-rose-700 text-white gap-2 shadow-sm">
-          <Camera className="w-4 h-4" /> Adicionar Peça
-        </Button>
+        
+        <div className="flex bg-white/50 backdrop-blur-md border border-primary/10 p-2 rounded-2xl shadow-sm overflow-x-auto">
+           {categories.map((cat, idx) => {
+             const isActive = categoryFilter === cat.value || (!categoryFilter && cat.value === 'Todos');
+             return (
+               <Link key={idx} href={`/client/wardrobe${cat.value === 'Todos' ? '' : `?category=${cat.value}`}`}>
+                 <Button 
+                   variant={isActive ? "default" : "ghost"} 
+                   className={`h-10 px-6 rounded-xl transition-all whitespace-nowrap ${isActive ? 'bg-stone-900 text-white shadow-lg shadow-stone-200' : 'text-stone-500 hover:text-primary hover:bg-primary/5'}`}
+                 >
+                   {cat.label}
+                   <span className="ml-2 opacity-40 text-[10px] font-bold">{cat.count}</span>
+                 </Button>
+               </Link>
+             )
+           })}
+        </div>
       </div>
 
-      <Tabs defaultValue="todas" className="w-full">
-        <TabsList className="grid w-full grid-cols-3 max-w-md mb-8 bg-neutral-100/80 p-1">
-          <TabsTrigger value="todas" className="data-[state=active]:bg-white data-[state=active]:text-rose-600">Peças</TabsTrigger>
-          <TabsTrigger value="looks" className="data-[state=active]:bg-white data-[state=active]:text-rose-600">Meus Looks</TabsTrigger>
-          <TabsTrigger value="ai" className="data-[state=active]:bg-white data-[state=active]:text-rose-600">Descobertas IA</TabsTrigger>
-        </TabsList>
-        
-        <TabsContent value="todas" className="space-y-6">
-          <div className="flex gap-2 pb-4 overflow-x-auto print:hidden">
-            <Badge variant="secondary" className="bg-rose-100 text-rose-800 hover:bg-rose-200 px-4 py-1.5 cursor-pointer">Todas as Peças</Badge>
-            <Badge variant="outline" className="text-neutral-600 hover:bg-neutral-50 px-4 py-1.5 cursor-pointer">Partes de Cima</Badge>
-            <Badge variant="outline" className="text-neutral-600 hover:bg-neutral-50 px-4 py-1.5 cursor-pointer">Partes de Baixo</Badge>
-            <Badge variant="outline" className="text-neutral-600 hover:bg-neutral-50 px-4 py-1.5 cursor-pointer">Terceira Peça</Badge>
-            <Badge variant="outline" className="text-neutral-600 hover:bg-neutral-50 px-4 py-1.5 cursor-pointer">Calçados</Badge>
-            <Badge variant="outline" className="text-neutral-600 hover:bg-neutral-50 px-4 py-1.5 cursor-pointer">Acessórios</Badge>
-          </div>
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
+         <div className="md:col-span-8 relative group">
+            <Search className="absolute left-6 top-1/2 -translate-y-1/2 text-stone-300 group-focus-within:text-primary transition-colors w-5 h-5" />
+            <input 
+              type="text" 
+              placeholder="Buscar por cor, tecido ou ocasião..." 
+              className="w-full h-16 pl-16 pr-6 rounded-[1.5rem] bg-white border border-stone-100 focus:border-primary/30 focus:ring-4 focus:ring-primary/5 transition-all shadow-sm outline-none text-lg font-light"
+            />
+         </div>
+         <div className="md:col-span-4 flex gap-4">
+            <Button variant="outline" className="flex-1 h-16 border-primary/20 bg-white/50 backdrop-blur-md rounded-[1.5rem] px-6 hover:bg-primary/5 transition-all text-stone-600 font-medium">
+              <Filter className="w-5 h-5 mr-3 text-primary/60" /> Filtrar
+            </Button>
+            <AddWardrobeItemModal clientId={user.id} />
+         </div>
+      </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {wardrobeItems.map((item) => (
-              <Card key={item.id} className="overflow-hidden group border-neutral-200/60 hover:shadow-lg transition-all duration-300">
-                <div className="aspect-square relative overflow-hidden bg-neutral-100">
-                  <img 
-                    src={item.image} 
-                    alt={item.name}
-                    className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500"
-                  />
-                  <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity duration-300">
-                    <Button variant="secondary" size="sm" className="bg-white text-neutral-900 border-none">Ver Detalhes</Button>
-                  </div>
-                </div>
-                <CardContent className="p-4">
-                  <div className="flex justify-between items-start mb-1">
-                    <span className="text-xs font-medium uppercase tracking-wider text-rose-600">{item.category}</span>
-                  </div>
-                  <h3 className="font-semibold text-neutral-900 leading-tight truncate" title={item.name}>{item.name}</h3>
-                  <p className="text-sm text-neutral-500 mt-1">{item.color}</p>
-                </CardContent>
-              </Card>
-            ))}
-            
-            <Card className="overflow-hidden group border-dashed border-2 border-neutral-300 hover:border-rose-400 hover:bg-rose-50/50 transition-all duration-300 flex flex-col items-center justify-center min-h-[300px] cursor-pointer">
-              <div className="h-12 w-12 rounded-full bg-neutral-100 group-hover:bg-rose-100 flex items-center justify-center mb-3 transition-colors">
-                <Plus className="w-6 h-6 text-neutral-400 group-hover:text-rose-600" />
-              </div>
-              <span className="font-medium text-neutral-600 group-hover:text-rose-700">Digitalizar Nova Peça</span>
-            </Card>
-          </div>
-        </TabsContent>
+      <section className="bg-white/40 backdrop-blur-xl rounded-[3rem] p-10 border border-white/60 shadow-inner">
+        <WardrobeGrid items={items} />
+      </section>
 
-        <TabsContent value="looks">
-          <Card className="border-dashed border-2 py-16 text-center bg-transparent">
-            <Shirt className="w-12 h-12 text-neutral-300 mx-auto mb-4" />
-            <h3 className="text-xl font-semibold text-neutral-900">Nenhum look montado ainda</h3>
-            <p className="text-neutral-500 mt-2 max-w-md mx-auto mb-6">Comece a combinar suas peças para criar formulações perfeitas para sua rotina.</p>
-            <Button variant="outline" className="border-rose-200 text-rose-700 hover:bg-rose-50">Criar Primeiro Look</Button>
-          </Card>
-        </TabsContent>
-
-        <TabsContent value="ai">
-          <Card className="bg-gradient-to-br from-indigo-50 to-rose-50 border-rose-100 py-16 text-center">
-            <Wand2 className="w-12 h-12 text-indigo-400 mx-auto mb-4" />
-            <h3 className="text-xl font-semibold text-indigo-950">Inteligência Artificial E.S.T.I.L.O.</h3>
-            <p className="text-indigo-800/70 mt-2 max-w-md mx-auto mb-6">Nossa IA pode analisar o seu guarda-roupa para sugerir novas compras e montar 30 looks automáticos.</p>
-            <Button className="bg-indigo-600 hover:bg-indigo-700 text-white shadow-md">Gerar Análise de Guarda-Roupa</Button>
-          </Card>
-        </TabsContent>
-      </Tabs>
+      <div className="bg-stone-900 rounded-[2.5rem] p-12 text-center space-y-8 relative overflow-hidden group">
+        <div className="absolute top-0 left-0 w-full h-full bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-5" />
+        <div className="relative z-10 space-y-4">
+           <div className="w-20 h-20 bg-primary/20 rounded-[2rem] flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-500">
+              <Sparkles className="w-10 h-10 text-primary" />
+           </div>
+           <h2 className="text-3xl font-bold text-white tracking-tight">Transforme seu Estilo</h2>
+           <p className="text-stone-400 max-w-lg mx-auto font-light text-lg">
+             Adicione novas peças regularmente para que sua consultora possa manter suas combinações sempre atualizadas e estratégicas.
+           </p>
+           <Button className="mt-6 bg-primary hover:bg-primary/90 text-white h-14 px-12 rounded-2xl font-bold shadow-2xl shadow-primary/20 transition-all border-none">
+             Agendar Curadoria de Looks
+           </Button>
+        </div>
+      </div>
     </div>
   )
 }

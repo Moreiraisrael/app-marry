@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button"
 import { ExternalLink, Filter, Search } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { motion } from "framer-motion"
+import Image from "next/image"
 
 const partnerStores = [
   { id: 1, name: "MAC Cosmetics", category: "Maquiagem", logo: "https://upload.wikimedia.org/wikipedia/commons/4/4e/Mac_cosmetics_logo.svg", discount: "15% OFF" },
@@ -53,8 +54,14 @@ export default function PartnerStores() {
             key={store.id}
           >
             <Card className="border-none bg-card/60 backdrop-blur-md shadow-sm hover:shadow-md transition-all rounded-[2.5rem] overflow-hidden group p-8">
-              <div className="h-24 w-full flex items-center justify-center mb-8 bg-background/50 rounded-2xl p-6 border border-primary/5 group-hover:bg-primary/[0.02] transition-colors duration-500">
-                 <img src={store.logo} alt={store.name} className="max-h-12 max-w-[80%] object-contain opacity-40 group-hover:opacity-100 transition-all duration-700 grayscale group-hover:grayscale-0 group-hover:scale-110" />
+              <div className="h-24 w-full flex items-center justify-center mb-8 bg-background/50 rounded-2xl p-6 border border-primary/5 group-hover:bg-primary/[0.02] transition-colors duration-500 relative">
+                 <Image 
+                    src={store.logo} 
+                    alt={store.name} 
+                    fill 
+                    className="object-contain p-4 opacity-40 group-hover:opacity-100 transition-all duration-700 grayscale group-hover:grayscale-0 group-hover:scale-110" 
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 25vw"
+                  />
               </div>
               <div className="flex justify-between items-start mb-8">
                 <div>

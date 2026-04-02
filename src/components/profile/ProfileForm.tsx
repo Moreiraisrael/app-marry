@@ -14,7 +14,6 @@ interface ProfileFormProps {
   initialData: {
     full_name: string | null
     email: string | null
-    bio: string | null
     avatar_url: string | null
   }
 }
@@ -87,15 +86,6 @@ export function ProfileForm({ initialData }: ProfileFormProps) {
             </div>
           </div>
 
-          <div className="space-y-3">
-            <Label className="text-[10px] text-muted-foreground uppercase tracking-[0.2em] font-bold">Bio Profissional</Label>
-            <textarea 
-              name="bio" 
-              className="w-full bg-white/80 border border-border/50 text-foreground rounded-2xl p-5 min-h-[120px] text-sm focus:ring-primary/20 font-medium leading-relaxed" 
-              defaultValue={initialData.bio || ""} 
-              placeholder="Conte um pouco sobre sua trajetória..."
-            />
-          </div>
         </div>
       </Card>
 

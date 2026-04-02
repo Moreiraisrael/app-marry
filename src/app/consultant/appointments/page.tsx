@@ -3,6 +3,8 @@ import { getClients } from "@/lib/actions/clients"
 import { CalendarView } from "@/components/appointments/CalendarView"
 import { Sparkles } from "lucide-react"
 
+export const dynamic = 'force-dynamic'
+
 export default async function AppointmentsPage() {
   const appointments = await getAppointments()
   const clients = await getClients()

@@ -5,6 +5,7 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/componen
 import { Button } from "@/components/ui/button"
 import { Progress } from "@/components/ui/progress"
 import { ArrowLeft, ArrowRight, CheckCircle2, Sparkles, Star, RefreshCw } from "lucide-react"
+import { motion } from "framer-motion"
 import { saveQuizResult } from "@/lib/actions/quizzes"
 import { useRouter } from "next/navigation"
 
@@ -226,70 +227,73 @@ export default function ArchetypeQuiz() {
   }
 
   if (result) {
-    const primaryInfo = (archetypes as Record<string, any>)[result.primary]
-    const secondaryInfo = result.secondary ? (archetypes as Record<string, any>)[result.secondary] : null
+    const primaryInfo = (archetypes as Record<string, typeof archetypes.romantica>)[result.primary]
+    const secondaryInfo = result.secondary ? (archetypes as Record<string, typeof archetypes.romantica>)[result.secondary] : null
 
     return (
-      <div className="max-w-3xl mx-auto py-12 px-4 animate-in zoom-in duration-500">
-        <div className={`rounded-3xl overflow-hidden shadow-2xl bg-white border border-neutral-100`}>
-          <div className={`bg-gradient-to-br ${primaryInfo.color} p-10 text-white text-center`}>
-            <div className="text-7xl mb-4 drop-shadow-lg">{primaryInfo.emoji}</div>
-            <p className="text-white/80 text-sm uppercase tracking-[0.2em] font-bold mb-2">Seu Arquétipo Dominante</p>
-            <h1 className="text-5xl font-serif font-bold mb-4">{primaryInfo.name}</h1>
-            <div className="flex flex-wrap justify-center gap-2 mt-6">
-              {primaryInfo.keywords.map((k: string) => (
-                <span key={k} className="px-4 py-1.5 bg-white/20 backdrop-blur-md rounded-full text-xs font-bold uppercase tracking-wider">{k}</span>
-              ))}
+      <div className="max-w-3xl mx-auto py-12 px-4 animate-in zoom-in duration-700">
+        <div className={`rounded-[3rem] overflow-hidden shadow-[0_32px_64px_-16px_rgba(0,0,0,0.15)] bg-white border border-stone-100`}>
+          <div className={`bg-gradient-to-br ${primaryInfo.color} p-12 text-white text-center relative overflow-hidden`}>
+            <div className="absolute inset-0 bg-black/5 mix-blend-overlay" />
+            <div className="relative z-10">
+              <div className="text-8xl mb-6 drop-shadow-2xl animate-bounce-slow">{primaryInfo.emoji}</div>
+              <p className="text-white/80 text-[10px] uppercase tracking-[0.3em] font-bold mb-3">Seu Arquétipo Dominante</p>
+              <h1 className="text-6xl font-serif font-bold mb-6 tracking-tight">{primaryInfo.name}</h1>
+              <div className="flex flex-wrap justify-center gap-2.5 mt-8">
+                {primaryInfo.keywords.map((k: string) => (
+                  <span key={k} className="px-6 py-2 bg-white/20 backdrop-blur-xl rounded-full text-xs font-bold uppercase tracking-wider border border-white/20">{k}</span>
+                ))}
+              </div>
             </div>
           </div>
 
-          <div className="p-10 space-y-8">
-            <p className="text-neutral-600 text-xl leading-relaxed text-center font-medium italic">
+          <div className="p-10 md:p-14 space-y-12">
+            <p className="text-stone-600 text-2xl leading-relaxed text-center font-serif italic max-w-2xl mx-auto">
               &quot;{primaryInfo.description}&quot;
             </p>
 
             {secondaryInfo && (
-              <div className={`${secondaryInfo.bg} ${secondaryInfo.border} border rounded-2xl p-6 transition-all hover:shadow-md`}>
-                <p className="text-[10px] font-bold text-neutral-500 uppercase tracking-[0.15em] mb-2">Influência Secundária</p>
-                <div className="flex items-center gap-3 mb-2">
-                  <span className="text-2xl">{secondaryInfo.emoji}</span>
-                  <p className="text-xl font-bold text-neutral-900">{secondaryInfo.name}</p>
+              <div className={`${secondaryInfo.bg} ${secondaryInfo.border} border-2 rounded-[2rem] p-8 transition-all hover:shadow-xl group`}>
+                <p className="text-[10px] font-bold text-stone-400 uppercase tracking-[0.2em] mb-3">Influência Secundária</p>
+                <div className="flex items-center gap-4 mb-4">
+                  <span className="text-3xl group-hover:scale-110 transition-transform">{secondaryInfo.emoji}</span>
+                  <p className="text-2xl font-bold text-stone-900 tracking-tight">{secondaryInfo.name}</p>
                 </div>
-                <p className="text-neutral-600 text-sm leading-relaxed">{secondaryInfo.description}</p>
+                <p className="text-stone-600 text-base leading-relaxed">{secondaryInfo.description}</p>
               </div>
             )}
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-               <div className="bg-neutral-50 rounded-2xl p-6 border border-neutral-100">
-                  <h4 className="text-neutral-900 font-bold mb-3 flex items-center gap-2">
-                    <Star className="w-4 h-4 text-amber-500" /> Superpoderes
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+               <div className="bg-stone-50/50 rounded-3xl p-8 border border-stone-100">
+                  <h4 className="text-stone-900 font-bold mb-4 flex items-center gap-3 text-lg">
+                    <Star className="w-5 h-5 text-[#B48D6C]" /> Superpoderes
                   </h4>
-                  <ul className="text-sm text-neutral-600 space-y-2">
-                    <li>• Comunicação visual autêntica</li>
-                    <li>• Magnetismo pessoal elevado</li>
-                    <li>• Coerência estratégica</li>
+                  <ul className="text-stone-600 space-y-3">
+                    <li className="flex items-center gap-2">• <span className="text-sm">Comunicação visual autêntica</span></li>
+                    <li className="flex items-center gap-2">• <span className="text-sm">Magnetismo pessoal elevado</span></li>
+                    <li className="flex items-center gap-2">• <span className="text-sm">Coerência estratégica</span></li>
                   </ul>
                </div>
-               <div className="bg-neutral-50 rounded-2xl p-6 border border-neutral-100">
-                  <h4 className="text-neutral-900 font-bold mb-3 flex items-center gap-2">
-                    <Sparkles className="w-4 h-4 text-amber-500" /> Próximos Passos
+               <div className="bg-stone-50/50 rounded-3xl p-8 border border-stone-100">
+                  <h4 className="text-stone-900 font-bold mb-4 flex items-center gap-3 text-lg">
+                    <Sparkles className="w-5 h-5 text-[#B48D6C]" /> Próximos Passos
                   </h4>
-                  <p className="text-xs text-neutral-600">
+                  <p className="text-stone-600 text-sm leading-relaxed italic">
                     Sua jornada continua no painel principal, onde você encontrará sugestões de looks baseadas no seu arquétipo.
                   </p>
                </div>
             </div>
 
-            <div className="flex flex-col gap-3">
+            <div className="flex flex-col gap-4 max-w-md mx-auto">
               <Button 
-                className="bg-neutral-900 hover:bg-black text-white h-14 rounded-2xl font-bold text-lg shadow-xl"
+                className="bg-stone-900 hover:bg-stone-800 text-stone-50 h-16 rounded-2xl font-bold text-lg shadow-2xl transition-all hover:scale-[1.02] active:scale-95"
                 onClick={() => router.push('/client/dashboard')}
               >
                 Ir para o Dashboard
               </Button>
               <Button 
                 variant="ghost"
-                className="text-neutral-400 hover:text-neutral-600 gap-2"
+                className="text-stone-400 hover:text-stone-900 h-12 gap-2 hover:bg-stone-50 rounded-xl transition-all"
                 onClick={() => window.location.reload()}
               >
                 <RefreshCw className="w-4 h-4" /> Refazer Quiz
@@ -302,71 +306,81 @@ export default function ArchetypeQuiz() {
   }
 
   return (
-    <div className="max-w-3xl mx-auto py-8 px-4 animate-in fade-in slide-in-from-bottom-4 duration-500 text-neutral-900">
-      <div className="mb-10 text-center">
-        <Button variant="ghost" className="mb-6 text-neutral-400 hover:text-neutral-900" onClick={() => router.push('/client/quiz')}>
+    <div className="max-w-3xl mx-auto py-12 px-4 min-h-[90vh] flex flex-col animate-in fade-in slide-in-from-bottom-6 duration-700 text-stone-900">
+      <div className="mb-12 text-center">
+        <Button variant="ghost" className="mb-8 text-stone-400 hover:text-stone-900 transition-colors hover:bg-stone-50" onClick={() => router.push('/client/quiz')}>
           <ArrowLeft className="w-4 h-4 mr-2" /> Desistir da Jornada
         </Button>
-        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-rose-50 text-rose-600 text-[10px] font-bold uppercase tracking-widest mb-4">
-          <Sparkles className="w-4 h-4" />
+        <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#B48D6C]/10 text-[#B48D6C] text-[10px] font-bold uppercase tracking-[0.2em] mb-6 border border-[#B48D6C]/10">
+          <Sparkles className="w-4 h-4 animate-pulse" />
           Mapeamento Arquetípico
         </div>
-        <h1 className="text-4xl font-serif font-bold text-neutral-900 mb-2">Desperte sua Essência</h1>
-        <p className="text-neutral-500">Responda com seu coração para descobrir sua imagem magnética.</p>
+        <h1 className="text-5xl font-serif font-bold text-stone-900 mb-3 tracking-tight">Desperte sua Essência</h1>
+        <p className="text-stone-500 text-lg max-w-lg mx-auto">Responda com seu coração para descobrir sua imagem magnética.</p>
       </div>
 
-      <div className="mb-8 max-w-md mx-auto">
-        <div className="flex justify-between text-[10px] font-bold text-neutral-400 uppercase tracking-widest mb-3">
+      <div className="mb-10 max-w-md mx-auto w-full">
+        <div className="flex justify-between text-[11px] font-bold text-stone-400 uppercase tracking-[0.2em] mb-4">
           <span>Passo {currentStep + 1} de {questions.length}</span>
           <span>{Math.round(progress)}%</span>
         </div>
-        <Progress value={progress} className="h-1.5 bg-neutral-100" />
+        <Progress value={progress} className="h-2 bg-stone-100 rounded-full" />
       </div>
 
-      <Card className="border-neutral-200/40 shadow-2xl bg-white/80 backdrop-blur-xl rounded-[2.5rem] overflow-hidden border-b-[6px] border-rose-100">
-        <CardHeader className="pb-8 pt-12 px-10 text-center">
-          <CardTitle className="text-2xl md:text-3xl font-serif font-bold leading-tight text-neutral-900">
+      <Card className="border-stone-200/50 shadow-[0_32px_64px_-16px_rgba(0,0,0,0.1)] bg-white/95 backdrop-blur-2xl rounded-[3rem] overflow-hidden border-b-[8px] border-stone-100/80 transition-all duration-500">
+        <CardHeader className="pb-10 pt-16 px-8 md:px-14 text-center">
+          <CardTitle className="text-3xl md:text-4xl font-serif font-bold leading-tight text-stone-900 tracking-tight">
             {currentQ.question}
           </CardTitle>
         </CardHeader>
-        <CardContent className="px-10 pb-12">
-          <div className="grid grid-cols-1 gap-3">
+        <CardContent className="px-8 md:px-14 pb-16">
+          <div className="grid grid-cols-1 gap-4">
             {currentQ.options.map((opt, idx) => (
               <button
                 key={opt.id}
                 onClick={() => setAnswers({...answers, [currentStep]: opt.archetype})}
-                className={`flex items-center justify-between p-6 rounded-2xl border-2 transition-all duration-300 group
+                className={`flex items-center justify-between p-7 rounded-[2rem] border-2 transition-all duration-500 group relative overflow-hidden
                   ${answers[currentStep] === opt.archetype 
-                    ? 'border-rose-500 bg-rose-50/50 shadow-lg shadow-rose-500/10' 
-                    : 'border-neutral-100 bg-white hover:border-rose-200 hover:shadow-md'
+                    ? 'border-[#B48D6C] bg-[#B48D6C]/5 shadow-lg' 
+                    : 'border-stone-100 bg-white hover:border-stone-200 hover:shadow-md'
                   }`}
               >
-                <div className="flex items-center gap-4">
-                   <span className={`w-8 h-8 rounded-lg flex items-center justify-center text-xs font-bold transition-colors
-                    ${answers[currentStep] === opt.archetype ? 'bg-rose-500 text-white' : 'bg-neutral-50 text-neutral-400 group-hover:bg-rose-100 group-hover:text-rose-600'}
+                <div className="flex items-center gap-6 relative z-10">
+                   <span className={`w-10 h-10 rounded-xl flex items-center justify-center text-sm font-bold transition-all duration-500
+                    ${answers[currentStep] === opt.archetype ? 'bg-[#B48D6C] text-white rotate-6' : 'bg-stone-50 text-stone-400 group-hover:bg-[#B48D6C]/10 group-hover:text-[#B48D6C]'}
                    `}>
                      {String.fromCharCode(65 + idx)}
                    </span>
-                   <span className={`text-left text-base font-medium transition-colors ${answers[currentStep] === opt.archetype ? 'text-rose-950 font-bold' : 'text-neutral-600'}`}>
+                   <span className={`text-left text-lg transition-all duration-500 ${answers[currentStep] === opt.archetype ? 'text-stone-900 font-bold tracking-tight transform translate-x-1' : 'text-stone-600 font-medium'}`}>
                      {opt.text}
                    </span>
                 </div>
-                {answers[currentStep] === opt.archetype && <CheckCircle2 className="w-6 h-6 text-rose-500 animate-in zoom-in duration-300" />}
+                {answers[currentStep] === opt.archetype && (
+                  <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }}>
+                    <CheckCircle2 className="w-7 h-7 text-[#B48D6C]" />
+                  </motion.div>
+                )}
               </button>
             ))}
           </div>
         </CardContent>
-        <CardFooter className="px-10 py-8 flex justify-between bg-neutral-50/50 border-t border-neutral-100">
-          <Button variant="ghost" size="lg" onClick={handleBack} disabled={currentStep === 0} className="text-neutral-400 font-bold text-xs uppercase tracking-widest">
+        <CardFooter className="px-8 md:px-14 py-10 flex flex-col md:flex-row gap-4 justify-between bg-stone-50/40 border-t border-stone-100/60 mt-auto">
+          <Button 
+            variant="ghost" 
+            size="lg" 
+            onClick={handleBack} 
+            disabled={currentStep === 0} 
+            className="text-stone-400 font-bold text-[10px] uppercase tracking-[0.2em] h-14 px-8 hover:bg-white hover:text-stone-900 rounded-2xl disabled:opacity-30"
+          >
             Anterior
           </Button>
           <Button 
             size="lg"
             onClick={handleNext} 
             disabled={!answers[currentStep] || isSaving}
-            className="bg-neutral-900 text-white hover:bg-rose-600 transition-all shadow-xl px-10 rounded-xl font-bold h-14"
+            className="bg-stone-900 text-stone-50 hover:bg-stone-800 transition-all shadow-2xl px-12 rounded-2xl font-bold h-16 text-lg min-w-[200px] active:scale-95 disabled:bg-stone-200"
           >
-            {isSaving ? 'Salvando...' : currentStep === questions.length - 1 ? 'Mapear Agora' : 'Próxima'} <ArrowRight className="w-5 h-5 ml-2" />
+            {isSaving ? 'Salvando...' : currentStep === questions.length - 1 ? 'Mapear Agora' : 'Próxima'} <ArrowRight className="w-5 h-5 ml-3" />
           </Button>
         </CardFooter>
       </Card>

@@ -85,7 +85,7 @@ export default function LandingPage() {
                     <span className="text-sm font-medium text-neutral-400">+500 consultoras ativas</span>
                  </div>
                  <div className="bg-white/10 backdrop-blur-md border border-white/10 p-6 rounded-2xl">
-                    <p className="text-sm italic text-neutral-200">"Transformei meu atendimento e escalei meu negócio com a precisão tecnológica do E.S.T.I.L.O."</p>
+                     <p className="text-sm italic text-neutral-200">{`"Transformei meu atendimento e escalei meu negócio com a precisão tecnológica do E.S.T.I.L.O."`}</p>
                     <p className="text-xs font-bold mt-4 text-amber-500">— Adriana M., Fashion Strategy</p>
                  </div>
               </div>

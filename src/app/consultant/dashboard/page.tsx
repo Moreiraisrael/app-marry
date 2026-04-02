@@ -19,9 +19,9 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { createClient } from '@/lib/supabase/client'
-import { getDashboardStats } from '@/lib/actions/dashboard'
+import { getDashboardStats } from "@/lib/actions/dashboard"
 
-export default function PremiumDashboard() {
+export default function ConsultantDashboard() {
   const [userName, setUserName] = useState('Consultora')
   const [stats, setStats] = useState<{label: string, value: string, icon: LucideIcon}[]>([
     { label: 'Clientes Ativas', value: '0', icon: Users },

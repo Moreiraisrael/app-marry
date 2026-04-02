@@ -21,7 +21,9 @@ export async function getShoppingLists(clientId?: string) {
       return []
     }
     return data || []
-  } catch (e) {
+  } catch (e: unknown) {
+    const err = e as { digest?: string; message?: string }
+    if (err?.digest === 'DYNAMIC_SERVER_USAGE' || err?.message?.includes('Dynamic server usage')) throw e
     console.error('Connection error in getShoppingLists:', e)
     return []
   }
@@ -53,7 +55,9 @@ export async function createShoppingList(formData: {
     }
     revalidatePath('/consultant/shopping-lists')
     return data
-  } catch (e) {
+  } catch (e: unknown) {
+    const err = e as { digest?: string; message?: string }
+    if (err?.digest === 'DYNAMIC_SERVER_USAGE' || err?.message?.includes('Dynamic server usage')) throw e
     console.error('Connection error in createShoppingList:', e)
     return null
   }

@@ -1,71 +1,122 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card"
+import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Palette, Sparkles, User, ArrowRight } from "lucide-react"
+import { ClipboardList, CheckCircle2, Circle } from "lucide-react"
 import Link from "next/link"
+import { getQuizzes } from "@/lib/actions/quizzes"
 
-export default function QuizzesHub() {
+export const dynamic = 'force-dynamic'
+
+export default async function ClientQuizPage() {
+  const quizResults = await getQuizzes()
+  
+  const availableQuizzes = [
+    {
+      id: 'style',
+      slug: 'style',
+      title: 'Descoberta de Estilo',
+      description: 'Identifique sua essência visual e pilares de estilo.',
+      quiz_type: 'style'
+    },
+    {
+      id: 'archetype',
+      slug: 'archetypes',
+      title: 'Arquétipos de Imagem',
+      description: 'Descubra a mensagem que sua imagem transmite.',
+      quiz_type: 'archetype'
+    },
+    {
+      id: 'color',
+      slug: 'color',
+      title: 'Análise de Coloração',
+      description: 'Guia preliminar para sua paleta de cores ideal.',
+      quiz_type: 'color'
+    }
+  ]
+
+  const quizzesWithStatus = availableQuizzes.map(q => {
+    const result = quizResults.find(r => r.quiz_type === q.quiz_type)
+    return {
+      ...q,
+      completed: !!result,
+      status: result?.status || 'pending'
+    }
+  })
+
   return (
-    <div className="max-w-4xl mx-auto py-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
-      <div className="mb-10 text-center">
-        <h1 className="text-3xl md:text-4xl font-serif font-bold text-neutral-900 tracking-tight mb-4">
-          Descubra o seu E.S.T.I.L.O.
-        </h1>
-        <p className="text-neutral-500 max-w-xl mx-auto text-lg">
-          Nosso motor de Inteligência Artificial precisa conhecer mais sobre você. Selecione qual jornada de descoberta deseja iniciar.
-        </p>
+    <div className="max-w-7xl mx-auto space-y-16 pb-20 animate-in fade-in slide-in-from-bottom-4 duration-1000">
+      <div className="flex flex-col md:flex-row items-start md:items-end justify-between gap-8">
+        <div className="space-y-4">
+           <div className="flex items-center gap-2 mb-3 text-primary font-bold tracking-[0.2em] uppercase text-xs">
+            <ClipboardList className="w-4 h-4" />
+            Mapeamento de Essência
+          </div>
+           <h1 className="text-5xl font-bold text-foreground leading-tight tracking-tight">Seus <span className="text-primary italic">Questionários</span></h1>
+           <p className="text-muted-foreground text-xl max-w-xl font-light leading-relaxed">Responda aos testes para que sua consultora possa criar uma estratégia de imagem sob medida.</p>
+        </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <Card className="border-neutral-200 hover:border-rose-200 hover:shadow-lg transition-all bg-white/50 backdrop-blur-sm">
-          <CardHeader>
-            <div className="h-12 w-12 rounded-2xl bg-rose-100 flex items-center justify-center mb-3">
-              <Sparkles className="h-6 w-6 text-rose-600" />
-            </div>
-            <CardTitle>Quiz de Estilo</CardTitle>
-            <CardDescription>Descubra suas bases universais de estilo e a sua identidade visual diária ideal.</CardDescription>
-          </CardHeader>
-          <CardFooter>
-            <Link href="/client/quiz/style" className="w-full">
-              <Button className="w-full bg-rose-600 hover:bg-rose-700 text-white shadow-sm">
-                Iniciar Jornada <ArrowRight className="ml-2 h-4 w-4" />
-              </Button>
-            </Link>
-          </CardFooter>
-        </Card>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
+        <div className="lg:col-span-2 space-y-8">
+           <div className="flex items-center justify-between border-b border-stone-100 pb-6">
+              <h2 className="text-2xl font-bold text-foreground">Testes Disponíveis</h2>
+              <span className="text-[10px] font-bold text-primary/60 uppercase tracking-[0.2em]">QUESTIONÁRIOS DISPONÍVEIS</span>
+           </div>
 
-        <Card className="border-neutral-200 hover:border-amber-200 hover:shadow-lg transition-all bg-white/50 backdrop-blur-sm">
-          <CardHeader>
-            <div className="h-12 w-12 rounded-2xl bg-amber-100 flex items-center justify-center mb-3">
-              <Palette className="h-6 w-6 text-amber-600" />
-            </div>
-            <CardTitle>Coloração Pessoal</CardTitle>
-            <CardDescription>Análise sazonal de contraste e temperatura guiada por IA para descobrir sua paleta.</CardDescription>
-          </CardHeader>
-          <CardFooter>
-            <Link href="/client/quiz/color" className="w-full">
-              <Button variant="outline" className="w-full border-amber-200 hover:bg-amber-50 text-amber-900">
-                Descobrir Paleta <ArrowRight className="ml-2 h-4 w-4" />
-              </Button>
-            </Link>
-          </CardFooter>
-        </Card>
+           <div className="space-y-6">
+              {quizzesWithStatus.map((quiz) => (
+                  <Card key={quiz.id} className="p-8 rounded-[2rem] bg-white border-stone-100 hover:border-primary/20 hover:shadow-xl hover:shadow-primary/5 transition-all group overflow-hidden relative">
+                     <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full -mr-16 -mt-16 group-hover:scale-110 transition-transform duration-500" />
+                     <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 relative z-10">
+                       <div className="flex gap-6">
+                          <div className="w-16 h-16 rounded-2xl bg-stone-50 flex items-center justify-center text-stone-400 group-hover:bg-primary/10 group-hover:text-primary transition-colors shadow-inner">
+                             {quiz.completed ? <CheckCircle2 className="w-8 h-8" /> : <Circle className="w-8 h-8" />}
+                          </div>
+                          <div className="space-y-1">
+                             <h3 className="text-xl font-bold text-foreground">{quiz.title}</h3>
+                             <p className="text-muted-foreground font-light">{quiz.description}</p>
+                             {quiz.completed && <span className="text-[10px] font-bold text-green-600 bg-green-50 px-2 py-0.5 rounded-full uppercase tracking-widest mt-2 inline-block">Concluído</span>}
+                          </div>
+                       </div>
+                       <Button asChild className={`h-12 rounded-xl px-8 font-bold transition-all ${quiz.completed ? 'bg-stone-50 text-stone-400' : 'bg-stone-900 text-white hover:bg-stone-800 shadow-lg shadow-stone-100'}`}>
+                          <Link href={quiz.completed ? "#" : `/client/quiz/${quiz.slug}`}>
+                             {quiz.completed ? "Rever Respostas" : "Começar Agora"}
+                          </Link>
+                       </Button>
+                     </div>
+                  </Card>
+              ))}
+           </div>
+        </div>
 
-        <Card className="border-neutral-200 hover:border-indigo-200 hover:shadow-lg transition-all bg-white/50 backdrop-blur-sm">
-          <CardHeader>
-            <div className="h-12 w-12 rounded-2xl bg-indigo-100 flex items-center justify-center mb-3">
-              <User className="h-6 w-6 text-indigo-600" />
-            </div>
-            <CardTitle>Arquétipos</CardTitle>
-            <CardDescription>Mapeie a imagem magnética que você deseja projetar na sua vida amorosa e profissional.</CardDescription>
-          </CardHeader>
-          <CardFooter>
-            <Link href="/client/quiz/archetypes" className="w-full">
-              <Button variant="outline" className="w-full border-indigo-200 hover:bg-indigo-50 text-indigo-900">
-                Mapear Arquétipo <ArrowRight className="ml-2 h-4 w-4" />
-              </Button>
-            </Link>
-          </CardFooter>
-        </Card>
+        <div className="space-y-8">
+           <div className="flex items-center justify-between border-b border-stone-100 pb-6">
+              <h2 className="text-2xl font-bold text-foreground">Por que responder?</h2>
+           </div>
+           
+           <div className="bg-stone-900 rounded-[2.5rem] p-10 text-white relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-64 h-64 bg-primary/10 rounded-full blur-3xl -mr-32 -mt-32" />
+              <div className="relative z-10 space-y-8">
+                 <div className="space-y-6">
+                    <div className="flex gap-4">
+                       <CheckCircle2 className="w-6 h-6 text-primary flex-shrink-0" />
+                       <p className="font-light text-stone-400">Dados precisos para sua análise cromática.</p>
+                    </div>
+                    <div className="flex gap-4">
+                       <CheckCircle2 className="w-6 h-6 text-primary flex-shrink-0" />
+                       <p className="font-light text-stone-400">Definição do seu arquétipo de estilo.</p>
+                    </div>
+                    <div className="flex gap-4">
+                       <CheckCircle2 className="w-6 h-6 text-primary flex-shrink-0" />
+                       <p className="font-light text-stone-400">Curadoria de compras mais assertiva.</p>
+                    </div>
+                 </div>
+                 
+                 <div className="p-6 bg-white/5 rounded-2xl border border-white/10 italic text-sm text-stone-300 font-light">
+                   &quot;As respostas nos ajudam a traduzir sua personalidade em uma imagem visual impactante.&quot;
+                 </div>
+              </div>
+           </div>
+        </div>
       </div>
     </div>
   )

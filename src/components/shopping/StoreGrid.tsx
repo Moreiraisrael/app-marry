@@ -4,6 +4,7 @@ import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { ExternalLink, ShoppingBag } from "lucide-react"
 import Link from "next/link"
+import Image from "next/image"
 
 interface Store {
   id: string
@@ -30,7 +31,13 @@ export function StoreGrid({ stores }: StoreGridProps) {
           <div className="space-y-4">
             <div className="w-16 h-16 bg-neutral-900 rounded-2xl border border-amber-500/10 flex items-center justify-center group-hover:scale-105 transition-transform">
                {store.logoUrl ? (
-                 <img src={store.logoUrl} alt={store.name} className="w-10 h-10 object-contain" />
+                 <Image 
+                    src={store.logoUrl} 
+                    alt={store.name} 
+                    width={40} 
+                    height={40} 
+                    className="object-contain" 
+                  />
                ) : (
                  <ShoppingBag className="w-8 h-8 text-amber-500/30" />
                )}

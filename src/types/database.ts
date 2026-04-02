@@ -10,6 +10,8 @@ export interface Profile {
   avatar_url: string | null;
   user_type: UserType | null;
   consultant_id: string | null;
+  style_archetypes: string[] | null;
+  season: string | null;
   created_at: string;
 }
 
@@ -35,6 +37,12 @@ export interface Quiz {
   result_text: string | null;
   status: 'pending' | 'approved';
   created_at: string;
+}
+
+export interface QuizWithProfile extends Quiz {
+  profiles: {
+    full_name: string | null;
+  } | null;
 }
 
 export interface Appointment {

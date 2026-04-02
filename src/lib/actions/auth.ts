@@ -4,7 +4,7 @@ import { createClient } from '@/lib/supabase/server'
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 
-export async function signIn(formData: FormData) {
+export async function signIn(formData: FormData): Promise<{ error?: string } | null> {
   const email = formData.get('email') as string
   const password = formData.get('password') as string
   
@@ -56,7 +56,7 @@ export async function signIn(formData: FormData) {
   redirect('/consultant/dashboard') // Default redirect, can be refined based on user_type
 }
 
-export async function signUp(formData: FormData) {
+export async function signUp(formData: FormData): Promise<{ error?: string; success?: string }> {
   const email = formData.get('email') as string
   const password = formData.get('password') as string
   const fullName = formData.get('fullName') as string
@@ -106,7 +106,7 @@ export async function signUp(formData: FormData) {
   return { success: 'Cadastro realizado! Verifique seu e-mail para confirmar.' }
 }
 
-export async function signOut() {
+export async function signOut(): Promise<void> {
   const supabase = await createClient()
   await supabase.auth.signOut()
   revalidatePath('/', 'layout')

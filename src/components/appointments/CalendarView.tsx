@@ -35,7 +35,7 @@ interface Appointment {
   client?: {
     full_name: string | null
     email: string | null
-  }
+  } | null
 }
 
 interface Client {
@@ -53,6 +53,7 @@ export function CalendarView({ initialAppointments, clients }: CalendarViewProps
   const [selectedDate, setSelectedDate] = useState(new Date())
   const [isOpen, setIsOpen] = useState(false)
   const [isPending, setIsPending] = useState(false)
+  const [selectedClientId, setSelectedClientId] = useState<string>("")
   const router = useRouter()
 
   const appointments = initialAppointments.filter(appt => 
@@ -71,20 +72,31 @@ export function CalendarView({ initialAppointments, clients }: CalendarViewProps
 
   const handleCreateAppointment = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+    
+    if (!selectedClientId) {
+      toast.error("Por favor, selecione uma cliente.")
+      return
+    }
+
     setIsPending(true)
     const formData = new FormData(e.currentTarget)
     
-    // Simplificando data p/ o exemplo: concatenar data selecionada com hora do input
-    const time = formData.get("time") as string // HH:mm
+    const time = formData.get("time") as string
+    if (!time) {
+      toast.error("Por favor, selecione o horário.")
+      setIsPending(false)
+      return
+    }
+
     const [hours, minutes] = time.split(':')
     const start = new Date(selectedDate)
     start.setHours(parseInt(hours), parseInt(minutes), 0)
     
     const end = new Date(start)
-    end.setHours(start.getHours() + 1) // 1h duracao padrao
+    end.setHours(start.getHours() + 1)
 
     const payload = new FormData()
-    payload.append("clientId", formData.get("clientId") as string)
+    payload.append("clientId", selectedClientId)
     payload.append("title", formData.get("title") as string)
     payload.append("startTime", start.toISOString())
     payload.append("endTime", end.toISOString())
@@ -94,6 +106,7 @@ export function CalendarView({ initialAppointments, clients }: CalendarViewProps
     if (result.success) {
       toast.success("Compromisso agendado com sucesso!")
       setIsOpen(false)
+      setSelectedClientId("")
       router.refresh()
     } else {
       toast.error(result.error || "Erro ao agendar")
@@ -178,14 +191,24 @@ export function CalendarView({ initialAppointments, clients }: CalendarViewProps
                 </div>
                 <div className="space-y-3">
                   <Label className="text-[10px] text-muted-foreground uppercase tracking-[0.2em] font-bold">Cliente</Label>
-                  <Select name="clientId" required>
+                  <Select 
+                    value={selectedClientId} 
+                    onValueChange={setSelectedClientId}
+                    required
+                  >
                     <SelectTrigger className="bg-secondary/30 border-transparent h-12 rounded-xl focus:ring-primary/20">
                       <SelectValue placeholder="Selecione a cliente..." />
                     </SelectTrigger>
                     <SelectContent>
-                      {clients.map(client => (
-                        <SelectItem key={client.id} value={client.id}>{client.full_name}</SelectItem>
-                      ))}
+                      {clients.length === 0 ? (
+                        <div className="p-4 text-center text-xs text-muted-foreground italic">
+                          Nenhuma cliente cadastrada
+                        </div>
+                      ) : (
+                        clients.map(client => (
+                          <SelectItem key={client.id} value={client.id}>{client.full_name || 'Cliente Sem Nome'}</SelectItem>
+                        ))
+                      )}
                     </SelectContent>
                   </Select>
                 </div>

@@ -1,10 +1,16 @@
 'use client'
 
-import { Card, CardContent } from "@/components/ui/card"
+import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { 
-  ShoppingBag, Sparkles, Search, Plus, 
-  Layers, Palette, Tag, Heart, ArrowRight
+  Sparkles, 
+  ArrowRight, 
+  Search, 
+  Plus,
+  Layers,
+  ShoppingBag,
+  Tag, 
+  Heart
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -114,8 +120,8 @@ export default function ShoppingAssistantPage() {
                         <div className="w-5 h-5 rounded-full bg-zinc-900 ring-2 ring-primary/10 ring-offset-2" title="Preto" />
                         <div className="w-5 h-5 rounded-full bg-neutral-200 ring-1 ring-primary/5" title="Off White" />
                       </div>
-                      <p className="text-muted-foreground text-xs font-medium line-clamp-2 leading-relaxed italic">
-                        "Elegância atemporal para o arquétipo Governante."
+                       <p className="text-muted-foreground text-xs font-medium line-clamp-2 leading-relaxed italic">
+                        &quot;Elegância atemporal para o arquétipo Governante.&quot;
                       </p>
                     </div>
                     <div className="flex justify-between items-center mt-8">

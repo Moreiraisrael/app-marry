@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { ExternalLink, ShoppingBag, Heart, Star } from "lucide-react"
 import Link from "next/link"
+import Image from "next/image"
 
 interface ProductCardProps {
   id: string
@@ -35,10 +36,12 @@ export function ProductCard({
       </div>
 
       <div className="relative aspect-[4/5] overflow-hidden">
-        <img 
+        <Image 
           src={imageUrl} 
           alt={name} 
-          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" 
+          fill
+          className="object-cover group-hover:scale-110 transition-transform duration-700" 
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
         />
         <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/80 to-transparent"></div>
         

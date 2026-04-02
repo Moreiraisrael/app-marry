@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-require-imports */
 const { createClient } = require('@supabase/supabase-js')
 require('dotenv').config()
 
@@ -8,7 +9,7 @@ const supabase = createClient(supabaseUrl, supabaseAnonKey)
 
 async function check() {
   console.log('Checking connection to:', supabaseUrl)
-  const { data, error } = await supabase
+  const { error } = await supabase
     .from('profiles')
     .select('count', { count: 'exact', head: true })
   

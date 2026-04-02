@@ -1,8 +1,8 @@
-'use client'
+"use client"
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
+import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
 import { 
   DollarSign, 
   TrendingUp, 
@@ -16,22 +16,39 @@ import {
 } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { motion } from "framer-motion"
-
-const mockStats = [
-  { label: "Saldo Disponível", value: "R$ 1.250,00", icon: DollarSign, trend: "+12%", color: "text-emerald-600" },
-  { label: "Total Ganho", value: "R$ 4.890,00", icon: TrendingUp, trend: "+8%", color: "text-primary" },
-  { label: "Cliques em Links", value: "1.240", icon: MousePointer2, trend: "+24%", color: "text-blue-600" },
-  { label: "Conversões", value: "85", icon: Users, trend: "+15%", color: "text-rose-600" },
-]
-
-const mockConversions = [
-  { id: 1, client: "Mariana Silva", product: "Blazer Zara Off-White", date: "2 horas atrás", commission: "R$ 45,90", status: "Confirmado" },
-  { id: 2, client: "Paula Oliveira", product: "Vestido Animale", date: "5 horas atrás", commission: "R$ 89,00", status: "Em processamento" },
-  { id: 3, client: "Juliana Santos", product: "Scarpin Arezzo", date: "Ontem", commission: "R$ 32,00", status: "Confirmado" },
-  { id: 4, client: "Fernanda Lima", product: "Calça Amaro", date: "Ontem", commission: "R$ 28,90", status: "Confirmado" },
-]
+import { getOrders, getOrdersSummary } from "@/lib/actions/orders"
+import { WithdrawalButton } from "@/components/orders/WithdrawalButton"
+import { format } from "date-fns"
+import { ptBR } from "date-fns/locale"
+import { useState, useEffect } from "react"
 
 export default function AffiliatesPage() {
+  const [orders, setOrders] = useState<any[]>([])
+  const [summary, setSummary] = useState({ availableBalance: 0, totalOrders: 0 })
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    async function loadData() {
+      try {
+        const [o, s] = await Promise.all([getOrders(), getOrdersSummary()])
+        setOrders(o)
+        setSummary(s)
+      } finally {
+        setLoading(setLoading(false) as any)
+      }
+    }
+    loadData()
+  }, [])
+
+  if (loading) return <div className="p-20 text-center">Carregando métricas de elite...</div>
+
+  const stats = [
+    { label: "Saldo Disponível", value: new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(summary.availableBalance), icon: DollarSign, trend: "+12%", color: "text-emerald-600" },
+    { label: "Total Ganho", value: new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(summary.availableBalance), icon: TrendingUp, trend: "+8%", color: "text-primary" },
+    { label: "Cliques em Links", value: "1.240", icon: MousePointer2, trend: "+24%", color: "text-blue-600" },
+    { label: "Conversões", value: String(summary.totalOrders), icon: Users, trend: "+15%", color: "text-rose-600" },
+  ]
+
   return (
     <div className="max-w-7xl mx-auto space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-1000">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
@@ -43,14 +60,12 @@ export default function AffiliatesPage() {
            <Button variant="outline" className="h-12 border-primary/20 bg-background/50 text-foreground hover:bg-primary/5 rounded-2xl px-6">
              <Download className="w-5 h-5 mr-2" /> Exportar Relatório
            </Button>
-           <Button className="h-12 bg-primary hover:bg-primary/90 text-primary-foreground rounded-2xl px-8 shadow-lg shadow-primary/20 border-none">
-             Solicitar Saque
-           </Button>
+           <WithdrawalButton balance={summary.availableBalance} />
         </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-        {mockStats.map((stat, i) => (
+        {stats.map((stat, i) => (
           <motion.div 
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -88,39 +103,52 @@ export default function AffiliatesPage() {
                </div>
             </div>
             <div className="overflow-x-auto">
-               <table className="w-full text-left font-sans">
-                  <thead className="bg-primary/5">
-                     <tr>
-                        <th className="px-10 py-6 text-[10px] font-bold text-primary uppercase tracking-widest">Cliente</th>
-                        <th className="px-10 py-6 text-[10px] font-bold text-primary uppercase tracking-widest">Produto</th>
-                        <th className="px-10 py-6 text-[10px] font-bold text-primary uppercase tracking-widest">Comissão</th>
-                        <th className="px-10 py-6 text-[10px] font-bold text-primary uppercase tracking-widest text-right"></th>
-                     </tr>
-                  </thead>
-                  <tbody className="divide-y divide-primary/5">
-                     {mockConversions.map((conv) => (
-                        <tr key={conv.id} className="hover:bg-primary/[0.02] transition-colors group">
-                           <td className="px-10 py-6">
-                              <div className="flex flex-col">
-                                 <span className="text-foreground font-bold text-sm tracking-wide">{conv.client}</span>
-                                 <span className="text-[10px] text-muted-foreground font-medium uppercase tracking-tight mt-1">{conv.date}</span>
-                              </div>
-                           </td>
-                           <td className="px-10 py-6">
-                              <span className="text-foreground/70 text-sm font-medium">{conv.product}</span>
-                           </td>
-                           <td className="px-10 py-6">
-                              <span className="text-foreground font-bold">{conv.commission}</span>
-                           </td>
-                           <td className="px-10 py-6 text-right">
-                              <Button variant="ghost" size="icon" className="h-10 w-10 text-muted-foreground hover:text-primary hover:bg-primary/10 rounded-xl transition-all">
-                                 <ChevronRight className="w-5 h-5" />
-                              </Button>
-                           </td>
-                        </tr>
-                     ))}
-                  </tbody>
-               </table>
+               {orders.length === 0 ? (
+                 <div className="p-20 text-center space-y-4">
+                   <TrendingUp className="w-12 h-12 text-primary/20 mx-auto" />
+                   <p className="text-muted-foreground italic">Nenhuma conversão encontrada no momento.</p>
+                 </div>
+               ) : (
+                 <table className="w-full text-left font-sans">
+                    <thead className="bg-primary/5">
+                       <tr>
+                          <th className="px-10 py-6 text-[10px] font-bold text-primary uppercase tracking-widest">Cliente</th>
+                          <th className="px-10 py-6 text-[10px] font-bold text-primary uppercase tracking-widest">Valor</th>
+                          <th className="px-10 py-6 text-[10px] font-bold text-primary uppercase tracking-widest">Comissão</th>
+                          <th className="px-10 py-6 text-[10px] font-bold text-primary uppercase tracking-widest text-right"></th>
+                       </tr>
+                    </thead>
+                    <tbody className="divide-y divide-primary/5">
+                       {orders.slice(0, 10).map((conv) => (
+                          <tr key={conv.id} className="hover:bg-primary/[0.02] transition-colors group">
+                             <td className="px-10 py-6">
+                                <div className="flex flex-col">
+                                   <span className="text-foreground font-bold text-sm tracking-wide">{conv.client_name || 'N/A'}</span>
+                                   <span className="text-[10px] text-muted-foreground font-medium uppercase tracking-tight mt-1">
+                                     {format(new Date(conv.created_at), "dd MMM, yyyy", { locale: ptBR })}
+                                   </span>
+                                </div>
+                             </td>
+                             <td className="px-10 py-6">
+                                <span className="text-foreground/70 text-sm font-medium">
+                                  {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(conv.amount)}
+                                </span>
+                             </td>
+                             <td className="px-10 py-6">
+                                <span className="text-foreground font-bold">
+                                  {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(conv.commission)}
+                                </span>
+                             </td>
+                             <td className="px-10 py-6 text-right">
+                                <Button variant="ghost" size="icon" className="h-10 w-10 text-muted-foreground hover:text-primary hover:bg-primary/10 rounded-xl transition-all">
+                                   <ChevronRight className="w-5 h-5" />
+                                </Button>
+                             </td>
+                          </tr>
+                       ))}
+                    </tbody>
+                 </table>
+               )}
             </div>
          </Card>
 

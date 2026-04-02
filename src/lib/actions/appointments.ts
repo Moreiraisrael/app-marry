@@ -1,9 +1,17 @@
 "use server"
 
 import { createClient } from "@/lib/supabase/server"
+import { Appointment } from "@/types/database"
 import { revalidatePath } from "next/cache"
 
-export async function createAppointment(formData: FormData) {
+export interface AppointmentWithClient extends Appointment {
+  client: {
+    full_name: string | null
+    email: string | null
+  } | null
+}
+
+export async function createAppointment(formData: FormData): Promise<{ success: boolean; error?: string; appointment?: Appointment }> {
   try {
     const supabase = await createClient()
     const { data: { user } } = await supabase.auth.getUser()
@@ -36,14 +44,15 @@ export async function createAppointment(formData: FormData) {
     }
 
     revalidatePath('/consultant/appointments')
-    return { success: true, appointment: data }
-  } catch (e) {
+    return { success: true, appointment: data as Appointment }
+  } catch (e: any) {
+    if (e?.digest === 'DYNAMIC_SERVER_USAGE' || e?.message?.includes('Dynamic server usage')) throw e;
     console.error('Connection error in createAppointment:', e)
     return { success: false, error: "Falha na conexão com o servidor." }
   }
 }
 
-export async function getAppointments() {
+export async function getAppointments(): Promise<AppointmentWithClient[]> {
   try {
     const supabase = await createClient()
     const { data: { user } } = await supabase.auth.getUser()
@@ -59,8 +68,9 @@ export async function getAppointments() {
       console.error('Error fetching appointments:', error)
       return []
     }
-    return data || []
-  } catch (e) {
+    return (data as unknown as AppointmentWithClient[]) || []
+  } catch (e: any) {
+    if (e?.digest === 'DYNAMIC_SERVER_USAGE' || e?.message?.includes('Dynamic server usage')) throw e;
     console.error('Connection error in getAppointments:', e)
     return []
   }

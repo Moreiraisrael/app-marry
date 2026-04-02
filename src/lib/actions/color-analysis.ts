@@ -7,7 +7,25 @@ type ColorAnalysisWithProfile = ColorAnalysisRequest & {
   profiles: Pick<Profile, 'full_name' | 'email'> | null
 }
 
-export async function getColorAnalysisRequests() {
+export interface AIColorAnalysisResult {
+  season: string;
+  temperature_analysis: string;
+  depth_analysis: string;
+  intensity_analysis: string;
+  contrast_level: string;
+  facial_features: {
+    face_shape: string;
+    facial_traits: string;
+  };
+  reasoning: string;
+  style_recommendations: {
+    necklines: string;
+    patterns: string;
+    accessories: string;
+  };
+}
+
+export async function getColorAnalysisRequests(): Promise<ColorAnalysisWithProfile[]> {
   try {
     const supabase = await createClient()
     const { data, error } = await supabase
@@ -30,7 +48,7 @@ export async function createColorAnalysisRequest(formData: {
   client_id: string
   client_photo: string
   additional_photos: string[]
-}) {
+}): Promise<ColorAnalysisRequest | null> {
   try {
     const supabase = await createClient()
     const { data: userData } = await supabase.auth.getUser()
@@ -60,7 +78,7 @@ export async function createColorAnalysisRequest(formData: {
   }
 }
 
-export async function analyzeColorWithAI(requestId: string) {
+export async function analyzeColorWithAI(requestId: string): Promise<AIColorAnalysisResult | null> {
   try {
     const supabase = await createClient()
     
@@ -102,7 +120,7 @@ export async function analyzeColorWithAI(requestId: string) {
   }
 }
 
-export async function approveColorAnalysis(requestId: string, season: string, notes: string) {
+export async function approveColorAnalysis(requestId: string, season: string, notes: string): Promise<{ success: boolean }> {
   try {
     const supabase = await createClient()
     

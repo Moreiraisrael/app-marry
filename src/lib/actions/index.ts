@@ -1,42 +1,47 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
-import { Profile, WardrobeItem } from '@/types/database'
+import { Profile, WardrobeItem, QuizType } from '@/types/database'
 import { revalidatePath } from 'next/cache'
 
-import * as clients from './clients'
-import * as colorAnalysis from './color-analysis'
-import * as shoppingLists from './shopping-lists'
-import * as ebooks from './ebooks'
-import * as quizzes from './quizzes'
+import { getClients as getClientsAction, getClientById as getClientByIdAction } from './clients'
+import { 
+  getColorAnalysisRequests as getColorAnalysisRequestsAction, 
+  createColorAnalysisRequest as createColorAnalysisRequestAction, 
+  analyzeColorWithAI as analyzeColorWithAIAction, 
+  approveColorAnalysis as approveColorAnalysisAction 
+} from './color-analysis'
+import { getShoppingLists as getShoppingListsAction, createShoppingList as createShoppingListAction } from './shopping-lists'
+import { getEbooks as getEbooksAction, generateEbook as generateEbookAction } from './ebooks'
+import { getQuizzes as getQuizzesAction, saveQuizResult as saveQuizResultAction } from './quizzes'
 
 // --- Re-exports using explicit async wrappers for Next.js Server Actions compatibility ---
 
-export async function getClients() { return await clients.getClients() }
-export async function getClientById(id: string) { return await clients.getClientById(id) }
+export async function getClients() { return await getClientsAction() }
+export async function getClientById(id: string) { return await getClientByIdAction(id) }
 
-export async function getColorAnalysisRequests() { return await colorAnalysis.getColorAnalysisRequests() }
+export async function getColorAnalysisRequests() { return await getColorAnalysisRequestsAction() }
 export async function createColorAnalysisRequest(data: { client_id: string; client_photo: string; additional_photos: string[] }) { 
-  return await colorAnalysis.createColorAnalysisRequest(data) 
+  return await createColorAnalysisRequestAction(data) 
 }
-export async function analyzeColorWithAI(requestId: string) { return await colorAnalysis.analyzeColorWithAI(requestId) }
+export async function analyzeColorWithAI(requestId: string) { return await analyzeColorWithAIAction(requestId) }
 export async function approveColorAnalysis(requestId: string, season: string, notes: string) { 
-  return await colorAnalysis.approveColorAnalysis(requestId, season, notes) 
+  return await approveColorAnalysisAction(requestId, season, notes) 
 }
 
-export async function getShoppingLists(clientId?: string) { return await shoppingLists.getShoppingLists(clientId) }
+export async function getShoppingLists(clientId?: string) { return await getShoppingListsAction(clientId) }
 export async function createShoppingList(data: { client_id: string; title: string; items: Record<string, unknown>[] }) { 
-  return await shoppingLists.createShoppingList(data) 
+  return await createShoppingListAction(data) 
 }
 
-export async function getEbooks(clientId?: string) { return await ebooks.getEbooks(clientId) }
+export async function getEbooks(clientId?: string) { return await getEbooksAction(clientId) }
 export async function generateEbook(data: { client_id: string; title: string; content: Record<string, unknown> }) { 
-  return await ebooks.generateEbook(data) 
+  return await generateEbookAction(data) 
 }
 
-export async function getQuizzes(clientId?: string) { return await quizzes.getQuizzes(clientId) }
-export async function saveQuizResult(quizType: string, answers: Record<string, unknown>, resultText: string) { 
-  return await quizzes.saveQuizResult(quizType as any, answers, resultText) 
+export async function getQuizzes(clientId?: string) { return await getQuizzesAction(clientId) }
+export async function saveQuizResult(quizType: QuizType, answers: Record<string, unknown>, resultText: string) { 
+  return await saveQuizResultAction(quizType, answers, resultText) 
 }
 
 // --- Direct Actions ---
@@ -56,7 +61,8 @@ export async function getClientsV2() {
       return []
     }
     return data as Profile[]
-  } catch (e) {
+  } catch (e: any) {
+    if (e?.digest === 'DYNAMIC_SERVER_USAGE' || e?.message?.includes('Dynamic server usage')) throw e;
     console.error('Connection error in getClientsV2:', e)
     return []
   }
@@ -75,7 +81,8 @@ export async function getWardrobeItems(clientId: string) {
       return []
     }
     return data as WardrobeItem[]
-  } catch (e) {
+  } catch (e: any) {
+    if (e?.digest === 'DYNAMIC_SERVER_USAGE' || e?.message?.includes('Dynamic server usage')) throw e;
     console.error('Connection error in getWardrobeItems:', e)
     return []
   }
@@ -94,7 +101,8 @@ export async function updateWardrobeStatus(itemId: string, status: WardrobeItem[
     }
     revalidatePath('/consultant/virtual-wardrobe')
     return { success: true }
-  } catch (e) {
+  } catch (e: any) {
+    if (e?.digest === 'DYNAMIC_SERVER_USAGE' || e?.message?.includes('Dynamic server usage')) throw e;
     console.error('Connection error in updateWardrobeStatus:', e)
     return { success: false }
   }
@@ -114,7 +122,8 @@ export async function getAppointments() {
       return []
     }
     return data
-  } catch (e) {
+  } catch (e: any) {
+    if (e?.digest === 'DYNAMIC_SERVER_USAGE' || e?.message?.includes('Dynamic server usage')) throw e;
     console.error('Connection error in getAppointments:', e)
     return []
   }
@@ -135,7 +144,8 @@ export async function updateAppointmentStatus(appointmentId: string, status: str
 
     revalidatePath('/consultant/appointments')
     return { success: true }
-  } catch (e) {
+  } catch (e: any) {
+    if (e?.digest === 'DYNAMIC_SERVER_USAGE' || e?.message?.includes('Dynamic server usage')) throw e;
     console.error('Connection error in updateAppointmentStatus:', e)
     return { success: false }
   }

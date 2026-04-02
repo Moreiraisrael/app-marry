@@ -18,7 +18,6 @@ interface SettingsTabsProps {
   initialData: {
     full_name: string | null
     email: string | null
-    bio: string | null
     avatar_url: string | null
   }
 }
