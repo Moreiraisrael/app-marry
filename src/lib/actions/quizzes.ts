@@ -22,8 +22,8 @@ export async function getQuizzes(clientId?: string): Promise<QuizWithProfile[]> 
       return []
     }
     return data || []
-  } catch (e: any) {
-    if (e?.digest === 'DYNAMIC_SERVER_USAGE' || e?.message?.includes('Dynamic server usage')) throw e;
+  } catch (e: unknown) {
+    if ((e as Error & { digest?: string })?.digest === 'DYNAMIC_SERVER_USAGE' || (e as Error)?.message?.includes('Dynamic server usage')) throw e;
     console.error('Connection error in getQuizzes:', e)
     return []
   }
@@ -55,8 +55,8 @@ export async function saveQuizResult(quizType: QuizType, answers: Record<string,
 
     revalidatePath('/client/dashboard')
     return { success: true, data }
-  } catch (e: any) {
-    if (e?.digest === 'DYNAMIC_SERVER_USAGE' || e?.message?.includes('Dynamic server usage')) throw e;
+  } catch (e: unknown) {
+    if ((e as Error & { digest?: string })?.digest === 'DYNAMIC_SERVER_USAGE' || (e as Error)?.message?.includes('Dynamic server usage')) throw e;
     console.error('Connection error in saveQuizResult:', e)
     return { success: false, error: 'Falha na conexão com o servidor' }
   }
@@ -95,8 +95,8 @@ export async function submitColorAnalysis(photoDataUrl: string, answers: Record<
     revalidatePath('/client/dashboard')
     revalidatePath('/consultant/color-analysis')
     return { success: true }
-  } catch (e: any) {
-     if (e?.digest === 'DYNAMIC_SERVER_USAGE' || e?.message?.includes('Dynamic server usage')) throw e;
+  } catch (e: unknown) {
+     if ((e as Error & { digest?: string })?.digest === 'DYNAMIC_SERVER_USAGE' || (e as Error)?.message?.includes('Dynamic server usage')) throw e;
      console.error('Connection error in submitColorAnalysis:', e)
      return { success: false, error: 'Falha na conexão com o servidor' }
   }
@@ -116,14 +116,14 @@ export async function getPendingQuizzes(): Promise<QuizWithProfile[]> {
       return []
     }
     return data || []
-  } catch (e: any) {
-    if (e?.digest === 'DYNAMIC_SERVER_USAGE' || e?.message?.includes('Dynamic server usage')) throw e;
+  } catch (e: unknown) {
+    if ((e as Error & { digest?: string })?.digest === 'DYNAMIC_SERVER_USAGE' || (e as Error)?.message?.includes('Dynamic server usage')) throw e;
     console.error('Connection error in getPendingQuizzes:', e)
     return []
   }
 }
 
-export async function getPendingColorAnalyses(): Promise<any[]> {
+export async function getPendingColorAnalyses(): Promise<Record<string, unknown>[]> {
   try {
     const supabase = await createClient()
     const { data, error } = await supabase
@@ -137,8 +137,8 @@ export async function getPendingColorAnalyses(): Promise<any[]> {
       return []
     }
     return data || []
-  } catch (e: any) {
-    if (e?.digest === 'DYNAMIC_SERVER_USAGE' || e?.message?.includes('Dynamic server usage')) throw e;
+  } catch (e: unknown) {
+    if ((e as Error & { digest?: string })?.digest === 'DYNAMIC_SERVER_USAGE' || (e as Error)?.message?.includes('Dynamic server usage')) throw e;
     console.error('Connection error in getPendingColorAnalyses:', e)
     return []
   }
@@ -149,7 +149,7 @@ export async function approveQuiz(quizId: string, resultText: string): Promise<{
     const supabase = await createClient()
     
     // First figure out if this is color, if so we need to update profiles with season too
-    const { data: quiz } = await supabase.from('quizzes').select('quiz_type, client_id, answers').eq('id', quizId).single()
+    // const { data: quiz } = await supabase.from('quizzes').select('quiz_type, client_id, answers').eq('id', quizId).single()
     
     const { error } = await supabase
       .from('quizzes')
@@ -164,8 +164,8 @@ export async function approveQuiz(quizId: string, resultText: string): Promise<{
     revalidatePath('/consultant/quizzes')
     revalidatePath('/client/dashboard')
     return { success: true }
-  } catch (e: any) {
-     if (e?.digest === 'DYNAMIC_SERVER_USAGE' || e?.message?.includes('Dynamic server usage')) throw e;
+  } catch (e: unknown) {
+     if ((e as Error & { digest?: string })?.digest === 'DYNAMIC_SERVER_USAGE' || (e as Error)?.message?.includes('Dynamic server usage')) throw e;
      console.error('Connection error in approveQuiz:', e)
      return { success: false, error: 'Falha na conexão' }
   }
@@ -217,8 +217,8 @@ export async function approveColorAnalysis(requestId: string, season: string, no
     revalidatePath('/consultant/color-analysis')
     revalidatePath('/client/dashboard')
     return { success: true }
-  } catch (e: any) {
-     if (e?.digest === 'DYNAMIC_SERVER_USAGE' || e?.message?.includes('Dynamic server usage')) throw e;
+  } catch (e: unknown) {
+     if ((e as Error & { digest?: string })?.digest === 'DYNAMIC_SERVER_USAGE' || (e as Error)?.message?.includes('Dynamic server usage')) throw e;
      console.error('Connection error in approveColorAnalysis:', e)
      return { success: false, error: 'Falha na conexão' }
   }

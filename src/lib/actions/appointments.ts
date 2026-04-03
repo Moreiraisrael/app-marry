@@ -45,8 +45,8 @@ export async function createAppointment(formData: FormData): Promise<{ success: 
 
     revalidatePath('/consultant/appointments')
     return { success: true, appointment: data as Appointment }
-  } catch (e: any) {
-    if (e?.digest === 'DYNAMIC_SERVER_USAGE' || e?.message?.includes('Dynamic server usage')) throw e;
+  } catch (e: unknown) {
+    if ((e as Error & { digest?: string })?.digest === 'DYNAMIC_SERVER_USAGE' || (e as Error)?.message?.includes('Dynamic server usage')) throw e;
     console.error('Connection error in createAppointment:', e)
     return { success: false, error: "Falha na conexão com o servidor." }
   }
@@ -69,9 +69,85 @@ export async function getAppointments(): Promise<AppointmentWithClient[]> {
       return []
     }
     return (data as unknown as AppointmentWithClient[]) || []
-  } catch (e: any) {
-    if (e?.digest === 'DYNAMIC_SERVER_USAGE' || e?.message?.includes('Dynamic server usage')) throw e;
+  } catch (e: unknown) {
+    if ((e as Error & { digest?: string })?.digest === 'DYNAMIC_SERVER_USAGE' || (e as Error)?.message?.includes('Dynamic server usage')) throw e;
     console.error('Connection error in getAppointments:', e)
+    return []
+  }
+}
+
+export async function deleteAppointment(appointmentId: string): Promise<{ success: boolean; error?: string }> {
+  try {
+    const supabase = await createClient()
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) return { success: false, error: "Usuário não autenticado." }
+
+    const { error } = await supabase
+      .from('appointments')
+      .delete()
+      .eq('id', appointmentId)
+      .eq('consultant_id', user.id) // Ensure only owner can delete
+
+    if (error) {
+      console.error('Error deleting appointment:', error)
+      return { success: false, error: error.message }
+    }
+
+    revalidatePath('/consultant/appointments')
+    return { success: true }
+  } catch (e: unknown) {
+    if ((e as Error & { digest?: string })?.digest === 'DYNAMIC_SERVER_USAGE' || (e as Error)?.message?.includes('Dynamic server usage')) throw e;
+    console.error('Connection error in deleteAppointment:', e)
+    return { success: false, error: "Falha na conexão com o servidor." }
+  }
+}
+
+export async function updateAppointment(appointmentId: string, updates: { start_time?: string, end_time?: string, notes?: string, status?: string }): Promise<{ success: boolean; error?: string }> {
+  try {
+    const supabase = await createClient()
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) return { success: false, error: "Usuário não autenticado." }
+
+    const { error } = await supabase
+      .from('appointments')
+      .update(updates)
+      .eq('id', appointmentId)
+      .eq('consultant_id', user.id) // Ensure only owner can update
+
+    if (error) {
+      console.error('Error updating appointment:', error)
+      return { success: false, error: error.message }
+    }
+
+    revalidatePath('/consultant/appointments')
+    return { success: true }
+  } catch (e: unknown) {
+    if ((e as Error & { digest?: string })?.digest === 'DYNAMIC_SERVER_USAGE' || (e as Error)?.message?.includes('Dynamic server usage')) throw e;
+    console.error('Connection error in updateAppointment:', e)
+    return { success: false, error: "Falha na conexão com o servidor." }
+  }
+}
+
+export async function getClientAppointments(): Promise<AppointmentWithClient[]> {
+  try {
+    const supabase = await createClient()
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) return []
+
+    const { data, error } = await supabase
+      .from('appointments')
+      .select('*, client:profiles!client_id(full_name, email)')
+      .eq('client_id', user.id)
+      .order('start_time', { ascending: true })
+
+    if (error) {
+      console.error('Error fetching appointments for client:', error)
+      return []
+    }
+    return (data as unknown as AppointmentWithClient[]) || []
+  } catch (e: unknown) {
+    if ((e as Error & { digest?: string })?.digest === 'DYNAMIC_SERVER_USAGE' || (e as Error)?.message?.includes('Dynamic server usage')) throw e;
+    console.error('Connection error in getClientAppointments:', e)
     return []
   }
 }

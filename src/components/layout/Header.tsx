@@ -2,7 +2,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 
 interface HeaderProps {
   title: string
-  profile?: any
+  profile?: { full_name?: string | null; avatar_url?: string | null } | null
 }
 
 export function Header({ title, profile }: HeaderProps) {

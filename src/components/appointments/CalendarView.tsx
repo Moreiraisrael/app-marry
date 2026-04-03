@@ -22,9 +22,10 @@ import {
   isSameDay, isToday 
 } from "date-fns"
 import { ptBR } from "date-fns/locale"
-import { createAppointment } from "@/lib/actions/appointments"
+import { createAppointment, deleteAppointment, updateAppointment } from "@/lib/actions/appointments"
 import { toast } from "sonner"
 import { useRouter } from "next/navigation"
+import { Trash2, Edit2 } from "lucide-react"
 
 interface Appointment {
   id: string
@@ -54,6 +55,11 @@ export function CalendarView({ initialAppointments, clients }: CalendarViewProps
   const [isOpen, setIsOpen] = useState(false)
   const [isPending, setIsPending] = useState(false)
   const [selectedClientId, setSelectedClientId] = useState<string>("")
+  const [selectedAppt, setSelectedAppt] = useState<Appointment | null>(null)
+  const [isDetailsOpen, setIsDetailsOpen] = useState(false)
+  const [isDeleting, setIsDeleting] = useState(false)
+  const [isUpdating, setIsUpdating] = useState(false)
+  const [isEditMode, setIsEditMode] = useState(false)
   const router = useRouter()
 
   const appointments = initialAppointments.filter(appt => 
@@ -112,6 +118,61 @@ export function CalendarView({ initialAppointments, clients }: CalendarViewProps
       toast.error(result.error || "Erro ao agendar")
     }
     setIsPending(false)
+  }
+
+  const handleDeleteAppointment = async (id: string) => {
+    if (!confirm("Tem certeza que deseja cancelar e excluir este agendamento?")) return;
+    setIsDeleting(true)
+    const result = await deleteAppointment(id)
+    if (result.success) {
+      toast.success("Agendamento excluído com sucesso!")
+      setIsDetailsOpen(false)
+      setSelectedAppt(null)
+      router.refresh()
+    } else {
+      toast.error(result.error || "Erro ao excluir agendamento")
+    }
+    setIsDeleting(false)
+  }
+
+  const handleUpdateAppointment = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    if (!selectedAppt) return;
+    setIsUpdating(true)
+    
+    const formData = new FormData(e.currentTarget)
+    const time = formData.get("time") as string
+    const title = formData.get("title") as string
+    
+    if (!time) {
+      toast.error("Por favor, selecione o horário.")
+      setIsUpdating(false)
+      return
+    }
+
+    const [hours, minutes] = time.split(':')
+    const start = new Date(selectedAppt.start_time)
+    start.setHours(parseInt(hours), parseInt(minutes), 0)
+    
+    const end = new Date(start)
+    end.setHours(start.getHours() + 1)
+
+    const result = await updateAppointment(selectedAppt.id, {
+      notes: title,
+      start_time: start.toISOString(),
+      end_time: end.toISOString()
+    })
+    
+    if (result.success) {
+      toast.success("Agendamento atualizado com sucesso!")
+      setIsEditMode(false)
+      setIsDetailsOpen(false)
+      setSelectedAppt(null)
+      router.refresh()
+    } else {
+      toast.error(result.error || "Erro ao atualizar")
+    }
+    setIsUpdating(false)
   }
 
   return (
@@ -238,7 +299,15 @@ export function CalendarView({ initialAppointments, clients }: CalendarViewProps
         ) : (
           <div className="space-y-4">
             {appointments.map((appt: Appointment) => (
-              <Card key={appt.id} className="border-none bg-white/80 hover:bg-white transition-all rounded-3xl shadow-sm hover:shadow-md border-l-4 border-l-primary group overflow-hidden">
+              <Card 
+                key={appt.id} 
+                className="border-none bg-white/80 hover:bg-white transition-all rounded-3xl shadow-sm hover:shadow-md border-l-4 border-l-primary group overflow-hidden cursor-pointer"
+                onClick={() => {
+                  setSelectedAppt(appt)
+                  setIsEditMode(false)
+                  setIsDetailsOpen(true)
+                }}
+              >
                 <CardContent className="p-6 flex items-center justify-between">
                   <div className="flex items-center gap-5">
                     <div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center text-primary shadow-sm">
@@ -259,6 +328,84 @@ export function CalendarView({ initialAppointments, clients }: CalendarViewProps
                 </CardContent>
               </Card>
             ))}
+
+          <Dialog open={isDetailsOpen} onOpenChange={setIsDetailsOpen}>
+            <DialogContent className="bg-white/95 backdrop-blur-xl border-none rounded-[2rem] p-8 shadow-2xl">
+              <DialogHeader>
+                <DialogTitle className="text-3xl font-serif text-foreground flex items-center gap-3">
+                  <CalendarIcon className="w-6 h-6 text-primary" /> {isEditMode ? 'Editar Agendamento' : 'Detalhes do Encontro'}
+                </DialogTitle>
+              </DialogHeader>
+              
+              {selectedAppt && !isEditMode && (
+                <div className="space-y-6 mt-6">
+                  <div className="flex items-center gap-4 bg-primary/5 p-4 rounded-2xl">
+                    <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
+                      <User className="w-6 h-6" />
+                    </div>
+                    <div>
+                      <p className="text-xs text-muted-foreground font-bold uppercase tracking-widest">Cliente</p>
+                      <p className="text-lg font-serif">{selectedAppt.client?.full_name}</p>
+                    </div>
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <p className="text-xs text-muted-foreground font-bold uppercase tracking-widest">Sessão</p>
+                    <p className="font-medium text-lg">{selectedAppt.notes}</p>
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <p className="text-xs text-muted-foreground font-bold uppercase tracking-widest">Horário</p>
+                    <p className="font-medium text-lg flex items-center gap-2">
+                      <Clock className="w-4 h-4 text-primary" />
+                      {format(new Date(selectedAppt.start_time), "dd 'de' MMMM, HH:mm", { locale: ptBR })}
+                    </p>
+                  </div>
+
+                  <div className="flex gap-3 pt-4 border-t border-border/50">
+                    <Button 
+                      variant="outline" 
+                      onClick={() => handleDeleteAppointment(selectedAppt.id)}
+                      disabled={isDeleting}
+                      className="flex-1 h-12 rounded-xl border-red-200 text-red-600 hover:bg-red-50 hover:text-red-700 font-bold tracking-widest text-[10px] uppercase"
+                    >
+                      {isDeleting ? "Cancelando..." : <><Trash2 className="w-4 h-4 mr-2" /> Cancelar</>}
+                    </Button>
+                    <Button 
+                      onClick={() => setIsEditMode(true)}
+                      className="flex-1 h-12 rounded-xl bg-stone-900 text-white shadow-lg hover:bg-stone-800 font-bold tracking-widest text-[10px] uppercase gap-2"
+                    >
+                      <Edit2 className="w-4 h-4" /> Editar
+                    </Button>
+                  </div>
+                </div>
+              )}
+
+              {selectedAppt && isEditMode && (
+                <form onSubmit={handleUpdateAppointment} className="space-y-6 mt-6">
+                  <div className="space-y-3">
+                    <Label className="text-[10px] text-muted-foreground uppercase tracking-[0.2em] font-bold">Título da Sessão</Label>
+                    <Input name="title" defaultValue={selectedAppt.notes || ""} required className="bg-secondary/30 border-transparent h-12 rounded-xl focus:ring-primary/20" />
+                  </div>
+                  
+                  <div className="space-y-3">
+                    <Label className="text-[10px] text-muted-foreground uppercase tracking-[0.2em] font-bold">Horário</Label>
+                    <Input name="time" type="time" defaultValue={format(new Date(selectedAppt.start_time), "HH:mm")} required className="bg-secondary/30 border-transparent h-12 rounded-xl focus:ring-primary/20" />
+                  </div>
+                  
+                  <div className="pt-4 flex gap-3">
+                    <Button type="button" variant="ghost" onClick={() => setIsEditMode(false)} className="flex-1 h-12 rounded-xl text-muted-foreground font-bold uppercase tracking-widest text-[10px]">
+                      Voltar
+                    </Button>
+                    <Button type="submit" disabled={isUpdating} className="flex-1 bg-primary hover:bg-primary/90 text-primary-foreground h-12 rounded-xl shadow-lg shadow-primary/20 font-bold uppercase tracking-widest text-[10px] gap-2">
+                      {isUpdating ? <Sparkles className="w-4 h-4 animate-spin" /> : <Check className="w-4 h-4" />}
+                      Salvar
+                    </Button>
+                  </div>
+                </form>
+              )}
+            </DialogContent>
+          </Dialog>
           </div>
         )}
 

@@ -22,8 +22,8 @@ export async function getEbooks(clientId?: string) {
       return []
     }
     return data as (Ebook & { profiles: { full_name: string } })[]
-  } catch (e: any) {
-    if (e?.digest === 'DYNAMIC_SERVER_USAGE' || e?.message?.includes('Dynamic server usage')) throw e;
+  } catch (e: unknown) {
+    if ((e as Error & { digest?: string })?.digest === 'DYNAMIC_SERVER_USAGE' || (e as Error)?.message?.includes('Dynamic server usage')) throw e;
     console.error('Connection error in getEbooks:', e)
     return []
   }
@@ -54,8 +54,8 @@ export async function generateEbook(formData: {
     }
     revalidatePath('/consultant/ebooks')
     return data
-  } catch (e: any) {
-    if (e?.digest === 'DYNAMIC_SERVER_USAGE' || e?.message?.includes('Dynamic server usage')) throw e;
+  } catch (e: unknown) {
+    if ((e as Error & { digest?: string })?.digest === 'DYNAMIC_SERVER_USAGE' || (e as Error)?.message?.includes('Dynamic server usage')) throw e;
     console.error('Connection error in generateEbook:', e)
     return null
   }

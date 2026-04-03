@@ -22,8 +22,16 @@ import { format } from "date-fns"
 import { ptBR } from "date-fns/locale"
 import { useState, useEffect } from "react"
 
+interface AffiliateOrder {
+  id: string;
+  client_name?: string | null;
+  created_at: string;
+  amount: number;
+  commission: number;
+}
+
 export default function AffiliatesPage() {
-  const [orders, setOrders] = useState<any[]>([])
+  const [orders, setOrders] = useState<AffiliateOrder[]>([])
   const [summary, setSummary] = useState({ availableBalance: 0, totalOrders: 0 })
   const [loading, setLoading] = useState(true)
 
@@ -34,7 +42,7 @@ export default function AffiliatesPage() {
         setOrders(o)
         setSummary(s)
       } finally {
-        setLoading(setLoading(false) as any)
+        setLoading(false)
       }
     }
     loadData()

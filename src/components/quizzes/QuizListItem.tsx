@@ -18,7 +18,7 @@ interface Quiz {
   } | null;
   created_at: string;
   quiz_type: string;
-  result_text?: string;
+  result_text?: string | null;
 }
 
 interface QuizListItemProps {

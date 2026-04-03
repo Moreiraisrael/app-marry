@@ -1,0 +1,41 @@
+
+[1m[46m RUN [49m[22m [36mv4.1.2 [39m[90mC:/Users/israe/aplicatvo marry[39m
+
+ [31m❯[39m src/__tests__/ClientsTable.test.tsx [2m([22m[2m6 tests[22m[2m | [22m[31m6 failed[39m[2m)[22m[32m 124[2mms[22m[39m
+[31m     [31m×[31m renderiza os clientes corretamente na tabela[39m[32m 47[2mms[22m[39m
+[31m     [31m×[31m abre o diálogo de cadastro ao clicar no botão "Nova Cliente" (Desktop)[39m[32m 15[2mms[22m[39m
+[31m     [31m×[31m abre o diálogo de cadastro ao clicar no FAB (Mobile)[39m[32m 14[2mms[22m[39m
+[31m     [31m×[31m submete o formulário e chama a server action[39m[32m 15[2mms[22m[39m
+[31m     [31m×[31m exibe erro se a criação falhar[39m[32m 14[2mms[22m[39m
+[31m     [31m×[31m filtra clientes corretamente via campo de busca[39m[32m 16[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 6 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/__tests__/ClientsTable.test.tsx[2m > [22mClientsTable Component[2m > [22mrenderiza os clientes corretamente na tabela
+[41m[1m FAIL [22m[49m src/__tests__/ClientsTable.test.tsx[2m > [22mClientsTable Component[2m > [22mabre o diálogo de cadastro ao clicar no botão "Nova Cliente" (Desktop)
+[41m[1m FAIL [22m[49m src/__tests__/ClientsTable.test.tsx[2m > [22mClientsTable Component[2m > [22mabre o diálogo de cadastro ao clicar no FAB (Mobile)
+[41m[1m FAIL [22m[49m src/__tests__/ClientsTable.test.tsx[2m > [22mClientsTable Component[2m > [22msubmete o formulário e chama a server action
+[41m[1m FAIL [22m[49m src/__tests__/ClientsTable.test.tsx[2m > [22mClientsTable Component[2m > [22mexibe erro se a criação falhar
+[41m[1m FAIL [22m[49m src/__tests__/ClientsTable.test.tsx[2m > [22mClientsTable Component[2m > [22mfiltra clientes corretamente via campo de busca
+[31m[1mError[22m: Element type is invalid: expected a string (for built-in components) or a class/function (for composite components) but got: undefined. You likely forgot to export your component from the file it's defined in, or you might have mixed up default and named imports.
+
+Check the render method of `ClientsTable`.[39m
+[90m [2m❯[22m createFiberFromTypeAndProps node_modules/react-dom/cjs/react-dom-client.development.js:[2m5021:28[22m[39m
+[90m [2m❯[22m createFiberFromElement node_modules/react-dom/cjs/react-dom-client.development.js:[2m5035:14[22m[39m
+[90m [2m❯[22m createChild node_modules/react-dom/cjs/react-dom-client.development.js:[2m6338:26[22m[39m
+[90m [2m❯[22m reconcileChildrenArray node_modules/react-dom/cjs/react-dom-client.development.js:[2m6670:25[22m[39m
+[90m [2m❯[22m reconcileChildFibersImpl node_modules/react-dom/cjs/react-dom-client.development.js:[2m6993:30[22m[39m
+[90m [2m❯[22m node_modules/react-dom/cjs/react-dom-client.development.js:[2m7098:33[22m[39m
+[90m [2m❯[22m reconcileChildren node_modules/react-dom/cjs/react-dom-client.development.js:[2m9701:13[22m[39m
+[90m [2m❯[22m beginWork node_modules/react-dom/cjs/react-dom-client.development.js:[2m12049:13[22m[39m
+[90m [2m❯[22m runWithFiberInDEV node_modules/react-dom/cjs/react-dom-client.development.js:[2m874:13[22m[39m
+[90m [2m❯[22m performUnitOfWork node_modules/react-dom/cjs/react-dom-client.development.js:[2m17641:22[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/6]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m6 failed[39m[22m[90m (6)[39m
+[2m   Start at [22m 01:32:55
+[2m   Duration [22m 2.68s[2m (transform 176ms, setup 179ms, import 953ms, tests 124ms, environment 878ms)[22m
+

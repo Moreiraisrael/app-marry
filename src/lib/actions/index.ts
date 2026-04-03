@@ -61,8 +61,8 @@ export async function getClientsV2() {
       return []
     }
     return data as Profile[]
-  } catch (e: any) {
-    if (e?.digest === 'DYNAMIC_SERVER_USAGE' || e?.message?.includes('Dynamic server usage')) throw e;
+  } catch (e: unknown) {
+    if ((e as Error & { digest?: string })?.digest === 'DYNAMIC_SERVER_USAGE' || (e as Error)?.message?.includes('Dynamic server usage')) throw e;
     console.error('Connection error in getClientsV2:', e)
     return []
   }
@@ -81,8 +81,8 @@ export async function getWardrobeItems(clientId: string) {
       return []
     }
     return data as WardrobeItem[]
-  } catch (e: any) {
-    if (e?.digest === 'DYNAMIC_SERVER_USAGE' || e?.message?.includes('Dynamic server usage')) throw e;
+  } catch (e: unknown) {
+    if ((e as Error & { digest?: string })?.digest === 'DYNAMIC_SERVER_USAGE' || (e as Error)?.message?.includes('Dynamic server usage')) throw e;
     console.error('Connection error in getWardrobeItems:', e)
     return []
   }
@@ -101,8 +101,8 @@ export async function updateWardrobeStatus(itemId: string, status: WardrobeItem[
     }
     revalidatePath('/consultant/virtual-wardrobe')
     return { success: true }
-  } catch (e: any) {
-    if (e?.digest === 'DYNAMIC_SERVER_USAGE' || e?.message?.includes('Dynamic server usage')) throw e;
+  } catch (e: unknown) {
+    if ((e as Error & { digest?: string })?.digest === 'DYNAMIC_SERVER_USAGE' || (e as Error)?.message?.includes('Dynamic server usage')) throw e;
     console.error('Connection error in updateWardrobeStatus:', e)
     return { success: false }
   }
@@ -122,8 +122,8 @@ export async function getAppointments() {
       return []
     }
     return data
-  } catch (e: any) {
-    if (e?.digest === 'DYNAMIC_SERVER_USAGE' || e?.message?.includes('Dynamic server usage')) throw e;
+  } catch (e: unknown) {
+    if ((e as Error & { digest?: string })?.digest === 'DYNAMIC_SERVER_USAGE' || (e as Error)?.message?.includes('Dynamic server usage')) throw e;
     console.error('Connection error in getAppointments:', e)
     return []
   }
@@ -144,8 +144,8 @@ export async function updateAppointmentStatus(appointmentId: string, status: str
 
     revalidatePath('/consultant/appointments')
     return { success: true }
-  } catch (e: any) {
-    if (e?.digest === 'DYNAMIC_SERVER_USAGE' || e?.message?.includes('Dynamic server usage')) throw e;
+  } catch (e: unknown) {
+    if ((e as Error & { digest?: string })?.digest === 'DYNAMIC_SERVER_USAGE' || (e as Error)?.message?.includes('Dynamic server usage')) throw e;
     console.error('Connection error in updateAppointmentStatus:', e)
     return { success: false }
   }

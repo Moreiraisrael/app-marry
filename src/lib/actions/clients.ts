@@ -59,91 +59,64 @@ export async function createClientProfile(formData: FormData): Promise<{ success
     const email = formData.get("email") as string
 
     if (!fullName || !email) {
-      return { success: false, error: "Nome e email são obrigatórios." }
+      return { success: false, error: "Nome e e-mail são obrigatórios." }
     }
 
     const { data: { user } } = await supabase.auth.getUser()
-    if (!user) return { success: false, error: "Usuário não autenticado." }
+    if (!user) {
+      return { success: false, error: "Sua sessão expirou. Por favor, faça login novamente." }
+    }
 
-    // Tenta via RPC (requer migration SQL no Supabase)
+    console.log(`[Clients] Tentando criar perfil para: ${email} via RPC`)
+
+    // Prioridade: RPC (Shadow Profile)
+    // Permite criar o perfil sem exigir que o cliente crie uma conta imediatamente
     const { data: clientId, error: rpcError } = await supabase.rpc('create_client_profile', {
       p_full_name: fullName,
       p_email: email,
       p_consultant_id: user.id,
     })
 
-    // RPC funcionou
-    if (!rpcError && clientId) {
-      const { data: profile } = await supabase
+    if (rpcError) {
+      console.error('[Clients] Erro RPC:', rpcError.message, rpcError.details)
+      
+      // Erro comum se a migration não foi aplicada
+      if (rpcError.message?.includes('function public.create_client_profile') || rpcError.message?.includes('does not exist')) {
+        return { 
+          success: false, 
+          error: "Sistema base não configurado. Por favor, execute as migrations SQL no dashboard do Supabase (veja run-migrations.js)." 
+        }
+      }
+      
+      return { success: false, error: `Erro ao processar cadastro: ${rpcError.message}` }
+    }
+
+    if (clientId) {
+      // Busca o profile recém-criado para retornar ao frontend
+      const { data: profile, error: selectError } = await supabase
         .from('profiles')
         .select('*')
         .eq('id', clientId)
         .single()
 
+      if (selectError) {
+        console.error('[Clients] Erro ao buscar perfil criado:', selectError)
+        // Mesmo com erro no select, se o ID existe, a criação funcionou
+        revalidatePath('/consultant/clients')
+        return { success: true }
+      }
+
       revalidatePath('/consultant/clients')
       return { success: true, client: profile as Profile }
     }
 
-    // Fallback: RPC não existe ainda → usa signUp do Supabase Auth
-    // Cria o usuário auth e depois vincula o profile
-    const { createClient: createSupabaseClient } = await import('@supabase/supabase-js')
-    const tempClient = createSupabaseClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-      { auth: { persistSession: false, autoRefreshToken: false } }
-    )
-
-    const tempPassword = `Miele@${Math.random().toString(36).slice(-8)}!`
-    const { data: authData, error: authError } = await tempClient.auth.signUp({
-      email,
-      password: tempPassword,
-      options: { data: { full_name: fullName, user_type: 'client' } }
-    })
-
-    if (authError) {
-      if (authError.status === 429) {
-        return { success: false, error: 'Muitas tentativas. Aguarde 1 minuto e tente novamente.' }
-      }
-      if (authError.message?.toLowerCase().includes('already registered')) {
-        return { success: false, error: 'Este e-mail já está cadastrado no sistema.' }
-      }
-      console.error('signUp error:', authError)
-      return { success: false, error: `Erro ao criar acesso: ${authError.message}` }
-    }
-
-    if (!authData.user) {
-      return { success: false, error: 'Falha ao criar usuário. Tente novamente.' }
-    }
-
-    // Insere o profile com o ID do auth user
-    const { data: profile, error: insertError } = await supabase
-      .from('profiles')
-      .insert({
-        id: authData.user.id,
-        full_name: fullName,
-        email,
-        user_type: 'client',
-        consultant_id: user.id,
-      })
-      .select()
-      .single()
-
-    if (insertError) {
-      console.error('Profile insert error:', insertError.code, insertError.message)
-      if (insertError.code === '42501') {
-        return { success: false, error: 'Permissão negada. Execute as migrations SQL no Supabase (ver run-migrations.js).' }
-      }
-      return { success: false, error: insertError.message }
-    }
-
-    revalidatePath('/consultant/clients')
-    return { success: true, client: profile as Profile }
+    return { success: false, error: "Não foi possível confirmar a criação do perfil." }
 
   } catch (e: unknown) {
     const err = e as { digest?: string; message?: string }
     if (err?.digest === 'DYNAMIC_SERVER_USAGE' || err?.message?.includes('Dynamic server usage')) throw e
-    console.error('Connection error in createClientProfile:', e)
-    return { success: false, error: "Falha na conexão com o servidor." }
+    console.error('[Clients] Erro inesperado em createClientProfile:', e)
+    return { success: false, error: "Houve uma falha inesperada. Tente novamente em instantes." }
   }
 }
 

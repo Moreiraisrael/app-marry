@@ -32,8 +32,8 @@ export async function getOrders(): Promise<Order[]> {
     }
 
     return data as Order[]
-  } catch (e: any) {
-    if (e?.digest === 'DYNAMIC_SERVER_USAGE' || e?.message?.includes('Dynamic server usage')) throw e;
+  } catch (e: unknown) {
+    if ((e as Error & { digest?: string })?.digest === 'DYNAMIC_SERVER_USAGE' || (e as Error)?.message?.includes('Dynamic server usage')) throw e;
     console.error('Connection error in getOrders:', e)
     return []
   }
@@ -65,8 +65,8 @@ export async function getOrdersSummary(): Promise<{
       pendingOrders,
       conversionRate
     }
-  } catch (e: any) {
-    if (e?.digest === 'DYNAMIC_SERVER_USAGE' || e?.message?.includes('Dynamic server usage')) throw e;
+  } catch (e: unknown) {
+    if ((e as Error & { digest?: string })?.digest === 'DYNAMIC_SERVER_USAGE' || (e as Error)?.message?.includes('Dynamic server usage')) throw e;
     console.error('Error calculating orders summary:', e)
     return {
       availableBalance: 0,
@@ -98,8 +98,8 @@ export async function requestWithdrawal(): Promise<{ success: boolean; error?: s
 
     revalidatePath('/consultant/orders')
     return { success: true }
-  } catch (e: any) {
-    if (e?.digest === 'DYNAMIC_SERVER_USAGE' || e?.message?.includes('Dynamic server usage')) throw e;
+  } catch (e: unknown) {
+    if ((e as Error & { digest?: string })?.digest === 'DYNAMIC_SERVER_USAGE' || (e as Error)?.message?.includes('Dynamic server usage')) throw e;
     console.error('Connection error in requestWithdrawal:', e)
     return { success: false, error: "Falha na conexão com o servidor." }
   }

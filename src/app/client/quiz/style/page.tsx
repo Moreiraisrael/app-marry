@@ -5,7 +5,7 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/componen
 import { Button } from "@/components/ui/button"
 import { Progress } from "@/components/ui/progress"
 import { ArrowLeft, ArrowRight, CheckCircle2, Sparkles, Check, RefreshCw } from "lucide-react"
-import { motion, AnimatePresence } from "framer-motion"
+import { motion } from "framer-motion"
 import { saveQuizResult } from "@/lib/actions/quizzes"
 import { useRouter } from "next/navigation"
 
@@ -136,7 +136,6 @@ export default function StyleQuizPage() {
           <span>{Math.round(progress)}%</span>
         </div>
         <Progress value={progress} className="h-2 bg-stone-100 rounded-full overflow-hidden">
-          {/* eslint-disable-next-line react/no-inline-styles */}
           <div className="h-full bg-[#B48D6C] transition-all duration-700" style={{ width: `${progress}%` }} />
         </Progress>
       </div>

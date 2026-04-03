@@ -1,0 +1,168 @@
+
+[1m[46m RUN [49m[22m [36mv4.1.2 [39m[90mC:/Users/israe/aplicatvo marry[39m
+
+ [31m❯[39m src/__tests__/ClientsTable.test.tsx [2m([22m[2m6 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[32m 267[2mms[22m[39m
+     [32m✓[39m renderiza os clientes corretamente na tabela[32m 57[2mms[22m[39m
+     [32m✓[39m abre o diálogo de cadastro ao clicar no botão "Nova Cliente" (Desktop)[32m 53[2mms[22m[39m
+     [32m✓[39m abre o diálogo de cadastro ao clicar no FAB (Mobile)[32m 28[2mms[22m[39m
+     [32m✓[39m submete o formulário e chama a server action[32m 50[2mms[22m[39m
+[31m     [31m×[31m exibe erro se a criação falhar[39m[32m 33[2mms[22m[39m
+     [32m✓[39m filtra clientes corretamente via campo de busca[32m 44[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/__tests__/ClientsTable.test.tsx[2m > [22mClientsTable Component[2m > [22mexibe erro se a criação falhar
+[31m[1mTestingLibraryElementError[22m[39m: Found a label with the text of: /nome completo/i, however no form control was found associated to that label. Make sure you're using the "for" attribute or "aria-labelledby" attribute correctly.
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div>[39m
+    [36m<div[39m
+      [33mclass[39m=[32m"space-y-8 pb-24 md:pb-0"[39m
+    [36m>[39m
+      [36m<div[39m
+        [33manimate[39m=[32m"[object Object]"[39m
+        [33mclass[39m=[32m"flex flex-col md:flex-row justify-between items-start md:items-center gap-6"[39m
+        [33minitial[39m=[32m"[object Object]"[39m
+      [36m>[39m
+        [36m<div>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"flex items-center gap-2 mb-2 text-primary font-bold tracking-[0.2em] uppercase text-[10px]"[39m
+          [36m>[39m
+            [36m<svg[39m
+              [33maria-hidden[39m=[32m"true"[39m
+              [33mclass[39m=[32m"lucide lucide-sparkles w-4 h-4"[39m
+              [33mfill[39m=[32m"none"[39m
+              [33mheight[39m=[32m"24"[39m
+              [33mstroke[39m=[32m"currentColor"[39m
+              [33mstroke-linecap[39m=[32m"round"[39m
+              [33mstroke-linejoin[39m=[32m"round"[39m
+              [33mstroke-width[39m=[32m"2"[39m
+              [33mviewBox[39m=[32m"0 0 24 24"[39m
+              [33mwidth[39m=[32m"24"[39m
+              [33mxmlns[39m=[32m"http://www.w3.org/2000/svg"[39m
+            [36m>[39m
+              [36m<path[39m
+                [33md[39m=[32m"M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z"[39m
+              [36m/>[39m
+              [36m<path[39m
+                [33md[39m=[32m"M20 2v4"[39m
+              [36m/>[39m
+              [36m<path[39m
+                [33md[39m=[32m"M22 4h-4"[39m
+              [36m/>[39m
+              [36m<circle[39m
+                [33mcx[39m=[32m"4"[39m
+                [33mcy[39m=[32m"20"[39m
+                [33mr[39m=[32m"2"[39m
+              [36m/>[39m
+            [36m</svg>[39m
+            [0mGestão de Portfólio[0m
+          [36m</div>[39m
+          [36m<h1[39m
+            [33mclass[39m=[32m"text-4xl md:text-5xl font-serif text-foreground tracking-tight mb-2"[39m
+          [36m>[39m
+            [0mCRM de Clientes[0m
+          [36m</h1>[39m
+          [36m<p[39m
+            [33mclass[39m=[32m"text-muted-foreground font-light text-lg max-w-2xl leading-relaxed"[39m
+          [36m>[39m
+            [0mGerencie o progresso, dossiês e descobertas de estilo de todas as suas clientes em um só lugar.[0m
+          [36m</p>[39m
+        [36m</div>[39m
+        [36m<div[39m
+          [33mdata-state[39m=[32m"open"[39m
+          [33mdata-testid[39m=[32m"dialog-root"[39m
+          [33mrole[39m=[32m"dialog"[39m
+        [36m>[39m
+          [36m<button[39m
+            [33mclass[39m=[32m"group/button shrink-0 items-center justify-center border border-transparent bg-clip-padding whitespace-nowrap outline-none select-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 [a]:hover:bg-primary/80 has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2 hidden md:flex bg-primary hover:bg-primary/90 text-primary-foreground gap-3 h-14 px-8 rounded-2xl shadow-xl shadow-primary/20 transition-all hover:scale-[1.02] font-bold uppercase tracking-widest text-xs"[39m
+            [33mdata-size[39m=[32m"default"[39m
+            [33mdata-slot[39m=[32m"button"[39m
+            [33mdata-testid[39m=[32m"add-client-desktop"[39m
+            [33mdata-variant[39m=[32m"default"[39m
+          [36m>[39m
+            [36m<svg[39m
+              [33maria-hidden[39m=[32m"true"[39m
+              [33mclass[39m=[32m"lucide lucide-user-plus w-5 h-5"[39m
+              [33mfill[39m=[32m"none"[39m
+              [33mheight[39m=[32m"24"[39m
+              [33mstroke[39m=[32m"currentColor"[39m
+              [33mstroke-linecap[39m=[32m"round"[39m
+              [33mstroke-linejoin[39m=[32m"round"[39m
+              [33mstroke-width[39m=[32m"2"[39m
+              [33mviewBox[39m=[32m"0 0 24 24"[39m
+              [33mwidth[39m=[32m"24"[39m
+              [33mxmlns[39m=[32m"http://www.w3.org/2000/svg"[39m
+            [36m>[39m
+              [36m<path[39m
+                [33md[39m=[32m"M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"[39m
+              [36m/>[39m
+              [36m<circle[39m
+                [33mcx[39m=[32m"9"[39m
+                [33mcy[39m=[32m"7"[39m
+                [33mr[39m=[32m"4"[39m
+              [36m/>[39m
+              [36m<line[39m
+                [33mx1[39m=[32m"19"[39m
+                [33mx2[39m=[32m"19"[39m
+                [33my1[39m=[32m"8"[39m
+                [33my2[39m=[32m"14"[39m
+              [36m/>[39m
+              [36m<line[39m
+                [33mx1[39m=[32m"22"[39m
+                [33mx2[39m=[32m"16"[39m
+                [33my1[39m=[32m"11"[39m
+                [33my2[39m=[32m"11"[39m
+              [36m/>[39m
+            [36m</svg>[39m
+            [0m Nova Cliente[0m
+          [36m</button>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"sm:max-w-[500px] bg-white/95 backdrop-blur-xl border-none md:rounded-[2rem] p-6 md:p-8 shadow-2xl overflow-y-auto max-h-[90vh]"[39m
+            [33mdata-testid[39m=[32m"dialog-content"[39m
+          [36m>[39m
+            [36m<header>[39m
+              [36m<h2[39m
+                [33mdata-testid[39m=[32m"dialog-title"[39m
+              [36m>[39m
+                [36m<span[39m
+                  [33mclass[39m=[32m"flex items-center gap-3"[39m
+                [36m>[39m
+                  [36m<svg[39m
+                    [33maria-hidden[39m=[32m"true"[39m
+                    [33mclass[39m=[32m"lucide lucide-user-plus w-6 h-6 text-primary"[39m
+                    [33mfill[39m=[32m"none"[39m
+                    [33mheight[39m=[32m"24"[39m
+                    [33mstroke[39m=[32m"currentColor"[39m
+                    [33mstroke-linecap[39m=[32m"round"[39m
+                    [33mstroke-linejoin[39m=[32m"round"[39m
+                    [33mstroke-width[39m=[32m"2"[39m
+                    [33mviewBox[39m=[32m"0 0 24 24"[39m
+                    [33mwidth[39m=[32m"24"[39m
+                    [33mxmlns[39m=[32m"http://www.w3.org/2000/svg"[39m
+                  [36m>[39m
+                    [36m<path[39m
+                      [33md[39m=[32m"M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"[39m
+                    [36m/>[39m
+               ...
+[90m [2m❯[22m Object.getElementError node_modules/@testing-library/dom/dist/config.js:[2m37:19[22m[39m
+[90m [2m❯[22m getAllByLabelText node_modules/@testing-library/dom/dist/queries/label-text.js:[2m108:40[22m[39m
+[90m [2m❯[22m node_modules/@testing-library/dom/dist/query-helpers.js:[2m52:17[22m[39m
+[90m [2m❯[22m node_modules/@testing-library/dom/dist/query-helpers.js:[2m95:19[22m[39m
+[36m [2m❯[22m src/__tests__/ClientsTable.test.tsx:[2m135:29[22m[39m
+    [90m133|[39m     fireEvent[33m.[39m[34mclick[39m(screen[33m.[39m[34mgetByTestId[39m([32m'add-client-desktop'[39m))
+    [90m134|[39m
+    [90m135|[39m     fireEvent.change(screen.getByLabelText(/nome completo/i), { target…
+    [90m   |[39m                             [31m^[39m
+    [90m136|[39m     fireEvent.change(screen.getByLabelText(/e-mail/i), { target: { val…
+    [90m137|[39m     fireEvent.change(screen.getByLabelText(/telefone/i), { target: { v…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m5 passed[39m[22m[90m (6)[39m
+[2m   Start at [22m 01:44:27
+[2m   Duration [22m 2.17s[2m (transform 200ms, setup 173ms, import 713ms, tests 267ms, environment 764ms)[22m
+

@@ -45,7 +45,7 @@ export async function getLookCapsules(clientId?: string): Promise<LookCapsule[]>
           .in('id', capsule.item_ids)
           .limit(4)
 
-        item_photos = (items || []).map((i: { photo_url: string }) => i.photo_url)
+        item_photos = (items || []).map((i: { photo_url: string }) => i.photo_url).filter(Boolean) as string[]
       }
 
       return {
@@ -56,7 +56,8 @@ export async function getLookCapsules(clientId?: string): Promise<LookCapsule[]>
     }))
 
     return capsules as LookCapsule[]
-  } catch (e) {
+  } catch (e: unknown) {
+    if ((e as Error & { digest?: string })?.digest === 'DYNAMIC_SERVER_USAGE' || (e as Error)?.message?.includes('Dynamic server usage')) throw e;
     console.error('Connection error in getLookCapsules:', e)
     return []
   }

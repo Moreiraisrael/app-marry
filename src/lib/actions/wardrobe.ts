@@ -20,8 +20,8 @@ export async function getWardrobeItems(clientId?: string) {
       return []
     }
     return data as WardrobeItem[]
-  } catch (e: any) {
-    if (e?.digest === 'DYNAMIC_SERVER_USAGE' || e?.message?.includes('Dynamic server usage')) throw e;
+  } catch (e: unknown) {
+    if ((e as Error & { digest?: string })?.digest === 'DYNAMIC_SERVER_USAGE' || (e as Error)?.message?.includes('Dynamic server usage')) throw e;
     console.error('Connection error in getWardrobeItems:', e)
     return []
   }
@@ -44,8 +44,8 @@ export async function createWardrobeItem(data: Omit<WardrobeItem, 'id' | 'create
     revalidatePath('/consultant/virtual-wardrobe')
     revalidatePath('/client/wardrobe')
     return item as WardrobeItem
-  } catch (e: any) {
-    if (e?.digest === 'DYNAMIC_SERVER_USAGE' || e?.message?.includes('Dynamic server usage')) throw e;
+  } catch (e: unknown) {
+    if ((e as Error & { digest?: string })?.digest === 'DYNAMIC_SERVER_USAGE' || (e as Error)?.message?.includes('Dynamic server usage')) throw e;
     console.error('Connection error in createWardrobeItem:', e)
     return null
   }
@@ -69,8 +69,8 @@ export async function updateWardrobeItem(id: string, data: Partial<WardrobeItem>
     revalidatePath('/consultant/virtual-wardrobe')
     revalidatePath('/client/wardrobe')
     return item as WardrobeItem
-  } catch (e: any) {
-    if (e?.digest === 'DYNAMIC_SERVER_USAGE' || e?.message?.includes('Dynamic server usage')) throw e;
+  } catch (e: unknown) {
+    if ((e as Error & { digest?: string })?.digest === 'DYNAMIC_SERVER_USAGE' || (e as Error)?.message?.includes('Dynamic server usage')) throw e;
     console.error('Connection error in updateWardrobeItem:', e)
     return null
   }
@@ -92,8 +92,8 @@ export async function deleteWardrobeItem(id: string) {
     revalidatePath('/consultant/virtual-wardrobe')
     revalidatePath('/client/wardrobe')
     return { success: true }
-  } catch (e: any) {
-    if (e?.digest === 'DYNAMIC_SERVER_USAGE' || e?.message?.includes('Dynamic server usage')) throw e;
+  } catch (e: unknown) {
+    if ((e as Error & { digest?: string })?.digest === 'DYNAMIC_SERVER_USAGE' || (e as Error)?.message?.includes('Dynamic server usage')) throw e;
     console.error('Connection error in deleteWardrobeItem:', e)
     return { success: false }
   }

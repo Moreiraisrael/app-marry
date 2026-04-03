@@ -10,8 +10,19 @@ import { Label } from "@/components/ui/label"
 import { updateProfile } from "@/lib/actions/profile"
 import { toast } from "sonner"
 
-export function ProfileClient({ profile }: { profile: any }) {
-  const [_state, formAction, isPending] = useActionState(
+interface ProfileData {
+  avatar_url?: string | null;
+  full_name?: string | null;
+  user_type?: string | null;
+  season?: string | null;
+  style_archetypes?: string[] | null;
+  email?: string | null;
+  bio?: string | null;
+  [key: string]: unknown;
+}
+
+export function ProfileClient({ profile }: { profile: ProfileData | null }) {
+  const [, formAction, isPending] = useActionState(
     async (_prevState: unknown, formData: FormData) => {
       const result = await updateProfile(formData)
       if (result.success) {

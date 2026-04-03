@@ -1,7 +1,7 @@
 "use server"
 
 import { createClient } from "@/lib/supabase/server"
-import { Profile, ColorAnalysisRequest } from "@/types/database"
+import { Profile, ColorAnalysisRequest, Appointment } from "@/types/database"
 
 export async function getDashboardStats(): Promise<{
   clientsCount: number;
@@ -34,8 +34,8 @@ export async function getDashboardStats(): Promise<{
       goalsPercentage: 0,
       messagesCount: 0
     }
-  } catch (e: any) {
-    if (e?.digest === 'DYNAMIC_SERVER_USAGE' || e?.message?.includes('Dynamic server usage')) throw e;
+  } catch (e: unknown) {
+    if ((e as Error & { digest?: string })?.digest === 'DYNAMIC_SERVER_USAGE' || (e as Error)?.message?.includes('Dynamic server usage')) throw e;
     console.error('Error in getDashboardStats:', e)
     return { 
       clientsCount: 0, 
@@ -50,6 +50,7 @@ export async function getClientDashboard(): Promise<{
   profile: Profile | null;
   wardrobeCount: number;
   colorAnalysis: ColorAnalysisRequest | null;
+  nextAppointment: Appointment | null;
   level: string;
   styleProgress: number;
 } | null> {
@@ -79,17 +80,28 @@ export async function getClientDashboard(): Promise<{
       .eq('status', 'completed')
       .order('created_at', { ascending: false })
       .limit(1)
-      .single()
+      .maybeSingle()
+
+    // Próximo agendamento
+    const { data: nextAppointment } = await supabase
+      .from('appointments')
+      .select('*')
+      .eq('client_id', user.id)
+      .gte('start_time', new Date().toISOString())
+      .order('start_time', { ascending: true })
+      .limit(1)
+      .maybeSingle()
 
     return {
       profile,
       wardrobeCount: wardrobeCount || 0,
       colorAnalysis: colorAnalysis || null,
+      nextAppointment: nextAppointment || null,
       level: 'Elegância em Construção',
       styleProgress: 45
     }
-  } catch (e: any) {
-    if (e?.digest === 'DYNAMIC_SERVER_USAGE' || e?.message?.includes('Dynamic server usage')) throw e;
+  } catch (e: unknown) {
+    if ((e as Error & { digest?: string })?.digest === 'DYNAMIC_SERVER_USAGE' || (e as Error)?.message?.includes('Dynamic server usage')) throw e;
     console.error('Error in getClientDashboard:', e)
     return null
   }

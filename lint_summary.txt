@@ -1,0 +1,36 @@
+﻿C:\Users\israe\aplicatvo marry\src\app\client\profile\ProfileClient.tsx : 13 : Unexpected any. Specify a different type.
+C:\Users\israe\aplicatvo marry\src\app\client\profile\ProfileClient.tsx : 14 : '_state' is assigned a value but never used.
+C:\Users\israe\aplicatvo marry\src\app\client\quiz\style\page.tsx : 8 : 'AnimatePresence' is defined but never used.
+C:\Users\israe\aplicatvo marry\src\app\client\quiz\style\page.tsx : 139 : Definition for rule 'react/no-inline-styles' was not found.
+C:\Users\israe\aplicatvo marry\src\app\consultant\affiliates\page.tsx : 26 : Unexpected any. Specify a different type.
+C:\Users\israe\aplicatvo marry\src\app\consultant\affiliates\page.tsx : 37 : Unexpected any. Specify a different type.
+C:\Users\israe\aplicatvo marry\src\components\layout\Header.tsx : 5 : Unexpected any. Specify a different type.
+C:\Users\israe\aplicatvo marry\src\lib\actions\appointments.ts : 48 : Unexpected any. Specify a different type.
+C:\Users\israe\aplicatvo marry\src\lib\actions\appointments.ts : 72 : Unexpected any. Specify a different type.
+C:\Users\israe\aplicatvo marry\src\lib\actions\dashboard.ts : 37 : Unexpected any. Specify a different type.
+C:\Users\israe\aplicatvo marry\src\lib\actions\dashboard.ts : 91 : Unexpected any. Specify a different type.
+C:\Users\israe\aplicatvo marry\src\lib\actions\ebooks.ts : 25 : Unexpected any. Specify a different type.
+C:\Users\israe\aplicatvo marry\src\lib\actions\ebooks.ts : 57 : Unexpected any. Specify a different type.
+C:\Users\israe\aplicatvo marry\src\lib\actions\index.ts : 64 : Unexpected any. Specify a different type.
+C:\Users\israe\aplicatvo marry\src\lib\actions\index.ts : 84 : Unexpected any. Specify a different type.
+C:\Users\israe\aplicatvo marry\src\lib\actions\index.ts : 104 : Unexpected any. Specify a different type.
+C:\Users\israe\aplicatvo marry\src\lib\actions\index.ts : 125 : Unexpected any. Specify a different type.
+C:\Users\israe\aplicatvo marry\src\lib\actions\index.ts : 147 : Unexpected any. Specify a different type.
+C:\Users\israe\aplicatvo marry\src\lib\actions\orders.ts : 35 : Unexpected any. Specify a different type.
+C:\Users\israe\aplicatvo marry\src\lib\actions\orders.ts : 68 : Unexpected any. Specify a different type.
+C:\Users\israe\aplicatvo marry\src\lib\actions\orders.ts : 101 : Unexpected any. Specify a different type.
+C:\Users\israe\aplicatvo marry\src\lib\actions\partner-stores.ts : 59 : Unexpected any. Specify a different type.
+C:\Users\israe\aplicatvo marry\src\lib\actions\partner-stores.ts : 278 : Unexpected any. Specify a different type.
+C:\Users\israe\aplicatvo marry\src\lib\actions\quizzes.ts : 25 : Unexpected any. Specify a different type.
+C:\Users\israe\aplicatvo marry\src\lib\actions\quizzes.ts : 58 : Unexpected any. Specify a different type.
+C:\Users\israe\aplicatvo marry\src\lib\actions\quizzes.ts : 98 : Unexpected any. Specify a different type.
+C:\Users\israe\aplicatvo marry\src\lib\actions\quizzes.ts : 119 : Unexpected any. Specify a different type.
+C:\Users\israe\aplicatvo marry\src\lib\actions\quizzes.ts : 126 : Unexpected any. Specify a different type.
+C:\Users\israe\aplicatvo marry\src\lib\actions\quizzes.ts : 140 : Unexpected any. Specify a different type.
+C:\Users\israe\aplicatvo marry\src\lib\actions\quizzes.ts : 152 : 'quiz' is assigned a value but never used.
+C:\Users\israe\aplicatvo marry\src\lib\actions\quizzes.ts : 167 : Unexpected any. Specify a different type.
+C:\Users\israe\aplicatvo marry\src\lib\actions\quizzes.ts : 220 : Unexpected any. Specify a different type.
+C:\Users\israe\aplicatvo marry\src\lib\actions\wardrobe.ts : 23 : Unexpected any. Specify a different type.
+C:\Users\israe\aplicatvo marry\src\lib\actions\wardrobe.ts : 47 : Unexpected any. Specify a different type.
+C:\Users\israe\aplicatvo marry\src\lib\actions\wardrobe.ts : 72 : Unexpected any. Specify a different type.
+C:\Users\israe\aplicatvo marry\src\lib\actions\wardrobe.ts : 95 : Unexpected any. Specify a different type.

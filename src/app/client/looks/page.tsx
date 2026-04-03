@@ -75,49 +75,46 @@ export default async function ClientLooksPage() {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return null
 
-  // Check if current user is a consultant — if so, show their clients' combined looks
-  const { data: profile } = await supabase
+  // Strategy: try BOTH paths and merge unique results.
+  // This works whether user_type is set or not (covers test scenarios).
+  const allLooksMap = new Map<string, LookCapsule>()
+
+  // Path 1: looks where this user is the client
+  const ownLooks = await getLookCapsules(user.id)
+  ownLooks.forEach(l => allLooksMap.set(l.id, l))
+
+  // Path 2: looks for clients whose consultant_id = this user
+  const { data: clientProfiles } = await supabase
     .from('profiles')
-    .select('user_type, consultant_id')
-    .eq('id', user.id)
-    .single()
+    .select('id')
+    .eq('consultant_id', user.id)
 
-  let looks: LookCapsule[] = []
+  if (clientProfiles && clientProfiles.length > 0) {
+    const clientIds = clientProfiles.map((c: { id: string }) => c.id)
+    const { data: rawLooks } = await supabase
+      .from('look_capsules')
+      .select('*')
+      .in('client_id', clientIds)
+      .order('created_at', { ascending: false })
 
-  if (profile?.user_type === 'consultant') {
-    // Consultant previewing: fetch all looks for their clients
-    const { data: clientProfiles } = await supabase
-      .from('profiles')
-      .select('id')
-      .eq('consultant_id', user.id)
-
-    if (clientProfiles && clientProfiles.length > 0) {
-      const clientIds = clientProfiles.map(c => c.id)
-      const { data: rawLooks, error } = await supabase
-        .from('look_capsules')
-        .select('*')
-        .in('client_id', clientIds)
-        .order('created_at', { ascending: false })
-
-      if (!error && rawLooks) {
-        looks = await Promise.all(rawLooks.map(async (capsule) => {
-          let item_photos: string[] = []
-          if (capsule.item_ids && capsule.item_ids.length > 0) {
-            const { data: items } = await supabase
-              .from('wardrobe_items')
-              .select('photo_url')
-              .in('id', capsule.item_ids)
-              .limit(4)
-            item_photos = (items || []).map((i: { photo_url: string }) => i.photo_url)
-          }
-          return { ...capsule, item_photos }
-        }))
-      }
+    if (rawLooks) {
+      await Promise.all(rawLooks.map(async (capsule) => {
+        if (allLooksMap.has(capsule.id)) return
+        let item_photos: string[] = []
+        if (capsule.item_ids && capsule.item_ids.length > 0) {
+          const { data: items } = await supabase
+            .from('wardrobe_items')
+            .select('photo_url')
+            .in('id', capsule.item_ids)
+            .limit(4)
+          item_photos = (items || []).map((i: { photo_url: string }) => i.photo_url).filter(Boolean) as string[]
+        }
+        allLooksMap.set(capsule.id, { ...capsule, item_photos })
+      }))
     }
-  } else {
-    // Regular client: fetch own looks
-    looks = await getLookCapsules(user.id)
   }
+
+  const looks: LookCapsule[] = Array.from(allLooksMap.values())
 
   return (
     <div className="max-w-5xl mx-auto space-y-12 animate-in fade-in slide-in-from-bottom-4 duration-1000">

@@ -19,8 +19,9 @@ export async function getPartnerStores(): Promise<PartnerStore[]> {
     
     return data || []
   } catch (e: unknown) {
-    const err = e as { digest?: string; message?: string }
-    if (err?.digest === 'DYNAMIC_SERVER_USAGE' || err?.message?.includes('Dynamic server usage')) throw e
+    const isDynamic = e instanceof Error && e.message.includes('Dynamic server usage')
+    const hasDigest = typeof e === 'object' && e !== null && 'digest' in e && (e as Record<string, unknown>).digest === 'DYNAMIC_SERVER_USAGE'
+    if (isDynamic || hasDigest) throw e
     console.error('Connection error in getPartnerStores:', e)
     return []
   }
@@ -55,7 +56,7 @@ export async function savePartnerStore(store: Partial<PartnerStore>): Promise<{ 
     revalidatePath('/consultant/partner-stores')
     return { success: true, data }
   } catch (e: unknown) {
-    if (e instanceof Error && (e as any).digest === 'DYNAMIC_SERVER_USAGE' || (e instanceof Error && e.message?.includes('Dynamic server usage'))) throw e;
+    if (e instanceof Error && (e as Error & { digest?: string }).digest === 'DYNAMIC_SERVER_USAGE' || (e instanceof Error && e.message?.includes('Dynamic server usage'))) throw e;
     console.error('Connection error in savePartnerStore:', e)
     return { success: false, error: 'Falha na conexão com o servidor' }
   }
@@ -274,7 +275,7 @@ export async function batchImportPartnerStores(): Promise<{ success: boolean; er
     revalidatePath('/consultant/partner-stores')
     return { success: true, count: stores.length }
   } catch (e: unknown) {
-    if (e instanceof Error && (e as any).digest === 'DYNAMIC_SERVER_USAGE' || (e instanceof Error && e.message?.includes('Dynamic server usage'))) throw e;
+    if (e instanceof Error && (e as Error & { digest?: string }).digest === 'DYNAMIC_SERVER_USAGE' || (e instanceof Error && e.message?.includes('Dynamic server usage'))) throw e;
     console.error('Connection error in batchImportPartnerStores:', e)
     return { success: false, error: 'Falha na conexão com o servidor' }
   }

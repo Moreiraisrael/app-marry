@@ -1,13 +1,18 @@
 import { Card } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
 import { ClipboardList, CheckCircle2, Circle } from "lucide-react"
 import Link from "next/link"
 import { getQuizzes } from "@/lib/actions/quizzes"
+import { createClient } from "@/lib/supabase/server"
 
 export const dynamic = 'force-dynamic'
 
 export default async function ClientQuizPage() {
-  const quizResults = await getQuizzes()
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  
+  if (!user) return null
+
+  const quizResults = await getQuizzes(user.id)
   
   const availableQuizzes = [
     {
@@ -77,11 +82,9 @@ export default async function ClientQuizPage() {
                              {quiz.completed && <span className="text-[10px] font-bold text-green-600 bg-green-50 px-2 py-0.5 rounded-full uppercase tracking-widest mt-2 inline-block">Concluído</span>}
                           </div>
                        </div>
-                       <Button asChild className={`h-12 rounded-xl px-8 font-bold transition-all ${quiz.completed ? 'bg-stone-50 text-stone-400' : 'bg-stone-900 text-white hover:bg-stone-800 shadow-lg shadow-stone-100'}`}>
-                          <Link href={quiz.completed ? "#" : `/client/quiz/${quiz.slug}`}>
-                             {quiz.completed ? "Rever Respostas" : "Começar Agora"}
-                          </Link>
-                       </Button>
+                       <Link href={`/client/quiz/${quiz.slug}`} className={`inline-flex items-center justify-center h-12 rounded-xl px-8 font-bold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-stone-400 focus-visible:ring-offset-2 ${quiz.completed ? 'bg-stone-100 text-stone-600 hover:bg-stone-200' : 'bg-stone-900 text-white hover:bg-stone-800 shadow-lg shadow-stone-100'}`}>
+                             {quiz.completed ? "Refazer Teste" : "Começar Agora"}
+                       </Link>
                      </div>
                   </Card>
               ))}
