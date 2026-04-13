@@ -104,3 +104,47 @@ export async function requestWithdrawal(): Promise<{ success: boolean; error?: s
     return { success: false, error: "Falha na conexão com o servidor." }
   }
 }
+
+export async function createOrder(data: {
+  client_name: string
+  external_order_id?: string
+  amount: number
+  commission: number
+  status: 'pending' | 'completed' | 'cancelled'
+  withdrawal_status: 'available' | 'requested' | 'withdrawn'
+}): Promise<{ success: boolean; error?: string }> {
+  try {
+    const supabase = await createClient()
+    const { data: { user } } = await supabase.auth.getUser()
+    
+    if (!user) {
+      return { success: false, error: "Não autorizado" }
+    }
+
+    const { error } = await supabase
+      .from('orders')
+      .insert([
+        {
+          consultant_id: user.id,
+          client_name: data.client_name,
+          external_order_id: data.external_order_id,
+          amount: data.amount,
+          commission: data.commission,
+          status: data.status,
+          withdrawal_status: data.withdrawal_status
+        }
+      ])
+
+    if (error) {
+      console.error('Error creating order:', error)
+      return { success: false, error: error.message }
+    }
+
+    revalidatePath('/consultant/orders')
+    return { success: true }
+  } catch (e: unknown) {
+    if ((e as Error & { digest?: string })?.digest === 'DYNAMIC_SERVER_USAGE' || (e as Error)?.message?.includes('Dynamic server usage')) throw e;
+    console.error('Error in createOrder:', e)
+    return { success: false, error: "Falha na conexão com o servidor." }
+  }
+}

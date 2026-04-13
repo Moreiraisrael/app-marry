@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { getOrders, getOrdersSummary } from "@/lib/actions/orders"
 import { WithdrawalButton } from "@/components/orders/WithdrawalButton"
+import { NewOrderDialog } from "@/components/orders/NewOrderDialog"
 import { format } from "date-fns"
 import { ptBR } from "date-fns/locale"
 
@@ -48,7 +49,8 @@ export default async function OrdersPage() {
           <h1 className="text-4xl font-bold text-foreground tracking-tight mb-2">Pedidos & Comissões</h1>
           <p className="text-muted-foreground text-lg">Acompanhe suas vendas e o processamento de suas recompensas.</p>
         </div>
-        <div className="flex gap-4">
+        <div className="flex flex-wrap gap-4">
+          <NewOrderDialog />
           <Button variant="outline" className="h-12 border-primary/20 bg-background/50 text-foreground hover:bg-primary/5 rounded-2xl px-6">
             <Download className="w-4 h-4 mr-2" /> Exportar
           </Button>

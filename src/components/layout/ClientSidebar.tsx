@@ -11,7 +11,7 @@ import {
   SidebarMenuItem,
   SidebarMenuButton,
 } from "@/components/ui/sidebar"
-import { Home, Sparkles, Shirt, FileUser, ShoppingBag, User, LogOut, LayoutGrid } from "lucide-react"
+import { Home, Sparkles, Shirt, FileUser, ShoppingBag, User, LogOut, LayoutGrid, Crown } from "lucide-react"
 import { signOut } from "@/lib/actions/auth"
 import { cn } from "@/lib/utils"
 import Link from "next/link"
@@ -24,6 +24,7 @@ const clientLinks = [
   { name: "Meus Looks", url: "/client/looks", icon: LayoutGrid },
   { name: "Vitrine Curada", url: "/client/shop", icon: ShoppingBag },
   { name: "Meu Dossiê", url: "/client/dossier", icon: FileUser },
+  { name: "Ferramentas Exclusivas", url: "/client/tools", icon: Crown },
 ]
 
 export function ClientSidebar() {
