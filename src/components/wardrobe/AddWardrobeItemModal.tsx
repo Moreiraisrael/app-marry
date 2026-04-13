@@ -47,11 +47,12 @@ export function AddWardrobeItemModal({ clientId }: AddWardrobeItemModalProps) {
       subcategory,
       color,
       photo_url: photoDataUrl,
-      status: "keep" as const
+      status: "keep" as const,
+      notes: null,
+      season_match: false,
+      ai_analysis: null
     }
 
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore - Ignore the exact typing for the insert, we only provide required fields
     const result = await createWardrobeItem(newItem)
 
     if (result) {
