@@ -27,6 +27,29 @@ export async function getWardrobeItems(clientId?: string) {
   }
 }
 
+export async function getWardrobeItemsByClients(clientIds: string[]) {
+  try {
+    if (!clientIds || clientIds.length === 0) return []
+
+    const supabase = await createClient()
+    const { data, error } = await supabase
+      .from('wardrobe_items')
+      .select('*')
+      .in('client_id', clientIds)
+      .order('created_at', { ascending: false })
+
+    if (error) {
+      console.error('Error fetching batched wardrobe items:', error)
+      return []
+    }
+    return data as WardrobeItem[]
+  } catch (e: unknown) {
+    if ((e as Error & { digest?: string })?.digest === 'DYNAMIC_SERVER_USAGE' || (e as Error)?.message?.includes('Dynamic server usage')) throw e;
+    console.error('Connection error in getWardrobeItemsByClients:', e)
+    return []
+  }
+}
+
 export async function createWardrobeItem(data: Omit<WardrobeItem, 'id' | 'created_at'>) {
   try {
     const supabase = await createClient()
