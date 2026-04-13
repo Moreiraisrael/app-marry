@@ -74,7 +74,7 @@ export function WardrobeGrid({ items }: WardrobeGridProps) {
                <div className="flex items-center justify-between mb-2">
                   <h4 className="font-bold text-foreground line-clamp-1 text-sm tracking-tight">{item.subcategory || 'Sem Categoria'}</h4>
                   { }
-                  <div className={`w-3 h-3 rounded-full border border-white/50 shadow-sm`} style={{ backgroundColor: item.color || '#ccc' }} />
+                  <div className={`w-3 h-3 rounded-full border border-white/50 shadow-sm bg-[var(--item-color)]`} style={{ '--item-color': item.color || '#ccc' } as React.CSSProperties} />
                </div>
                <div className="flex items-center gap-2">
                   <Badge variant="outline" className={`text-[10px] font-bold border-none px-2 py-0.5 rounded-md ${
