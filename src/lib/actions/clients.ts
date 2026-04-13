@@ -67,8 +67,6 @@ export async function createClientProfile(formData: FormData): Promise<{ success
       return { success: false, error: "Sua sessão expirou. Por favor, faça login novamente." }
     }
 
-    console.log(`[Clients] Tentando criar perfil para: ${email} via RPC`)
-
     // Prioridade: RPC (Shadow Profile)
     // Permite criar o perfil sem exigir que o cliente crie uma conta imediatamente
     const { data: clientId, error: rpcError } = await supabase.rpc('create_client_profile', {
