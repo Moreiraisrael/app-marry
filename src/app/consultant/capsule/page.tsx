@@ -1,7 +1,7 @@
 import { Sparkles } from "lucide-react"
 import { getLookCapsules } from "@/lib/actions/capsules"
 import { getClients } from "@/lib/actions/clients"
-import { getWardrobeItems } from "@/lib/actions/wardrobe"
+import { getWardrobeItemsByClients } from "@/lib/actions/wardrobe"
 import { CapsuleCard } from "@/components/capsules/CapsuleCard"
 import { CreateLookModal } from "@/components/capsules/CreateLookModal"
 import { Card } from "@/components/ui/card"
@@ -16,14 +16,28 @@ export default async function CapsulePage() {
     getClients(),
   ])
 
-  // Pre-fetch wardrobe items for all clients to pass to the modal
+  // Pre-fetch wardrobe items for all clients in a single batch query
   const clientWardrobeItems: Record<string, WardrobeItem[]> = {}
-  await Promise.all(
-    clients.map(async (client) => {
-      const items = await getWardrobeItems(client.id)
-      clientWardrobeItems[client.id] = items
+
+  if (clients.length > 0) {
+    const clientIds = clients.map(c => c.id)
+    const allItems = await getWardrobeItemsByClients(clientIds)
+
+    // Group items by client ID
+    allItems.forEach(item => {
+      if (!clientWardrobeItems[item.client_id]) {
+        clientWardrobeItems[item.client_id] = []
+      }
+      clientWardrobeItems[item.client_id].push(item)
     })
-  )
+
+    // Ensure clients without items are initialized
+    clients.forEach(client => {
+      if (!clientWardrobeItems[client.id]) {
+        clientWardrobeItems[client.id] = []
+      }
+    })
+  }
 
   return (
     <div className="max-w-7xl mx-auto space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-1000">
