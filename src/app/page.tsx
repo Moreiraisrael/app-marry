@@ -39,7 +39,7 @@ export default function LandingPage() {
           <div className="flex flex-col sm:flex-row gap-6 pt-4">
              {/* Portal Cards */}
              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full">
-                <Link href="/auth/register" className="group">
+                <Link href="/auth/login" className="group">
                   <div className="h-full p-8 rounded-3xl bg-neutral-900/50 border border-white/5 hover:border-amber-500/30 hover:bg-neutral-900 transition-all duration-500 relative overflow-hidden">
                     <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
                       <Briefcase className="w-20 h-20 text-amber-500" />
@@ -48,12 +48,12 @@ export default function LandingPage() {
                     <h3 className="text-xl font-bold mb-2">Portal da Consultora</h3>
                     <p className="text-xs text-neutral-500 mb-6">Comece a gerenciar suas clientes e escale seu negócio.</p>
                     <div className="flex items-center text-amber-500 text-sm font-bold group-hover:translate-x-1 transition-transform">
-                      Criar Conta Profissional <ArrowRight className="w-4 h-4 ml-2" />
+                      Fazer Login <ArrowRight className="w-4 h-4 ml-2" />
                     </div>
                   </div>
                 </Link>
 
-                <Link href="/auth/register" className="group">
+                <Link href="/auth/login" className="group">
                   <div className="h-full p-8 rounded-3xl bg-neutral-900/50 border border-white/5 hover:border-rose-500/30 hover:bg-neutral-900 transition-all duration-500 relative overflow-hidden">
                      <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
                       <User className="w-20 h-20 text-rose-500" />
@@ -62,7 +62,7 @@ export default function LandingPage() {
                     <h3 className="text-xl font-bold mb-2">Área da Cliente</h3>
                     <p className="text-xs text-neutral-500 mb-6">Descubra seu estilo e receba seu dossiê exclusivo.</p>
                     <div className="flex items-center text-rose-500 text-sm font-bold group-hover:translate-x-1 transition-transform">
-                      Iniciar Jornada de Estilo <ArrowRight className="w-4 h-4 ml-2" />
+                      Fazer Login <ArrowRight className="w-4 h-4 ml-2" />
                     </div>
                   </div>
                 </Link>
