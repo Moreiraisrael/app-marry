@@ -148,9 +148,6 @@ export async function approveQuiz(quizId: string, resultText: string): Promise<{
   try {
     const supabase = await createClient()
     
-    // First figure out if this is color, if so we need to update profiles with season too
-    // const { data: quiz } = await supabase.from('quizzes').select('quiz_type, client_id, answers').eq('id', quizId).single()
-    
     const { error } = await supabase
       .from('quizzes')
       .update({ status: 'approved', result_text: resultText })
