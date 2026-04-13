@@ -23,11 +23,11 @@ describe('LandingPage', () => {
     expect(screen.getByText('Área da Cliente')).toBeInTheDocument();
   });
 
-  it('contains correct links to the auth register route', () => {
+  it('contains correct links to the auth login route', () => {
     render(<LandingPage />);
     const links = screen.getAllByTestId('next-link');
-    // Ensure both links go to '/auth/register'
-    const authLinks = links.filter(link => link.getAttribute('href') === '/auth/register');
+    // Ensure both links go to '/auth/login'
+    const authLinks = links.filter(link => link.getAttribute('href') === '/auth/login');
     expect(authLinks).toHaveLength(2);
   });
 
