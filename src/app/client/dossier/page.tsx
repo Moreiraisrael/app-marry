@@ -65,8 +65,8 @@ export default async function ClientDossierPage() {
               {seasonData.colors.map((color, i) => (
                 <div key={i} className="group/color relative">
                   <div 
-                    className="w-12 h-12 rounded-full shadow-inner border border-stone-200 transition-transform group-hover/color:scale-110" 
-                    style={{ backgroundColor: color }} 
+                    className="w-12 h-12 rounded-full shadow-inner border border-stone-200 transition-transform group-hover/color:scale-110 bg-[var(--swatch-color)]"
+                    style={{ '--swatch-color': color } as React.CSSProperties}
                   />
                   <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 opacity-0 group-hover/color:opacity-100 transition-opacity text-[8px] font-bold text-neutral-400">
                     {color}
