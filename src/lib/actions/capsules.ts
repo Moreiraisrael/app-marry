@@ -34,26 +34,37 @@ export async function getLookCapsules(clientId?: string): Promise<LookCapsule[]>
       return []
     }
 
-    // For each capsule, fetch photo_urls of the items
-    const capsules = await Promise.all((data || []).map(async (capsule) => {
-      let item_photos: string[] = []
+    const rawData = data || []
 
-      if (capsule.item_ids && capsule.item_ids.length > 0) {
-        const { data: items } = await supabase
-          .from('wardrobe_items')
-          .select('photo_url')
-          .in('id', capsule.item_ids)
-          .limit(4)
+    // 1. Collect all unique item IDs
+    const allItemIds = Array.from(new Set(rawData.flatMap(c => c.item_ids || [])))
 
-        item_photos = (items || []).map((i: { photo_url: string }) => i.photo_url).filter(Boolean) as string[]
-      }
+    // 2. Fetch all photos in one go
+    const photoMap = new Map<string, string>()
+    if (allItemIds.length > 0) {
+      const { data: items } = await supabase
+        .from('wardrobe_items')
+        .select('id, photo_url')
+        .in('id', allItemIds)
+
+      items?.forEach((item: { id: string; photo_url: string }) => {
+        if (item.photo_url) photoMap.set(item.id, item.photo_url)
+      })
+    }
+
+    // 3. Map back to capsules
+    const capsules = rawData.map((capsule) => {
+      const item_photos = (capsule.item_ids || [])
+        .map(id => photoMap.get(id))
+        .filter((url): url is string => Boolean(url))
+        .slice(0, 4)
 
       return {
         ...capsule,
-        client_name: capsule.profiles?.full_name ?? null,
+        client_name: (capsule.profiles as any)?.full_name ?? null,
         item_photos,
       }
-    }))
+    })
 
     return capsules as LookCapsule[]
   } catch (e: unknown) {

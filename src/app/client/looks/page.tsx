@@ -98,19 +98,28 @@ export default async function ClientLooksPage() {
       .order('created_at', { ascending: false })
 
     if (rawLooks) {
-      await Promise.all(rawLooks.map(async (capsule) => {
-        if (allLooksMap.has(capsule.id)) return
-        let item_photos: string[] = []
-        if (capsule.item_ids && capsule.item_ids.length > 0) {
-          const { data: items } = await supabase
-            .from('wardrobe_items')
-            .select('photo_url')
-            .in('id', capsule.item_ids)
-            .limit(4)
-          item_photos = (items || []).map((i: { photo_url: string }) => i.photo_url).filter(Boolean) as string[]
-        }
+      const looksToFetch = rawLooks.filter(c => !allLooksMap.has(c.id))
+      const allItemIds = Array.from(new Set(looksToFetch.flatMap(c => c.item_ids || [])))
+
+      const photoMap = new Map<string, string>()
+      if (allItemIds.length > 0) {
+        const { data: items } = await supabase
+          .from('wardrobe_items')
+          .select('id, photo_url')
+          .in('id', allItemIds)
+
+        items?.forEach((item: { id: string; photo_url: string }) => {
+          if (item.photo_url) photoMap.set(item.id, item.photo_url)
+        })
+      }
+
+      looksToFetch.forEach(capsule => {
+        const item_photos = (capsule.item_ids || [])
+          .map(id => photoMap.get(id))
+          .filter((url): url is string => Boolean(url))
+          .slice(0, 4)
         allLooksMap.set(capsule.id, { ...capsule, item_photos })
-      }))
+      })
     }
   }
 
