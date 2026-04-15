@@ -98,7 +98,7 @@ describe('Biotype Server Actions', () => {
           measurements: expect.any(Object)
         })
       }))
-      expect(result?.shape).toBe('Ampulheta')
+      expect(result!.shape).toBe('Ampulheta')
     })
   })
 

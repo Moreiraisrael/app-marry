@@ -98,7 +98,7 @@ describe('Visagism Server Actions', () => {
           facial_measurements: expect.any(Object)
         })
       }))
-      expect(result?.shape).toBe('Diamante')
+      expect(result!.shape).toBe('Diamante')
     })
   })
 
