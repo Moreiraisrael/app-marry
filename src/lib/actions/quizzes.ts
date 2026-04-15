@@ -7,12 +7,19 @@ import { revalidatePath } from 'next/cache'
 export async function getQuizzes(clientId?: string): Promise<QuizWithProfile[]> {
   try {
     const supabase = await createClient()
+    
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) return []
+
     let query = supabase
       .from('quizzes')
-      .select('*, profiles!client_id(full_name)')
+      .select('*, profiles!inner(full_name)')
     
     if (clientId) {
       query = query.eq('client_id', clientId)
+    } else {
+      // Como o consultant visualiza a lista global dele, ele só pode ver os quizzes dos PRÓPRIOS clientes
+      query = query.eq('profiles.consultant_id', user.id)
     }
 
     const { data, error } = await query.order('created_at', { ascending: false })
@@ -105,10 +112,14 @@ export async function submitColorAnalysis(photoDataUrl: string, answers: Record<
 export async function getPendingQuizzes(): Promise<QuizWithProfile[]> {
   try {
     const supabase = await createClient()
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) return []
+
     const { data, error } = await supabase
       .from('quizzes')
-      .select('*, profiles!client_id(full_name, email)')
+      .select('*, profiles!inner(full_name, email, consultant_id)')
       .eq('status', 'pending')
+      .eq('profiles.consultant_id', user.id)
       .order('created_at', { ascending: false })
 
     if (error) {

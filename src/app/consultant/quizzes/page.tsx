@@ -7,6 +7,7 @@ import {
 import { Button } from "@/components/ui/button"
 import { getQuizzes } from "@/lib/actions/quizzes"
 import { QuizListItem } from "@/components/quizzes/QuizListItem"
+import Link from "next/link"
 
 export const dynamic = 'force-dynamic'
 
@@ -112,9 +113,17 @@ export default async function ConsultantQuizzesPage() {
                              </div>
                           </td>
                           <td className="px-8 py-6 text-right">
-                            <Button variant="ghost" size="sm" className="text-primary hover:bg-primary/10 rounded-xl font-bold text-xs gap-2 transition-all">
-                               Dossiê <ArrowRight className="w-4 h-4" />
-                            </Button>
+                            {quiz.client_id ? (
+                              <Link href={`/consultant/clients/${quiz.client_id}/dossier`}>
+                                <Button variant="ghost" size="sm" className="text-primary hover:bg-primary/10 rounded-xl font-bold text-xs gap-2 transition-all">
+                                   Dossiê <ArrowRight className="w-4 h-4" />
+                                </Button>
+                              </Link>
+                            ) : (
+                              <Button variant="ghost" size="sm" className="text-primary hover:bg-primary/10 rounded-xl font-bold text-xs gap-2 transition-all">
+                                 Dossiê <ArrowRight className="w-4 h-4" />
+                              </Button>
+                            )}
                           </td>
                         </tr>
                       ))

@@ -5,11 +5,14 @@ import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { ArrowRight, User, CheckCircle2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { Textarea } from "@/components/ui/textarea"
 import { motion } from "framer-motion"
 import { approveQuiz } from "@/lib/actions/quizzes"
+import Link from "next/link"
 
 interface Quiz {
   id: string;
+  client_id?: string;
   title?: string;
   description?: string;
   completed?: boolean;
@@ -30,10 +33,11 @@ interface QuizListItemProps {
 export function QuizListItem({ quiz, index, isPending }: QuizListItemProps) {
   const [isApproving, setIsApproving] = useState(false)
   const [showDetails, setShowDetails] = useState(false)
+  const [editedResult, setEditedResult] = useState(quiz.result_text || 'Aprovado')
 
   const handleApprove = async () => {
     setIsApproving(true)
-    await approveQuiz(quiz.id, quiz.result_text || 'Aprovado')
+    await approveQuiz(quiz.id, editedResult)
     setIsApproving(false)
   }
 
@@ -69,9 +73,20 @@ export function QuizListItem({ quiz, index, isPending }: QuizListItemProps) {
           <span className="text-primary block mb-2 font-bold text-[10px] uppercase tracking-[0.2em]">Diagnóstico:</span>
           <span className="font-semibold">{quiz.quiz_type}</span>
           
-          {showDetails && quiz.result_text && (
-            <div className="mt-4 pt-4 border-t border-primary/10">
-              <span className="text-primary block mb-2 font-bold text-[10px] uppercase tracking-[0.2em]">Resultado Calculado:</span>
+          {showDetails && isPending && (
+            <div className="mt-4 pt-4 border-t border-primary/10 flex flex-col gap-2">
+              <span className="text-primary block mb-2 font-bold text-[10px] uppercase tracking-[0.2em]">Editar Resultado Final:</span>
+              <Textarea 
+                value={editedResult}
+                onChange={(e) => setEditedResult(e.target.value)}
+                className="bg-white/50 border-primary/20 rounded-xl resize-none text-[#B48D6C] font-semibold p-4"
+                rows={3}
+              />
+            </div>
+          )}
+          {showDetails && !isPending && quiz.result_text && (
+             <div className="mt-4 pt-4 border-t border-primary/10">
+              <span className="text-primary block mb-2 font-bold text-[10px] uppercase tracking-[0.2em]">Resultado Aprovado:</span>
               <span className="font-semibold text-[#B48D6C]">{quiz.result_text}</span>
             </div>
           )}
@@ -97,11 +112,14 @@ export function QuizListItem({ quiz, index, isPending }: QuizListItemProps) {
             )}
           </div>
         ) : (
-          <Button className="w-full bg-primary/10 hover:bg-primary/20 text-primary rounded-[1.25rem] gap-2 font-bold h-12 border-none relative z-10 transition-all">
-            Ver Dossiê <ArrowRight className="w-4 h-4" />
-          </Button>
+          <Link href={`/consultant/clients/${quiz.client_id}/dossier`} className="block w-full">
+            <Button className="w-full bg-primary/10 hover:bg-primary/20 text-primary rounded-[1.25rem] gap-2 font-bold h-12 border-none relative z-10 transition-all">
+              Ver Dossiê <ArrowRight className="w-4 h-4" />
+            </Button>
+          </Link>
         )}
       </Card>
     </motion.div>
   )
 }
+
