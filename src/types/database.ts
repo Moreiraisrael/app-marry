@@ -12,6 +12,10 @@ export interface Profile {
   consultant_id: string | null;
   style_archetypes: string[] | null;
   season: string | null;
+  body_shape: 'Ampulheta' | 'Triângulo' | 'Triângulo Invertido' | 'Retângulo' | 'Oval' | null;
+  body_measurements: Record<string, number> | null;
+  face_shape: 'Oval' | 'Redondo' | 'Quadrado' | 'Coração' | 'Diamante' | 'Longo' | 'Triangular' | null;
+  facial_measurements: Record<string, number> | null;
   created_at: string;
 }
 
@@ -97,5 +101,33 @@ export interface Ebook {
   title: string;
   content: Record<string, unknown>;
   pdf_url: string | null;
+  created_at: string;
+}
+
+export interface BiotypeRequest {
+  id: string;
+  client_id: string;
+  consultant_id: string;
+  front_photo: string | null;
+  side_photo: string | null;
+  ai_suggested_shape: 'Ampulheta' | 'Triângulo' | 'Triângulo Invertido' | 'Retângulo' | 'Oval' | null;
+  consultant_shape: 'Ampulheta' | 'Triângulo' | 'Triângulo Invertido' | 'Retângulo' | 'Oval' | null;
+  consultant_notes: string | null;
+  ai_analysis_data: Record<string, unknown> | null;
+  status: 'pending' | 'approved';
+  created_at: string;
+}
+
+export interface VisagismRequest {
+  id: string;
+  client_id: string;
+  consultant_id: string;
+  front_face_photo: string | null;
+  side_face_photo: string | null;
+  ai_suggested_shape: 'Oval' | 'Redondo' | 'Quadrado' | 'Coração' | 'Diamante' | 'Longo' | 'Triangular' | null;
+  consultant_shape: 'Oval' | 'Redondo' | 'Quadrado' | 'Coração' | 'Diamante' | 'Longo' | 'Triangular' | null;
+  consultant_notes: string | null;
+  ai_analysis_data: Record<string, unknown> | null;
+  status: 'pending' | 'approved';
   created_at: string;
 }
