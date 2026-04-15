@@ -84,7 +84,7 @@ describe('Biotype Server Actions', () => {
         side_photo: 'base64-side',
         status: 'pending'
       }))
-      expect(result.id).toBe('new-bio-req')
+      expect((result as any).id).toBe('new-bio-req')
     })
   })
 

@@ -84,7 +84,7 @@ describe('Visagism Server Actions', () => {
         side_face_photo: 'base64-side-face',
         status: 'pending'
       }))
-      expect(result.id).toBe('new-v-req')
+      expect((result as any).id).toBe('new-v-req')
     })
   })
 
