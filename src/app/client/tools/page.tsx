@@ -11,7 +11,7 @@ export default async function ClientToolsPage() {
         <div className="space-y-4 relative z-10 w-full">
            <div className="flex items-center gap-2 mb-3 text-primary font-bold tracking-[0.2em] uppercase text-xs">
             <Crown className="w-4 h-4" />
-            Recursos Exclusivos Marry Miele
+            Recursos Exclusivos Estilo App
           </div>
            <h1 className="text-5xl font-bold text-foreground leading-tight tracking-tight">Ferramentas <span className="text-primary italic">Avançadas</span></h1>
            <p className="text-muted-foreground text-xl max-w-xl font-light leading-relaxed">Acesse nosso ecossistema completo de análises estratégicas e diagnósticos inteligentes.</p>

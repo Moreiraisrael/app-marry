@@ -72,10 +72,10 @@ export function ConsultantSidebar() {
         <Link href="/consultant/dashboard" className="flex flex-col gap-1 group">
           <div className="flex items-center gap-2 mb-1">
              <div className="w-8 h-[1px] bg-primary/40 group-hover:w-12 transition-all duration-500" />
-             <span className="text-[10px] uppercase tracking-[0.3em] font-bold text-primary/60">Ateliê Elite</span>
+             <span className="text-[10px] uppercase tracking-[0.3em] font-bold text-primary/60">Consultoria de Estilo</span>
           </div>
           <h1 className="text-xl font-serif text-foreground/90 tracking-tight leading-none">
-            MARRY <span className="font-light italic text-primary">MIELE</span>
+            ESTILO <span className="font-light italic text-primary">APP</span>
           </h1>
         </Link>
       </SidebarHeader>

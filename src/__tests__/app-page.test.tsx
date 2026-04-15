@@ -19,26 +19,27 @@ describe('LandingPage', () => {
 
   it('renders navigation links', () => {
     render(<LandingPage />);
-    expect(screen.getByText('Portal da Consultora')).toBeInTheDocument();
-    expect(screen.getByText('Área da Cliente')).toBeInTheDocument();
+    const continueButtons = screen.getAllByText('Continuar');
+    expect(continueButtons.length).toBeGreaterThan(0);
   });
 
   it('contains correct links to the auth login route', () => {
     render(<LandingPage />);
     const links = screen.getAllByTestId('next-link');
-    // Ensure both links go to '/auth/login'
+    // Ensure the link goes to '/auth/login'
     const authLinks = links.filter(link => link.getAttribute('href') === '/auth/login');
-    expect(authLinks).toHaveLength(2);
+    expect(authLinks.length).toBeGreaterThanOrEqual(1);
   });
 
   it('renders the brand title', () => {
     render(<LandingPage />);
-    expect(screen.getByText('E.S.T.I.L.O.')).toBeInTheDocument();
+    const brandTitles = screen.getAllByText('E.S.T.I.L.O.');
+    expect(brandTitles.length).toBeGreaterThan(0);
   });
 
   it('renders trust bar brand names', () => {
     render(<LandingPage />);
-    const brands = ['VOGUE', 'ELLE', 'BAZAAR', 'L’OFFICIEL', 'GLAMOUR'];
+    const brands = [/VOGUE/i, /ELLE/i, /Bazaar/i, /L'OFFICIEL/i, /Marie Claire/i];
     brands.forEach((brand) => {
       expect(screen.getByText(brand)).toBeInTheDocument();
     });

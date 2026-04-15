@@ -31,7 +31,7 @@ export default async function ClientShopPage() {
     category: store.category || "Outros",
     affiliateLink: store.store_link || "#",
     logoUrl: store.logo_url || undefined,
-    description: "Curadoria exclusiva Marry Miele."
+    description: "Curadoria exclusiva Estilo App."
   }))
 
   return (

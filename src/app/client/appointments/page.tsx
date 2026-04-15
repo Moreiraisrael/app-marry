@@ -21,7 +21,7 @@ export default async function ClientAppointmentsPage() {
         </div>
         <h1 className="text-4xl md:text-5xl font-serif text-foreground tracking-tight mb-2">Suas Sessões</h1>
         <p className="text-muted-foreground font-light text-lg">
-          Acompanhe todos os seus encontros com sua consultora Marry Miele.
+          Acompanhe todos os seus encontros com sua consultora Estilo App.
         </p>
       </div>
 

@@ -15,6 +15,7 @@ import {
   HelpCircle,
   type LucideIcon
 } from 'lucide-react'
+import Link from 'next/link'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -118,9 +119,11 @@ export default function ConsultantDashboard() {
                   <CardTitle className="text-2xl font-serif text-foreground">Atividade Recente</CardTitle>
                   <CardDescription className="text-sm font-medium italic text-muted-foreground">Seu fluxo estratégico de consultoria</CardDescription>
                 </div>
-                <Button className="rounded-full bg-primary px-6 text-primary-foreground transition-all hover:bg-primary/90 hover:scale-[1.02] active:scale-95 shadow-lg shadow-primary/20">
-                  <Plus className="mr-2 h-4 w-4" /> Nova Consultoria
-                </Button>
+                <Link href="/consultant/appointments">
+                  <Button className="rounded-full bg-primary px-6 text-primary-foreground transition-all hover:bg-primary/90 hover:scale-[1.02] active:scale-95 shadow-lg shadow-primary/20">
+                    <Plus className="mr-2 h-4 w-4" /> Nova Consultoria
+                  </Button>
+                </Link>
               </CardHeader>
               <CardContent className="p-0">
                 <div className="flex flex-col items-center justify-center p-20 text-center space-y-4">
@@ -141,16 +144,16 @@ export default function ConsultantDashboard() {
             <Card className="h-full border-none bg-card/40 backdrop-blur-sm shadow-sm shadow-primary/5">
               <CardHeader className="p-8">
                 <CardTitle className="text-2xl font-serif text-foreground/90">Ferramentas Pro</CardTitle>
-                <CardDescription className="font-light">Recursos exclusivos Marry Miele</CardDescription>
+                <CardDescription className="font-light">Recursos exclusivos Estilo App</CardDescription>
               </CardHeader>
               <CardContent className="p-8 pt-0 space-y-3">
                 {[
-                  { title: 'Dossiê Sazonal', icon: Sparkles, desc: 'Color Analysis 2026' },
-                  { title: 'Guia de Biotipo', icon: BookOpen, desc: 'Análise Antropométrica' },
-                  { title: 'Métricas de Visagismo', icon: TrendingUp, desc: 'Diagnóstico por IA' },
-                  { title: 'Elite Settings', icon: Settings, desc: 'Preferências da conta' }
+                  { title: 'Dossiê Sazonal', icon: Sparkles, desc: 'Color Analysis 2026', href: '/consultant/color-analysis' },
+                  { title: 'Guia de Biotipo', icon: BookOpen, desc: 'Análise Antropométrica', href: '/consultant/biotipo' },
+                  { title: 'Métricas de Visagismo', icon: TrendingUp, desc: 'Diagnóstico por IA', href: '/consultant/visagismo' },
+                  { title: 'Elite Settings', icon: Settings, desc: 'Preferências da conta', href: '/consultant/settings' }
                 ].map((tool, i) => (
-                  <button key={i} className="group w-full flex items-center gap-4 rounded-2xl p-4 text-left transition-all hover:bg-white/60 border border-transparent hover:border-primary/10">
+                  <Link href={tool.href} key={i} className="group w-full flex items-center gap-4 rounded-2xl p-4 text-left transition-all hover:bg-white/60 border border-transparent hover:border-primary/10">
                     <div className="rounded-xl bg-background p-3 shadow-sm group-hover:scale-110 transition-transform">
                       <tool.icon className="h-5 w-5 text-primary opacity-80" />
                     </div>
@@ -159,18 +162,20 @@ export default function ConsultantDashboard() {
                       <p className="text-[10px] uppercase tracking-wider text-muted-foreground font-bold">{tool.desc}</p>
                     </div>
                     <ChevronRight className="h-4 w-4 text-primary opacity-0 -translate-x-2 transition-all group-hover:opacity-100 group-hover:translate-x-0" />
-                  </button>
+                  </Link>
                 ))}
                 
-                <div className="mt-8 p-6 rounded-3xl bg-secondary/40 border border-primary/5 flex flex-col gap-4">
-                  <div className="flex items-center gap-2">
-                    <HelpCircle className="h-4 w-4 text-primary opacity-60" />
-                    <span className="text-xs font-bold uppercase tracking-widest text-muted-foreground opacity-80">Suporte VIP</span>
+                <Link href="mailto:suporte@estilo.app.br" className="mt-8 block p-6 rounded-3xl bg-secondary/40 border border-primary/5 hover:bg-secondary/60 transition-colors">
+                  <div className="flex flex-col gap-4">
+                    <div className="flex items-center gap-2">
+                      <HelpCircle className="h-4 w-4 text-primary opacity-60" />
+                      <span className="text-xs font-bold uppercase tracking-widest text-muted-foreground opacity-80">Suporte VIP</span>
+                    </div>
+                    <p className="text-xs text-muted-foreground leading-relaxed italic font-light">
+                      Transformando imagens em estratégias de sucesso pessoal.
+                    </p>
                   </div>
-                  <p className="text-xs text-muted-foreground leading-relaxed italic font-light">
-                    Transformando imagens em estratégias de sucesso pessoal.
-                  </p>
-                </div>
+                </Link>
               </CardContent>
             </Card>
           </motion.div>

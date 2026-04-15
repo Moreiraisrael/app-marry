@@ -26,7 +26,7 @@ export default async function ConsultantSettingsPage() {
     <div className="max-w-4xl mx-auto space-y-12 animate-in fade-in slide-in-from-bottom-4 duration-1000">
       <div>
         <h2 className="text-4xl md:text-5xl font-serif text-foreground tracking-tight mb-2">Configurações</h2>
-        <p className="text-muted-foreground font-light text-lg">Gerencie sua conta, notificações e preferências do sistema Marry Miele.</p>
+        <p className="text-muted-foreground font-light text-lg">Gerencie sua conta, notificações e preferências do sistema Estilo App.</p>
       </div>
 
       <SettingsTabs initialData={initialData} />

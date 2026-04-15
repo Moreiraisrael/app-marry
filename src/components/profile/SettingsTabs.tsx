@@ -131,7 +131,7 @@ export function SettingsTabs({ initialData }: SettingsTabsProps) {
                  </div>
                  <div className="space-y-1">
                    <p className="text-white/60 text-xs font-bold uppercase tracking-[0.2em]">Status do Plano</p>
-                   <h4 className="text-3xl font-serif">Marry Miele VIP</h4>
+                   <h4 className="text-3xl font-serif">Estilo App VIP</h4>
                  </div>
                  <div className="mt-8 pt-6 border-t border-white/10 flex justify-between items-center text-sm">
                    <span className="font-light italic opacity-80">Próxima renovação: 25 Abr, 2026</span>

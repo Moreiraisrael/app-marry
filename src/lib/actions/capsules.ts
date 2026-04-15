@@ -55,8 +55,8 @@ export async function getLookCapsules(clientId?: string): Promise<LookCapsule[]>
     // 3. Map back to capsules
     const capsules = rawData.map((capsule) => {
       const item_photos = (capsule.item_ids || [])
-        .map(id => photoMap.get(id))
-        .filter((url): url is string => Boolean(url))
+        .map((id: string) => photoMap.get(id))
+        .filter((url: string | undefined): url is string => Boolean(url))
         .slice(0, 4)
 
       return {

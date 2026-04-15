@@ -115,8 +115,8 @@ export default async function ClientLooksPage() {
 
       looksToFetch.forEach(capsule => {
         const item_photos = (capsule.item_ids || [])
-          .map(id => photoMap.get(id))
-          .filter((url): url is string => Boolean(url))
+          .map((id: string) => photoMap.get(id))
+          .filter((url: string | undefined): url is string => Boolean(url))
           .slice(0, 4)
         allLooksMap.set(capsule.id, { ...capsule, item_photos })
       })
@@ -163,7 +163,7 @@ export default async function ClientLooksPage() {
       {/* Footer branding */}
       <div className="text-center pb-12 opacity-50 flex items-center justify-center gap-2">
         <Sparkles className="w-4 h-4 text-rose-400" />
-        <span className="text-neutral-400 text-xs tracking-[0.3em] font-medium uppercase">Montado por Marry Miele · E.S.T.I.L.O.</span>
+        <span className="text-neutral-400 text-xs tracking-[0.3em] font-medium uppercase">Montado por Estilo App · E.S.T.I.L.O.</span>
       </div>
     </div>
   )

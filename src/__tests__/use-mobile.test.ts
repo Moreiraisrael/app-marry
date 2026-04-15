@@ -65,7 +65,7 @@ describe("useIsMobile", () => {
     act(() => {
       setInnerWidth(500);
       const changeHandler = addEventListenerMock.mock.calls.find(
-        (call) => call[0] === "change"
+        (call: any[]) => call[0] === "change"
       )?.[1];
       if (changeHandler) {
         changeHandler({ matches: true });

@@ -20,7 +20,7 @@ const playfair = Playfair_Display({
 });
 
 export const metadata: Metadata = {
-  title: "Marry Miele - Elegância Estratégica",
+  title: "Estilo App - Elegância Estratégica",
   description: "Plataforma premium de consultoria de imagem e estilo.",
 };
 
