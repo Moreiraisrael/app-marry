@@ -6,6 +6,7 @@ import {
 } from "lucide-react"
 import { getColorAnalysisRequests } from "@/lib/actions/color-analysis"
 import { ColorAnalysisItem } from "@/components/color-analysis/ColorAnalysisItem"
+import { NewAnalysisDialog } from "@/components/color-analysis/NewAnalysisDialog"
 
 export const dynamic = 'force-dynamic'
 
@@ -25,10 +26,7 @@ export default async function ColorAnalysisPage() {
             Identifique a cartela de cores ideal de sua cliente com precisão matemática e auxílio de visão computacional.
           </p>
         </div>
-        <Button className="bg-primary hover:bg-primary/90 text-primary-foreground h-14 px-8 rounded-[1.5rem] shadow-xl shadow-primary/20 gap-3 border-none group transition-all">
-          <Camera className="w-5 h-5 group-hover:scale-110 transition-transform" />
-          <span className="font-bold">Nova Análise Digital</span>
-        </Button>
+        <NewAnalysisDialog />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
@@ -47,12 +45,16 @@ export default async function ColorAnalysisPage() {
                 </p>
               </div>
               <div className="flex flex-wrap justify-center gap-4 w-full max-w-sm">
-                <Button className="flex-1 h-14 rounded-2xl bg-foreground text-background font-bold gap-2 hover:bg-foreground/90 transition-colors">
-                  <Plus className="w-5 h-5" /> Enviar Foto
-                </Button>
-                <Button variant="outline" className="flex-1 h-14 rounded-2xl border-primary/20 text-foreground hover:bg-primary/5 gap-2 transition-colors">
-                   Manual
-                </Button>
+                <NewAnalysisDialog trigger={
+                  <Button className="flex-1 h-14 rounded-2xl bg-foreground text-background font-bold gap-2 hover:bg-foreground/90 transition-colors">
+                    <Plus className="w-5 h-5" /> Enviar Foto
+                  </Button>
+                } />
+                <NewAnalysisDialog trigger={
+                  <Button variant="outline" className="flex-1 h-14 rounded-2xl border-primary/20 text-foreground hover:bg-primary/5 gap-2 transition-colors">
+                     Manual
+                  </Button>
+                } />
               </div>
             </div>
           </Card>

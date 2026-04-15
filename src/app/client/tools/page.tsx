@@ -20,37 +20,42 @@ export default async function ClientToolsPage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Dossiê Sazonal */}
-        <Card className="border-none bg-stone-900 rounded-[3rem] p-12 text-white relative overflow-hidden group shadow-2xl shadow-stone-900/20 transition-all duration-700 hover:shadow-primary/10 hover:-translate-y-1 cursor-pointer">
-          <div className="absolute top-0 right-0 w-64 h-64 bg-primary/20 rounded-full blur-[80px] -mr-32 -mt-32 group-hover:bg-primary/30 transition-all duration-1000" />
-          <div className="absolute bottom-0 left-0 w-40 h-40 bg-rose-500/10 rounded-full blur-[50px] -ml-20 -mb-20" />
-          
-          <div className="relative z-10 flex flex-col h-full justify-between gap-12">
-            <div className="flex items-start justify-between">
-              <div className="w-16 h-16 rounded-2xl bg-white/10 backdrop-blur-md flex items-center justify-center border border-white/5 shadow-inner">
-                <Palette className="w-8 h-8 text-rose-200" />
-              </div>
-              <span className="flex items-center gap-2 text-[10px] font-bold text-rose-200 uppercase tracking-widest bg-white/5 px-3 py-1.5 rounded-full border border-white/10">
-                <Sparkles className="w-3 h-3" /> Color Analysis 2026
-              </span>
-            </div>
+        <Link href="/client/dossier">
+          <Card className="border-none bg-stone-900 rounded-[3rem] p-12 text-white relative overflow-hidden group shadow-2xl shadow-stone-900/20 transition-all duration-700 hover:shadow-primary/10 hover:-translate-y-1 cursor-pointer h-full">
+            <div className="absolute top-0 right-0 w-64 h-64 bg-primary/20 rounded-full blur-[80px] -mr-32 -mt-32 group-hover:bg-primary/30 transition-all duration-1000" />
+            <div className="absolute bottom-0 left-0 w-40 h-40 bg-rose-500/10 rounded-full blur-[50px] -ml-20 -mb-20" />
             
-            <div className="space-y-4">
-              <h2 className="text-3xl font-bold tracking-tight">Dossiê Sazonal</h2>
-              <p className="text-stone-400 font-light leading-relaxed text-sm max-w-sm">
-                Explore sua cartela de coloração pessoal atualizada com as tendências cromáticas globais de 2026.
-              </p>
+            <div className="relative z-10 flex flex-col h-full justify-between gap-12">
+              <div className="flex items-start justify-between">
+                <div className="w-16 h-16 rounded-2xl bg-white/10 backdrop-blur-md flex items-center justify-center border border-white/5 shadow-inner">
+                  <Palette className="w-8 h-8 text-rose-200" />
+                </div>
+                <span className="flex items-center gap-2 text-[10px] font-bold text-rose-200 uppercase tracking-widest bg-white/5 px-3 py-1.5 rounded-full border border-white/10">
+                  <Sparkles className="w-3 h-3" /> Color Analysis 2026
+                </span>
+              </div>
               
-              <div className="pt-6 flex gap-3">
-                <div className="flex gap-2">
-                   <div className="w-10 h-10 rounded-full bg-slate-800 border border-white/10 shadow-lg" />
-                   <div className="w-10 h-10 rounded-full bg-stone-800 border border-white/10 shadow-lg -ml-4" />
-                   <div className="w-10 h-10 rounded-full bg-rose-900 border border-white/10 shadow-lg -ml-4" />
-                   <div className="w-10 h-10 rounded-full bg-emerald-950 border border-white/10 shadow-lg -ml-4" />
+              <div className="space-y-4">
+                <h2 className="text-3xl font-bold tracking-tight">Dossiê Sazonal</h2>
+                <p className="text-stone-400 font-light leading-relaxed text-sm max-w-sm">
+                  Explore sua cartela de coloração pessoal atualizada com as tendências cromáticas globais de 2026.
+                </p>
+                
+                <div className="pt-6 flex items-center justify-between">
+                  <div className="flex gap-2">
+                     <div className="w-10 h-10 rounded-full bg-slate-800 border border-white/10 shadow-lg" />
+                     <div className="w-10 h-10 rounded-full bg-stone-800 border border-white/10 shadow-lg -ml-4" />
+                     <div className="w-10 h-10 rounded-full bg-rose-900 border border-white/10 shadow-lg -ml-4" />
+                     <div className="w-10 h-10 rounded-full bg-emerald-950 border border-white/10 shadow-lg -ml-4" />
+                  </div>
+                  <div className="opacity-0 group-hover:opacity-100 transition-opacity bg-white/10 p-2 rounded-full backdrop-blur-md">
+                     <ArrowRight className="w-5 h-5 text-white" />
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        </Card>
+          </Card>
+        </Link>
 
         {/* Guia de Biotipo */}
         <Card className="border-none bg-white/80 backdrop-blur-xl rounded-[3rem] p-12 text-foreground relative overflow-hidden group shadow-xl shadow-stone-100 border border-stone-200/50 transition-all duration-700 hover:shadow-2xl hover:-translate-y-1 cursor-pointer">

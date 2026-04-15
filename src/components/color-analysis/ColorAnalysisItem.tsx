@@ -1,15 +1,14 @@
-"use client"
-
-import { useState } from "react"
+import { useState, useTransition } from "react"
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { ArrowRight, CheckCircle2 } from "lucide-react"
+import { ArrowRight, CheckCircle2, Sparkles, BrainCircuit, Activity, Eye, Loader2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { motion } from "framer-motion"
 import { ColorAnalysisRequest } from "@/types/database"
 import { format } from "date-fns"
 import { ptBR } from "date-fns/locale"
-import { approveColorAnalysis } from "@/lib/actions/quizzes"
+import { approveColorAnalysis, analyzeColorWithAI, AIColorAnalysisResult } from "@/lib/actions/color-analysis"
+import { useRouter } from "next/navigation"
 
 interface ColorAnalysisItemProps {
   request: ColorAnalysisRequest & {
@@ -27,11 +26,14 @@ const SEASONS = [
 
 export function ColorAnalysisItem({ request, index }: ColorAnalysisItemProps) {
   const [isExpanded, setIsExpanded] = useState(false)
-  const [selectedSeason, setSelectedSeason] = useState("")
+  const [selectedSeason, setSelectedSeason] = useState(request.consultant_season || request.ai_suggested_season || "")
   const [isApproving, setIsApproving] = useState(false)
+  const [isPendingAI, startAITransition] = useTransition()
+  const router = useRouter()
   
   const formattedDate = format(new Date(request.created_at), "dd MMM, yyyy", { locale: ptBR })
   const isPending = request.status === 'pending'
+  const aiData = request.ai_analysis_data as AIColorAnalysisResult | null
 
   const handleApprove = async () => {
     if (!selectedSeason) return
@@ -39,6 +41,14 @@ export function ColorAnalysisItem({ request, index }: ColorAnalysisItemProps) {
     await approveColorAnalysis(request.id, selectedSeason, "Analisado pela consultoria.")
     setIsApproving(false)
     setIsExpanded(false)
+    router.refresh()
+  }
+
+  const handleRunAI = () => {
+    startAITransition(async () => {
+      await analyzeColorWithAI(request.id)
+      router.refresh()
+    })
   }
 
   return (
@@ -82,21 +92,73 @@ export function ColorAnalysisItem({ request, index }: ColorAnalysisItemProps) {
 
         {isExpanded && (
           <div className="mt-6 pt-6 border-t border-primary/10 animate-in slide-in-from-top-2">
-            <p className="text-[10px] text-primary font-bold uppercase tracking-[0.2em] mb-4">Foto para Análise</p>
             
-            {request.client_photo ? (
-              <div className="w-full h-64 rounded-2xl overflow-hidden bg-stone-100 mb-6 border border-stone-200 shadow-sm relative">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={request.client_photo} alt="Foto Cliente" className="object-cover w-full h-full" />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              {/* Coluna da Imagem */}
+              <div>
+                <p className="text-[10px] text-primary font-bold uppercase tracking-[0.2em] mb-4">Foto para Análise</p>
+                {request.client_photo ? (
+                  <div className="w-full h-64 rounded-2xl overflow-hidden bg-stone-100 mb-6 border border-stone-200 shadow-sm relative">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={request.client_photo} alt="Foto Cliente" className="object-cover w-full h-full" />
+                  </div>
+                ) : (
+                  <p className="text-sm text-stone-500 italic mb-6">Nenhuma foto enviada.</p>
+                )}
+                
+                {isPending && !request.ai_suggested_season && (
+                  <Button 
+                    onClick={handleRunAI} 
+                    disabled={isPendingAI || !request.client_photo}
+                    className="w-full bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl h-12 gap-2 shadow-lg shadow-indigo-600/20"
+                  >
+                    {isPendingAI ? <Loader2 className="w-4 h-4 animate-spin" /> : <BrainCircuit className="w-4 h-4" />}
+                    {isPendingAI ? "Analisando Contrastes..." : "Rodar Motor de IA"}
+                  </Button>
+                )}
               </div>
-            ) : (
-              <p className="text-sm text-stone-500 italic mb-6">Nenhuma foto enviada.</p>
-            )}
+
+              {/* Coluna da Inteligência */}
+              <div>
+                {aiData ? (
+                  <div className="space-y-4 bg-primary/5 p-5 rounded-2xl border border-primary/10 mb-6">
+                    <div className="flex items-center gap-2 text-primary font-bold mb-2">
+                      <Sparkles className="w-4 h-4" /> Diagnóstico IA
+                    </div>
+                    <div className="space-y-3">
+                      <div className="flex gap-3 items-start">
+                         <Activity className="w-4 h-4 mt-0.5 text-primary/60" />
+                         <div>
+                            <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground block">Temperatura</span>
+                            <span className="text-sm font-medium">{aiData.temperature_analysis}</span>
+                         </div>
+                      </div>
+                      <div className="flex gap-3 items-start">
+                         <Eye className="w-4 h-4 mt-0.5 text-primary/60" />
+                         <div>
+                            <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground block">Nível de Contraste</span>
+                            <span className="text-sm font-medium capitalize">{aiData.contrast_level} - {aiData.depth_analysis}</span>
+                         </div>
+                      </div>
+                    </div>
+                    <div className="mt-4 p-3 bg-white/60 rounded-xl">
+                       <span className="text-[10px] font-bold uppercase text-primary mb-1 block">Aparecimento Sazonal Sugerido</span>
+                       <span className="text-lg font-serif">{aiData.season}</span>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="h-full flex flex-col justify-center items-center text-center p-8 bg-stone-50 rounded-2xl border border-stone-200 border-dashed">
+                      <BrainCircuit className="w-8 h-8 text-stone-300 mb-3" />
+                      <p className="text-sm text-stone-500 font-medium">Aguardando análise da Inteligência Visual</p>
+                  </div>
+                )}
+              </div>
+            </div>
 
             {isPending && (
-              <div className="space-y-4">
-                <p className="text-[10px] text-primary font-bold uppercase tracking-[0.2em] mb-2">Selecione a Cartela Identificada:</p>
-                <div className="grid grid-cols-2 lg:grid-cols-3 gap-2">
+              <div className="mt-8 space-y-4 pt-6 border-t border-primary/10">
+                <p className="text-[10px] text-primary font-bold uppercase tracking-[0.2em] mb-2">Resultado Final: Selecione a Cartela</p>
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-2">
                   {SEASONS.map(s => (
                     <div 
                       key={s} 
@@ -111,9 +173,9 @@ export function ColorAnalysisItem({ request, index }: ColorAnalysisItemProps) {
                   <Button 
                     onClick={handleApprove}
                     disabled={!selectedSeason || isApproving}
-                    className="bg-emerald-600 hover:bg-emerald-700 text-white rounded-[1.25rem] font-bold h-12 px-8 transition-all"
+                    className="bg-emerald-600 hover:bg-emerald-700 text-white rounded-[1.25rem] font-bold h-12 px-8 transition-all shadow-lg shadow-emerald-600/20"
                   >
-                    {isApproving ? 'Aprovando...' : 'Aprovar Análise'} <CheckCircle2 className="w-4 h-4 ml-2" />
+                    {isApproving ? 'Aprovando...' : 'Aprovar e Liberar Dossiê'} <CheckCircle2 className="w-4 h-4 ml-2" />
                   </Button>
                 </div>
               </div>
