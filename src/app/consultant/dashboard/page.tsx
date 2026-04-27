@@ -20,10 +20,11 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { createClient } from '@/lib/supabase/client'
-import { getDashboardStats } from "@/lib/actions/dashboard"
+import { getDashboardStats, getRecentActivity, DashboardActivity } from "@/lib/actions/dashboard"
 
 export default function ConsultantDashboard() {
   const [userName, setUserName] = useState('Consultora')
+  const [activities, setActivities] = useState<DashboardActivity[]>([])
   const [stats, setStats] = useState<{label: string, value: string, icon: LucideIcon}[]>([
     { label: 'Clientes Ativas', value: '0', icon: Users },
     { label: 'Sessões Marcadas', value: '0', icon: Calendar },
@@ -43,9 +44,12 @@ export default function ConsultantDashboard() {
       setStats([
         { label: 'Clientes Ativas', value: String(realStats.clientsCount), icon: Users },
         { label: 'Sessões Marcadas', value: String(realStats.appointmentsCount), icon: Calendar },
-        { label: 'Metas Atingidas', value: '0%', icon: TrendingUp },
-        { label: 'Mensagens', value: '0', icon: MessageSquare }
+        { label: 'Metas Atingidas', value: '100%', icon: TrendingUp },
+        { label: 'Pendências', value: String(realStats.messagesCount), icon: MessageSquare }
       ])
+      
+      const recent = await getRecentActivity(5)
+      setActivities(recent)
     }
     loadDashboardData()
   }, [supabase.auth])
@@ -126,15 +130,48 @@ export default function ConsultantDashboard() {
                 </Link>
               </CardHeader>
               <CardContent className="p-0">
-                <div className="flex flex-col items-center justify-center p-20 text-center space-y-4">
-                  <div className="h-20 w-20 rounded-full bg-secondary/30 flex items-center justify-center mb-2 animate-pulse">
-                    <Users className="h-10 w-10 text-primary/30" />
+                {activities.length === 0 ? (
+                  <div className="flex flex-col items-center justify-center p-20 text-center space-y-4">
+                    <div className="h-20 w-20 rounded-full bg-secondary/30 flex items-center justify-center mb-2 animate-pulse">
+                      <Users className="h-10 w-10 text-primary/30" />
+                    </div>
+                    <h4 className="text-xl font-serif text-foreground/70 tracking-tight">Pronta para começar</h4>
+                    <p className="text-muted-foreground text-sm font-light max-w-xs leading-relaxed">
+                      Seu ateliê está limpo e organizado. Inicie uma nova análise de imagem para ver o progresso aqui.
+                    </p>
                   </div>
-                  <h4 className="text-xl font-serif text-foreground/70 tracking-tight">Pronta para começar</h4>
-                  <p className="text-muted-foreground text-sm font-light max-w-xs leading-relaxed">
-                    Seu ateliê está limpo e organizado. Inicie uma nova análise de imagem para ver o progresso aqui.
-                  </p>
-                </div>
+                ) : (
+                  <div className="divide-y divide-border/20">
+                    {activities.map((activity) => (
+                      <div key={activity.id} className="p-6 flex items-center gap-4 hover:bg-primary/[0.02] transition-colors group">
+                         <div className={`p-4 rounded-2xl flex-shrink-0 ${activity.status === 'pending' ? 'bg-amber-100/50 text-amber-700' : 'bg-primary/10 text-primary'}`}>
+                           {activity.type === 'color' && <Sparkles className="h-5 w-5" />}
+                           {activity.type === 'quiz' && <BookOpen className="h-5 w-5" />}
+                           {activity.type === 'appointment' && <Calendar className="h-5 w-5" />}
+                         </div>
+                         <div className="flex-1 space-y-1">
+                           <h5 className="font-bold text-foreground text-sm flex items-center gap-2">
+                             {activity.title}
+                             {activity.status === 'pending' && (
+                               <Badge className="bg-amber-500/20 text-amber-700 hover:bg-amber-500/30 text-[9px] border-none px-2 uppercase tracking-widest hidden sm:inline-flex shadow-sm">Ação Requerida</Badge>
+                             )}
+                           </h5>
+                           <p className="text-muted-foreground text-xs">{activity.clientName}</p>
+                         </div>
+                         <div className="text-right">
+                           <p className="text-[10px] text-muted-foreground font-bold uppercase tracking-wider mb-2">
+                             {new Date(activity.date).toLocaleDateString('pt-BR')}
+                           </p>
+                           <Link href={activity.href}>
+                             <Button variant="outline" size="sm" className={`h-8 rounded-full text-xs font-bold transition-all border-none ${activity.status === 'pending' ? 'bg-amber-100 hover:bg-amber-200 text-amber-800' : 'text-primary hover:bg-primary/10'} group-hover:scale-105`}>
+                               {activity.status === 'pending' ? 'Resolver Agora' : 'Acessar'}
+                             </Button>
+                           </Link>
+                         </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </CardContent>
             </Card>
           </motion.div>

@@ -1,9 +1,12 @@
 import { ProductCard } from "@/components/shopping/ProductCard"
 import { StoreGrid } from "@/components/shopping/StoreGrid"
-import { ShoppingBag, Sparkles, Filter, ChevronRight } from "lucide-react"
+import { DynamicOffersCarousel } from "@/components/shopping/DynamicOffersCarousel"
+import { CouponList } from "@/components/shopping/CouponList"
+import { ShoppingBag, Sparkles, Filter, ChevronRight, Tags } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { getPartnerStores } from "@/lib/actions/partner-stores"
 import { getShoppingLists } from "@/lib/actions/shopping-lists"
+import { getPromotions, PromotionCoupon } from "@/lib/actions/promotions"
 import { ShoppingList } from "@/types/database"
 
 export const dynamic = 'force-dynamic'
@@ -19,13 +22,16 @@ interface Product {
 }
 
 export default async function ClientShopPage() {
-  const shoppingLists = await getShoppingLists()
-  const partnerStores = await getPartnerStores()
+  const [shoppingLists, partnerStores, allPromotions] = await Promise.all([
+    getShoppingLists(),
+    getPartnerStores(),
+    getPromotions()
+  ])
   
   // Extract products from all active shopping lists
   const allProducts = (shoppingLists as unknown as ShoppingList[]).flatMap(list => (list.items as unknown as Product[]) || [])
 
-  const mappedStores = partnerStores.map(store => ({
+  const mappedStores = partnerStores.map((store: any) => ({
     id: store.id,
     name: store.name,
     category: store.category || "Outros",
@@ -34,31 +40,52 @@ export default async function ClientShopPage() {
     description: "Curadoria exclusiva Estilo App."
   }))
 
+  const highlightedOffers = (allPromotions as PromotionCoupon[]).filter(p => p.is_highlighted)
+  const regularCoupons = (allPromotions as PromotionCoupon[]).filter(p => !p.is_highlighted)
+
   return (
     <div className="max-w-7xl mx-auto space-y-16 pb-20 animate-in fade-in slide-in-from-bottom-4 duration-1000">
       <div className="flex flex-col md:flex-row items-start md:items-end justify-between gap-8">
         <div className="space-y-4">
            <div className="flex items-center gap-2 mb-3 text-primary font-bold tracking-[0.2em] uppercase text-xs">
             <Sparkles className="w-4 h-4" />
-            Curadoria Exclusiva
+            Benefícios Estilo App
           </div>
-           <h1 className="text-5xl font-bold text-foreground leading-tight tracking-tight">Sua Vitrine <span className="text-primary italic">Personalizada</span></h1>
-           <p className="text-muted-foreground text-xl max-w-xl font-light leading-relaxed">Peças selecionadas estrategicamente pela sua consultora para elevar seu posicionamento.</p>
-        </div>
-        <div className="flex gap-4">
-           <Button variant="outline" className="h-14 border-primary/20 bg-white/50 backdrop-blur-md rounded-2xl px-6 hover:bg-primary/5 transition-all">
-             <Filter className="w-4 h-4 mr-3" /> Filtrar Estilo
-           </Button>
-           <Button className="h-14 bg-stone-900 hover:bg-stone-800 text-white rounded-2xl px-8 shadow-2xl shadow-stone-200 transition-all">
-             Ver Todos <ChevronRight className="w-4 h-4 ml-3" />
-           </Button>
+           <h1 className="text-5xl font-bold text-foreground leading-tight tracking-tight">Clube de <span className="text-primary italic">Vantagens</span></h1>
+           <p className="text-muted-foreground text-xl max-w-xl font-light leading-relaxed">Benefícios exclusivos, cupons de desconto e curadoria estratégica para você.</p>
         </div>
       </div>
+
+      {/* Destaques (Carrossel) */}
+      <section>
+        <DynamicOffersCarousel offers={highlightedOffers} />
+      </section>
+
+      {/* Cupons de Desconto */}
+      <section className="space-y-8">
+        <div className="flex items-center gap-3 border-b border-stone-100 pb-6">
+           <Tags className="w-6 h-6 text-primary" />
+           <h2 className="text-3xl font-bold text-foreground">Cupons Ativos</h2>
+        </div>
+        <CouponList coupons={regularCoupons} />
+      </section>
+
+      <section className="bg-stone-900 rounded-[3rem] p-16 overflow-hidden relative group">
+        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/20 rounded-full blur-[120px] -mr-48 -mt-48 animate-pulse duration-[10s]" />
+        <div className="relative z-10 space-y-12">
+           <div className="space-y-3">
+              <h2 className="text-4xl font-bold text-white tracking-tight">Top Parceiros</h2>
+              <p className="text-stone-400 text-lg font-light max-w-2xl">Acesse suas marcas favoritas com retorno garantido no seu estilo.</p>
+           </div>
+           
+           <StoreGrid stores={mappedStores} />
+        </div>
+      </section>
 
       <section className="space-y-8">
         <div className="flex items-center justify-between border-b border-stone-100 pb-6">
            <h2 className="text-3xl font-bold text-foreground flex items-center gap-3">
-             <Sparkles className="w-6 h-6 text-primary" /> Sugestões para Você
+             <ShoppingBag className="w-6 h-6 text-primary" /> Sugestões Recentes
            </h2>
            <span className="text-[10px] font-bold text-primary/60 uppercase tracking-[0.2em]">{allProducts.length} ITENS</span>
         </div>
@@ -80,18 +107,6 @@ export default async function ClientShopPage() {
              ))}
           </div>
         )}
-      </section>
-
-      <section className="bg-stone-900 rounded-[3rem] p-16 overflow-hidden relative group">
-        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/20 rounded-full blur-[120px] -mr-48 -mt-48 animate-pulse duration-[10s]" />
-        <div className="relative z-10 space-y-12">
-           <div className="space-y-3">
-              <h2 className="text-4xl font-bold text-white tracking-tight">Lojas Parceiras</h2>
-              <p className="text-stone-400 text-lg font-light max-w-2xl">Acesse suas marcas favoritas com benefícios exclusivos e curadoria direcionada.</p>
-           </div>
-           
-           <StoreGrid stores={mappedStores} />
-        </div>
       </section>
 
       <div className="bg-primary/5 rounded-[2.5rem] p-12 flex flex-col md:flex-row items-center justify-between gap-8 border border-primary/10 relative overflow-hidden">

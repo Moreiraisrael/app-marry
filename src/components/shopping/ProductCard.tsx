@@ -19,6 +19,7 @@ interface ProductCardProps {
 }
 
 export function ProductCard({
+  id,
   name,
   price,
   storeName,
@@ -74,7 +75,7 @@ export function ProductCard({
           </Badge>
         </div>
 
-        <Link href={affiliateUrl} target="_blank">
+        <Link href={`/api/track?url=${encodeURIComponent(affiliateUrl)}&type=product&id=${id}`} target="_blank" className="block w-full">
           <Button className="w-full bg-amber-500 hover:bg-amber-600 text-black font-bold h-12 rounded-xl group/btn shadow-[0_0_20px_rgba(245,158,11,0.15)]">
             <ShoppingBag className="w-4 h-4 mr-2" /> Comprar Agora
             <ExternalLink className="w-4 h-4 ml-auto opacity-0 group-hover/btn:opacity-100 transition-opacity" />

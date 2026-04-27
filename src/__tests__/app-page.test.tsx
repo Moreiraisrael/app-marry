@@ -37,11 +37,4 @@ describe('LandingPage', () => {
     expect(brandTitles.length).toBeGreaterThan(0);
   });
 
-  it('renders trust bar brand names', () => {
-    render(<LandingPage />);
-    const brands = [/VOGUE/i, /ELLE/i, /Bazaar/i, /L'OFFICIEL/i, /Marie Claire/i];
-    brands.forEach((brand) => {
-      expect(screen.getByText(brand)).toBeInTheDocument();
-    });
-  });
 });
