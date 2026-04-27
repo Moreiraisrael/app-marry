@@ -1,9 +1,17 @@
 export const dynamic = 'force-dynamic'
 
+import { Metadata } from 'next'
 import RegisterClient from './register-client'
 
+export const metadata: Metadata = {
+  title: 'Cadastro - App Marry',
+}
+
 export default function RegisterPage() {
-  // Unique identifier to bypass Vercel symlink EPERM bug
-  console.log('Rendering RegisterPage')
-  return <RegisterClient />
+  return (
+    <>
+      <div id="vercel-dedupe-bypass-register" style={{ display: 'none' }} aria-hidden="true" />
+      <RegisterClient />
+    </>
+  )
 }
