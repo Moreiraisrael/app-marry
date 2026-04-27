@@ -13,7 +13,8 @@ CREATE POLICY "Consultants can insert client profiles" ON public.profiles
   );
 
 -- 2. Permite consultoras atualizarem perfis de suas clientes
-CREATE POLICY IF NOT EXISTS "Consultants can update their clients" ON public.profiles
+DROP POLICY IF EXISTS "Consultants can update their clients" ON public.profiles;
+CREATE POLICY "Consultants can update their clients" ON public.profiles
   FOR UPDATE USING (
     auth.uid() = id OR
     auth.uid() = consultant_id
@@ -32,5 +33,5 @@ CREATE POLICY "Consultants can view capsules" ON public.look_capsules
 DROP POLICY IF EXISTS "Consultants can manage shopping lists" ON public.shopping_lists;
 CREATE POLICY "Consultants can manage shopping lists" ON public.shopping_lists
   FOR ALL USING (
-    auth.uid() = consultant_id OR auth.uid() = client_id
+    auth.uid() IN (SELECT consultant_id FROM public.profiles WHERE id = client_id) OR auth.uid() = client_id
   );
