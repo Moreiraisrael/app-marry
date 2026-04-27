@@ -12,6 +12,12 @@ vi.mock('lucide-react', () => ({
   Sparkles: () => <div data-testid="icon-sparkles" />,
   Filter: () => <div data-testid="icon-filter" />,
   ChevronRight: () => <div data-testid="icon-chevron" />,
+  Tags: () => <div data-testid="icon-tags" />,
+  TicketPercent: () => <div data-testid="icon-ticket-percent" />,
+  Copy: () => <div data-testid="icon-copy" />,
+  ExternalLink: () => <div data-testid="icon-external-link" />,
+  CheckCircle2: () => <div data-testid="icon-check-circle-2" />,
+  Scissors: () => <div data-testid="icon-scissors" />,
 }))
 
 // Mock components
@@ -41,7 +47,7 @@ describe('ClientShopPage Server Component', () => {
     const ui = await ClientShopPage()
     render(ui as React.ReactElement)
 
-    expect(screen.getByText(/Peças selecionadas estrategicamente/i)).toBeInTheDocument()
+    expect(screen.getByText(/Benefícios exclusivos/i)).toBeInTheDocument()
     expect(screen.getByText('Sua vitrine está sendo montada')).toBeInTheDocument()
     expect(screen.getByTestId('store-grid')).toHaveTextContent('Stores: 0')
   })
