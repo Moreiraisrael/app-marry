@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "@supabase/ssr": "^0.9.0",
-    "@supabase/supabase-js": "^2.100.0",
+    "@supabase/supabase-js": "^2.105.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
