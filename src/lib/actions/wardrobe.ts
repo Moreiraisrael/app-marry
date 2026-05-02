@@ -121,3 +121,67 @@ export async function deleteWardrobeItem(id: string) {
     return { success: false }
   }
 }
+
+export interface AIOutfitAnalysisResult {
+  rating: number;
+  summary: string;
+  strengths: string[];
+  improvements: string[];
+  recommended_occasions: string[];
+  color_harmony: string;
+}
+
+export async function analyzeOutfitWithAI(imageUrl: string): Promise<AIOutfitAnalysisResult | null> {
+  try {
+    const { GoogleGenAI } = await import('@google/genai')
+    
+    // Download the image and convert to base64
+    const imageResp = await fetch(imageUrl)
+    if (!imageResp.ok) {
+      console.error('Failed to fetch image from URL for look analysis')
+      return null
+    }
+    const arrayBuffer = await imageResp.arrayBuffer()
+    const base64Data = Buffer.from(arrayBuffer).toString('base64')
+    const mimeType = imageResp.headers.get('content-type') || 'image/jpeg'
+
+    const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY })
+    
+    const prompt = `Você é um personal stylist de elite. Analise este look (outfit) com precisão.
+    
+    Responda ESTRITAMENTE num formato JSON válido seguindo a seguinte estrutura, sem markdown ao redor, apenas o JSON puro:
+    {
+      "rating": numero de 1 a 10 avaliando o look geral,
+      "summary": "Um parágrafo de resumo sobre a impressão geral do look",
+      "strengths": ["Ponto forte 1", "Ponto forte 2", ...],
+      "improvements": ["Sugestão de melhoria 1", "Sugestão 2", ...],
+      "recommended_occasions": ["Ocasião 1", "Ocasião 2", ...],
+      "color_harmony": "Breve análise da harmonia e contraste de cores das peças"
+    }`
+
+    const response = await ai.models.generateContent({
+      model: 'gemini-2.5-flash',
+      contents: [
+        prompt,
+        {
+          inlineData: {
+            data: base64Data,
+            mimeType: mimeType
+          }
+        }
+      ],
+      config: {
+        responseMimeType: "application/json",
+      }
+    })
+
+    const textResponse = response.text || ""
+    const cleanJsonText = textResponse.replace(/```json/g, '').replace(/```/g, '').trim()
+    
+    const aiResult: AIOutfitAnalysisResult = JSON.parse(cleanJsonText)
+    return aiResult
+  } catch (e) {
+    console.error('Connection error or AI error in analyzeOutfitWithAI:', e)
+    return null
+  }
+}

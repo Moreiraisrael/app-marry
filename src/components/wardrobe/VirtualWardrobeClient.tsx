@@ -9,6 +9,7 @@ import { Sparkles, Plus, Search, Filter, Camera, FolderOpen } from "lucide-react
 import { Input } from "@/components/ui/input"
 import { WardrobeGrid } from "@/components/wardrobe/WardrobeGrid"
 import { AddWardrobeItemModal } from "@/components/wardrobe/AddWardrobeItemModal"
+import { AnalyzeLookModal } from "@/components/wardrobe/AnalyzeLookModal"
 import { WardrobeItem } from "@/types/database"
 
 interface VirtualWardrobeClientProps {
@@ -142,11 +143,9 @@ export function VirtualWardrobeClient({ initialItems, clients }: VirtualWardrobe
                <div className="absolute -bottom-10 -left-10 w-32 h-32 bg-white/10 rounded-full group-hover:scale-125 transition-transform duration-1000" />
                <h4 className="text-xl font-bold mb-3 relative z-10">IA Stylist</h4>
                <p className="text-xs text-white/80 leading-relaxed mb-8 relative z-10">
-                 Gerar 5 novos looks baseados nas cores e arquétipos das clientes selecionadas.
+                 Faça upload de um look completo e receba uma análise detalhada da nossa Inteligência Artificial sobre harmonia, proporções e ocasiões adequadas.
                </p>
-               <Button onClick={() => alert('Gerador de looks com IA em desenvolvimento!')} className="w-full bg-white text-primary hover:bg-stone-50 font-bold rounded-xl h-12 relative z-10 transition-all">
-                 Sugestões de Looks
-               </Button>
+               <AnalyzeLookModal clientId={activeClientId} />
             </Card>
           </aside>
 
