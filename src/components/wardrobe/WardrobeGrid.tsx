@@ -8,11 +8,22 @@ import { WardrobeItem } from "@/types/database"
 import { Badge } from "@/components/ui/badge"
 import Image from "next/image"
 
+import { AddWardrobeItemModal } from "@/components/wardrobe/AddWardrobeItemModal"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import { deleteWardrobeItem } from "@/lib/actions/wardrobe"
+
 interface WardrobeGridProps {
   items: WardrobeItem[]
+  activeClientId?: string
+  onDelete?: (id: string) => void
 }
 
-export function WardrobeGrid({ items }: WardrobeGridProps) {
+export function WardrobeGrid({ items, activeClientId = "", onDelete }: WardrobeGridProps) {
   if (items.length === 0) {
     return (
       <div className="grid grid-cols-1">
@@ -31,9 +42,14 @@ export function WardrobeGrid({ items }: WardrobeGridProps) {
               Clique em &quot;Escanear Peça&quot; para começar a digitalizar o guarda-roupa da sua cliente.
             </p>
           </div>
-          <Button className="bg-primary hover:bg-primary/90 text-primary-foreground rounded-2xl gap-3 font-bold px-10 h-14 shadow-xl shadow-primary/20 transition-all">
-             Digitalizar Primeira Peça
-          </Button>
+          <AddWardrobeItemModal 
+            clientId={activeClientId}
+            trigger={
+              <Button className="bg-primary hover:bg-primary/90 text-primary-foreground rounded-2xl gap-3 font-bold px-10 h-14 shadow-xl shadow-primary/20 transition-all">
+                 Digitalizar Primeira Peça
+              </Button>
+            }
+          />
         </motion.div>
       </div>
     )
@@ -63,9 +79,27 @@ export function WardrobeGrid({ items }: WardrobeGridProps) {
                         <Button size="icon" className="w-8 h-8 rounded-lg bg-white/20 backdrop-blur-md border border-white/30 text-white hover:bg-primary hover:border-primary transition-all">
                            <Heart className="w-4 h-4" />
                         </Button>
-                        <Button size="icon" className="w-8 h-8 rounded-lg bg-white/20 backdrop-blur-md border border-white/30 text-white hover:bg-stone-900 transition-all">
-                           <MoreHorizontal className="w-4 h-4" />
-                        </Button>
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button size="icon" className="w-8 h-8 rounded-lg bg-white/20 backdrop-blur-md border border-white/30 text-white hover:bg-stone-900 transition-all">
+                               <MoreHorizontal className="w-4 h-4" />
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end" className="w-40 bg-white rounded-xl shadow-xl border-stone-100">
+                            <DropdownMenuItem className="text-stone-600 font-medium cursor-pointer rounded-lg hover:bg-stone-50 hover:text-stone-900">
+                              Editar
+                            </DropdownMenuItem>
+                            <DropdownMenuItem 
+                              className="text-red-600 font-medium cursor-pointer rounded-lg hover:bg-red-50 hover:text-red-700"
+                              onClick={async () => {
+                                if (onDelete) onDelete(item.id);
+                                await deleteWardrobeItem(item.id);
+                              }}
+                            >
+                              Excluir
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
                      </div>
                   </div>
                </div>

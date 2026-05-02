@@ -1,20 +1,23 @@
 "use client"
 
-import { useState } from "react"
+import React, { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Plus, X, UploadCloud, Camera, CheckCircle2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
 import { createWardrobeItem } from "@/lib/actions/wardrobe"
+import { createClient } from "@/lib/supabase/client"
 
 interface AddWardrobeItemModalProps {
   clientId: string
+  trigger?: React.ReactNode
 }
 
-export function AddWardrobeItemModal({ clientId }: AddWardrobeItemModalProps) {
+export function AddWardrobeItemModal({ clientId, trigger }: AddWardrobeItemModalProps) {
   const [isOpen, setIsOpen] = useState(false)
   const [photoDataUrl, setPhotoDataUrl] = useState<string | null>(null)
+  const [photoFile, setPhotoFile] = useState<File | null>(null)
   const [category, setCategory] = useState("Top")
   const [subcategory, setSubcategory] = useState("")
   const [color, setColor] = useState("#000000")
@@ -24,6 +27,7 @@ export function AddWardrobeItemModal({ clientId }: AddWardrobeItemModalProps) {
   const handlePhotoSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (file) {
+      setPhotoFile(file)
       const reader = new FileReader()
       reader.onload = (event) => {
         setPhotoDataUrl(event.target?.result as string)
@@ -33,7 +37,7 @@ export function AddWardrobeItemModal({ clientId }: AddWardrobeItemModalProps) {
   }
 
   const handleSubmit = async () => {
-    if (!photoDataUrl) {
+    if (!photoFile || !photoDataUrl) {
       setErrorText("A foto da peça é obrigatória.")
       return
     }
@@ -41,12 +45,34 @@ export function AddWardrobeItemModal({ clientId }: AddWardrobeItemModalProps) {
     setIsSubmitting(true)
     setErrorText("")
 
+    const supabase = createClient()
+    
+    // Upload image to Supabase Storage
+    const fileExt = photoFile.name.split('.').pop()
+    const fileName = `${clientId}-${Date.now()}.${fileExt}`
+    
+    const { data: uploadData, error: uploadError } = await supabase.storage
+      .from('wardrobe')
+      .upload(fileName, photoFile)
+
+    if (uploadError) {
+      console.error("Upload error:", uploadError)
+      setErrorText("Erro ao fazer upload da imagem.")
+      setIsSubmitting(false)
+      return
+    }
+
+    // Get public URL
+    const { data: { publicUrl } } = supabase.storage
+      .from('wardrobe')
+      .getPublicUrl(fileName)
+
     const newItem = {
       client_id: clientId,
       category,
       subcategory,
       color,
-      photo_url: photoDataUrl,
+      photo_url: publicUrl,
       status: "keep" as const,
       notes: null,
       season_match: false,
@@ -59,6 +85,7 @@ export function AddWardrobeItemModal({ clientId }: AddWardrobeItemModalProps) {
       setIsOpen(false)
       // Reset form
       setPhotoDataUrl(null)
+      setPhotoFile(null)
       setCategory("Top")
       setSubcategory("")
       setColor("#000000")
@@ -69,14 +96,29 @@ export function AddWardrobeItemModal({ clientId }: AddWardrobeItemModalProps) {
     setIsSubmitting(false)
   }
 
+  const triggerElement = trigger ? (
+    React.cloneElement(trigger as React.ReactElement<any>, {
+      onClick: (e: React.MouseEvent) => {
+        console.log("Abrindo modal de Wardrobe Item");
+        setIsOpen(true);
+        const childProps = (trigger as React.ReactElement<any>).props;
+        if (childProps && childProps.onClick) {
+          childProps.onClick(e);
+        }
+      }
+    })
+  ) : (
+    <Button 
+      onClick={() => setIsOpen(true)}
+      className="h-16 w-16 bg-stone-900 hover:bg-stone-800 text-white rounded-[1.5rem] shadow-2xl shadow-stone-200 transition-all flex items-center justify-center p-0"
+    >
+      <Plus className="w-6 h-6" />
+    </Button>
+  );
+
   return (
     <>
-      <Button 
-        onClick={() => setIsOpen(true)}
-        className="h-16 w-16 bg-stone-900 hover:bg-stone-800 text-white rounded-[1.5rem] shadow-2xl shadow-stone-200 transition-all flex items-center justify-center p-0"
-      >
-        <Plus className="w-6 h-6" />
-      </Button>
+      {triggerElement}
 
       <AnimatePresence>
         {isOpen && (

@@ -118,3 +118,33 @@ export async function createClientProfile(formData: FormData): Promise<{ success
   }
 }
 
+export async function deleteClientProfile(clientId: string): Promise<{ success: boolean; error?: string }> {
+  try {
+    const supabase = await createClient()
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) {
+      return { success: false, error: "Sessão expirada." }
+    }
+
+    // Only allow deleting clients that belong to the consultant
+    const { error } = await supabase
+      .from('profiles')
+      .delete()
+      .eq('id', clientId)
+      .eq('consultant_id', user.id)
+
+    if (error) {
+      console.error('Error deleting client:', error)
+      return { success: false, error: 'Erro ao excluir o cliente.' }
+    }
+
+    revalidatePath('/consultant/clients')
+    return { success: true }
+  } catch (e: unknown) {
+    const err = e as { digest?: string; message?: string }
+    if (err?.digest === 'DYNAMIC_SERVER_USAGE' || err?.message?.includes('Dynamic server usage')) throw e
+    console.error('Connection error in deleteClientProfile:', e)
+    return { success: false, error: 'Falha inesperada ao tentar excluir.' }
+  }
+}
+

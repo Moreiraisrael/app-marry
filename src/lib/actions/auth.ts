@@ -28,7 +28,7 @@ export async function signIn(formData: FormData): Promise<{ error?: string } | n
     if (error.message.includes('Email not confirmed')) {
       return { error: 'Por favor, confirme seu e-mail antes de acessar' }
     }
-    return { error: 'Ocorreu um erro ao entrar. Tente novamente.' }
+    return { error: 'Erro: ' + error.message }
   }
 
   // Sincronizar perfil após login bem-sucedido (Resiliente)

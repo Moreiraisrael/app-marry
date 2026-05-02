@@ -25,8 +25,14 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 import { Label } from "@/components/ui/label"
-import { createClientProfile } from "@/lib/actions/clients"
+import { createClientProfile, deleteClientProfile } from "@/lib/actions/clients"
 import { toast } from "sonner"
 import { useRouter } from "next/navigation"
 
@@ -269,14 +275,42 @@ export function ClientsTable({ initialClients }: ClientsTableProps) {
                     </TableCell>
                     <TableCell className="text-right pr-6 md:pr-8">
                       <div className="flex items-center justify-end gap-1 md:gap-2">
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button 
+                              variant="ghost" 
+                              size="icon" 
+                              className="size-10 md:size-10 text-muted-foreground hover:text-primary rounded-xl transition-all active:scale-90"
+                            >
+                              <MoreVertical className="w-5 h-5" />
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end" className="w-40 bg-white rounded-xl shadow-xl border-stone-100">
+                            <DropdownMenuItem className="text-stone-600 font-medium cursor-pointer rounded-lg hover:bg-stone-50 hover:text-stone-900">
+                              Editar
+                            </DropdownMenuItem>
+                            <DropdownMenuItem 
+                              className="text-red-600 font-medium cursor-pointer rounded-lg hover:bg-red-50 hover:text-red-700"
+                              onClick={async (e) => {
+                                e.stopPropagation();
+                                const res = await deleteClientProfile(client.id);
+                                if (res.success) {
+                                  toast.success("Cliente removido com sucesso!");
+                                  router.refresh();
+                                } else {
+                                  toast.error(res.error || "Erro ao remover cliente");
+                                }
+                              }}
+                            >
+                              Excluir
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
                         <Button 
-                          variant="ghost" 
-                          size="icon" 
-                          className="size-10 md:size-10 text-muted-foreground hover:text-primary rounded-xl transition-all active:scale-90"
-                        >
-                          <MoreVertical className="w-5 h-5" />
-                        </Button>
-                        <Button 
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            router.push(`/consultant/clients/${client.id}`);
+                          }}
                           className="hidden xs:flex bg-secondary hover:bg-primary/10 text-primary hover:text-primary rounded-xl h-10 px-4 font-bold tracking-tight text-[10px] md:text-xs transition-all group-hover:scale-105 active:scale-95"
                         >
                            Ver Perfil
