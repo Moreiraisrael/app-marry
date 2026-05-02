@@ -7,6 +7,7 @@ import {
 import { getColorAnalysisRequests } from "@/lib/actions/color-analysis"
 import { ColorAnalysisItem } from "@/components/color-analysis/ColorAnalysisItem"
 import { NewAnalysisDialog } from "@/components/color-analysis/NewAnalysisDialog"
+import { IALearningDialog } from "@/components/color-analysis/IALearningDialog"
 
 export const dynamic = 'force-dynamic'
 
@@ -108,9 +109,7 @@ export default async function ColorAnalysisPage() {
                <p className="text-sm text-white/80 mb-8 font-light leading-relaxed">
                  Sua precisão nas análises subiu 15% este mês graças às novas atualizações de motor visual.
                </p>
-               <Button className="w-full bg-white text-primary hover:bg-stone-50 font-bold rounded-xl h-12">
-                 Explorar Insights
-               </Button>
+               <IALearningDialog />
              </div>
           </Card>
         </div>
