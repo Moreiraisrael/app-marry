@@ -2,6 +2,7 @@
 
 import { createClient } from "@/lib/supabase/server"
 import { ColorAnalysisRequest, Profile } from "@/types/database"
+import { GoogleGenAI } from '@google/genai'
 
 type ColorAnalysisWithProfile = ColorAnalysisRequest & {
   profiles: Pick<Profile, 'full_name' | 'email'> | null
@@ -82,40 +83,91 @@ export async function analyzeColorWithAI(requestId: string): Promise<AIColorAnal
   try {
     const supabase = await createClient()
     
-    // Simulated AI result based on the legacy logic
-    const mockResult = {
-      season: "inverno_frio",
-      temperature_analysis: "Subtom predominante azulado/rosado. Veias azuis. Contraste nítido entre pele e traços.",
-      depth_analysis: "Profundidade média-profunda. Cabelo escuro que emoldura o rosto com clareza.",
-      intensity_analysis: "Intensidade brilhante. As cores naturais têm vivacidade.",
-      contrast_level: "alto",
-      facial_features: {
-        face_shape: "oval",
-        facial_traits: "suaves"
-      },
-      reasoning: "A cliente apresenta subtons frios inequívocos e alto contraste pessoal, características clássicas do Inverno Frio.",
-      style_recommendations: {
-        necklines: "Decote em V profundo para alongar",
-        patterns: "Geométricos de alto contraste",
-        accessories: "Prata e ouro branco"
-      }
+    // 1. Fetch the request to get the image URL
+    const { data: request, error: fetchError } = await supabase
+      .from('color_analysis_requests')
+      .select('client_photo')
+      .eq('id', requestId)
+      .single()
+
+    if (fetchError || !request?.client_photo) {
+      console.error('Error fetching request or no photo:', fetchError)
+      return null
     }
 
-    const { error } = await supabase
+    // 2. Download the image and convert to base64
+    const imageResp = await fetch(request.client_photo)
+    if (!imageResp.ok) {
+      console.error('Failed to fetch image from URL')
+      return null
+    }
+    const arrayBuffer = await imageResp.arrayBuffer()
+    const base64Data = Buffer.from(arrayBuffer).toString('base64')
+    const mimeType = imageResp.headers.get('content-type') || 'image/jpeg'
+
+    // 3. Call Gemini API
+    const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY })
+    
+    const prompt = `Você é um consultor de imagem especialista em Coloração Pessoal (Método Sazonal Expandido). Analise esta foto detalhadamente e determine a cartela de cores da pessoa.
+    
+    Responda ESTRITAMENTE num formato JSON válido seguindo a seguinte estrutura, sem markdown ao redor, apenas o JSON puro:
+    {
+      "season": "uma das 12 estações em minúsculo com underline (ex: inverno_frio, verao_claro, outono_quente, primavera_brilhante)",
+      "temperature_analysis": "Análise detalhada do subtom, temperatura da pele e veias",
+      "depth_analysis": "Análise da profundidade de cor (cabelo, pele, olhos)",
+      "intensity_analysis": "Análise da intensidade (brilhante ou suave)",
+      "contrast_level": "alto, medio ou baixo",
+      "facial_features": {
+        "face_shape": "Formato do rosto",
+        "facial_traits": "Traços faciais"
+      },
+      "reasoning": "Resumo do raciocínio explicando o porquê da escolha da cartela",
+      "style_recommendations": {
+        "necklines": "Recomendações de decotes",
+        "patterns": "Estampas ideais",
+        "accessories": "Acessórios (metais, pedras)"
+      }
+    }`
+
+    const response = await ai.models.generateContent({
+      model: 'gemini-2.5-flash',
+      contents: [
+        prompt,
+        {
+          inlineData: {
+            data: base64Data,
+            mimeType: mimeType
+          }
+        }
+      ],
+      config: {
+        responseMimeType: "application/json",
+      }
+    })
+
+    const textResponse = response.text || ""
+    // Remove markdown code blocks if Gemini includes them despite instructions
+    const cleanJsonText = textResponse.replace(/```json/g, '').replace(/```/g, '').trim()
+    
+    const aiResult: AIColorAnalysisResult = JSON.parse(cleanJsonText)
+
+    // 4. Update the database with the real AI result
+    const { error: updateError } = await supabase
       .from('color_analysis_requests')
       .update({
-        ai_suggested_season: mockResult.season,
-        ai_analysis_data: mockResult,
+        ai_suggested_season: aiResult.season,
+        ai_analysis_data: aiResult as any,
       })
       .eq('id', requestId)
 
-    if (error) {
-      console.error('Error updating AI analysis:', error)
+    if (updateError) {
+      console.error('Error updating AI analysis:', updateError)
       return null
     }
-    return mockResult
+    
+    return aiResult
   } catch (e) {
-    console.error('Connection error in analyzeColorWithAI:', e)
+    console.error('Connection error or AI error in analyzeColorWithAI:', e)
     return null
   }
 }
