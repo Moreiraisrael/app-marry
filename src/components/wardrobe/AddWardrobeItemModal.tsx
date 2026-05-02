@@ -97,16 +97,15 @@ export function AddWardrobeItemModal({ clientId, trigger }: AddWardrobeItemModal
   }
 
   const triggerElement = trigger ? (
-    React.cloneElement(trigger as React.ReactElement<any>, {
-      onClick: (e: React.MouseEvent) => {
+    <div 
+      onClick={() => {
         console.log("Abrindo modal de Wardrobe Item");
         setIsOpen(true);
-        const childProps = (trigger as React.ReactElement<any>).props;
-        if (childProps && childProps.onClick) {
-          childProps.onClick(e);
-        }
-      }
-    })
+      }} 
+      className="inline-block cursor-pointer"
+    >
+      {trigger}
+    </div>
   ) : (
     <Button 
       onClick={() => setIsOpen(true)}
@@ -116,27 +115,33 @@ export function AddWardrobeItemModal({ clientId, trigger }: AddWardrobeItemModal
     </Button>
   );
 
+  const [mounted, setMounted] = useState(false);
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
+
   return (
     <>
       {triggerElement}
 
-      <AnimatePresence>
-        {isOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-0">
-            <motion.div 
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={() => setIsOpen(false)}
-              className="absolute inset-0 bg-stone-900/40 backdrop-blur-sm"
-            />
-            
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              className="relative w-full max-w-lg z-10"
-            >
+      {mounted && typeof document !== "undefined" && React.createPortal(
+        <AnimatePresence>
+          {isOpen && (
+            <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-0">
+              <motion.div 
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                onClick={() => setIsOpen(false)}
+                className="absolute inset-0 bg-stone-900/40 backdrop-blur-sm"
+              />
+              
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.95, y: 20 }}
+                className="relative w-full max-w-lg z-10"
+              >
               <Card className="border-stone-200 shadow-2xl bg-white rounded-[2.5rem] overflow-hidden">
                 <CardHeader className="p-8 pb-4 flex flex-row items-center justify-between border-b border-stone-100">
                   <CardTitle className="font-serif text-2xl text-stone-900">Cadastrar Peça</CardTitle>
@@ -248,8 +253,10 @@ export function AddWardrobeItemModal({ clientId, trigger }: AddWardrobeItemModal
               </Card>
             </motion.div>
           </div>
-        )}
-      </AnimatePresence>
+          )}
+        </AnimatePresence>,
+        document.body
+      )}
     </>
   )
 }
