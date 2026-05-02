@@ -8,6 +8,7 @@ import { Camera, ImagePlus, User, Loader2, Sparkles } from "lucide-react"
 import { Profile } from "@/types/database"
 import { getClients } from "@/lib/actions/clients"
 import { createColorAnalysisRequest } from "@/lib/actions/color-analysis"
+import { createClient } from "@/lib/supabase/client"
 import { useRouter } from "next/navigation"
 
 interface NewAnalysisDialogProps {
@@ -21,7 +22,8 @@ export function NewAnalysisDialog({ trigger }: NewAnalysisDialogProps) {
   const [loading, setLoading] = useState(false)
   const [submitting, setSubmitting] = useState(false)
   
-  // Imagem em Base64 preview
+  // Arquivo e Imagem em Base64 preview
+  const [selectedFile, setSelectedFile] = useState<File | null>(null)
   const [previewImage, setPreviewImage] = useState<string | null>(null)
 
   const router = useRouter()
@@ -45,6 +47,7 @@ export function NewAnalysisDialog({ trigger }: NewAnalysisDialogProps) {
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (file) {
+      setSelectedFile(file)
       const reader = new FileReader()
       reader.onloadend = () => {
         setPreviewImage(reader.result as string)
@@ -54,23 +57,50 @@ export function NewAnalysisDialog({ trigger }: NewAnalysisDialogProps) {
   }
 
   const handleSubmit = async () => {
-    if (!selectedClientId || !previewImage) return
+    if (!selectedClientId || !selectedFile) return
 
     setSubmitting(true)
-    const result = await createColorAnalysisRequest({
-      client_id: selectedClientId,
-      client_photo: previewImage,
-      additional_photos: []
-    })
+    
+    try {
+      const supabase = createClient()
+      const fileExt = selectedFile.name.split('.').pop()
+      const fileName = `${selectedClientId}-${Date.now()}.${fileExt}`
+      
+      const { data: uploadData, error: uploadError } = await supabase.storage
+        .from('color-analysis')
+        .upload(fileName, selectedFile, {
+          cacheControl: '3600',
+          upsert: false
+        })
 
-    setSubmitting(false)
-    if (result) {
-      setOpen(false)
-      setPreviewImage(null)
-      setSelectedClientId("")
-      router.refresh()
-    } else {
-      alert("Erro ao criar análise. Verifique sua conexão e tente novamente.")
+      if (uploadError) {
+        throw new Error(`Erro no upload: ${uploadError.message}`)
+      }
+
+      const { data: { publicUrl } } = supabase.storage
+        .from('color-analysis')
+        .getPublicUrl(fileName)
+
+      const result = await createColorAnalysisRequest({
+        client_id: selectedClientId,
+        client_photo: publicUrl,
+        additional_photos: []
+      })
+
+      if (result) {
+        setOpen(false)
+        setPreviewImage(null)
+        setSelectedFile(null)
+        setSelectedClientId("")
+        router.refresh()
+      } else {
+        throw new Error("Erro ao salvar a análise no banco.")
+      }
+    } catch (e: any) {
+      console.error(e)
+      alert(e.message || "Erro ao criar análise. Verifique sua conexão e tente novamente.")
+    } finally {
+      setSubmitting(false)
     }
   }
 
@@ -163,7 +193,7 @@ export function NewAnalysisDialog({ trigger }: NewAnalysisDialogProps) {
             Cancelar
           </Button>
           <Button 
-            disabled={!previewImage || !selectedClientId || submitting} 
+            disabled={!selectedFile || !selectedClientId || submitting} 
             onClick={handleSubmit}
             className="rounded-xl font-bold bg-primary hover:bg-primary/90 text-white min-w-[120px]"
           >
