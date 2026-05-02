@@ -103,7 +103,12 @@ export async function signUp(formData: FormData): Promise<{ error?: string; succ
     }
   }
 
-  return { success: 'Cadastro realizado! Verifique seu e-mail para confirmar.' }
+  if (data.session) {
+    revalidatePath('/', 'layout')
+    redirect(userType === 'consultant' ? '/consultant/dashboard' : '/client/dashboard')
+  }
+
+  return { success: 'Cadastro realizado com sucesso! Você já pode fazer login.' }
 }
 
 export async function signOut(): Promise<void> {
