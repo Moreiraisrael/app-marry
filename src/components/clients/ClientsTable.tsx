@@ -53,6 +53,10 @@ export function ClientsTable({ initialClients }: ClientsTableProps) {
   const [searchTerm, setSearchTerm] = useState("")
   const [isOpen, setIsOpen] = useState(false)
   const [isPending, setIsPending] = useState(false)
+  const [inviteLink, setInviteLink] = useState<string | null>(null)
+  const [tempPassword, setTempPassword] = useState<string | null>(null)
+  const [clientName, setClientName] = useState<string>("")
+  const [clientEmail, setClientEmail] = useState<string>("")
   const router = useRouter()
 
   const filteredClients = initialClients.filter(client => 
@@ -64,8 +68,9 @@ export function ClientsTable({ initialClients }: ClientsTableProps) {
     e.preventDefault()
     setIsPending(true)
     const formData = new FormData(e.currentTarget)
+    const fullName = formData.get("fullName") as string
+    const email = formData.get("email") as string
     
-    // Tenta trigger de feedback háptico (browser support limited but good for progressive enhancement)
     if ("vibrate" in navigator) {
       navigator.vibrate(10)
     }
@@ -74,17 +79,44 @@ export function ClientsTable({ initialClients }: ClientsTableProps) {
     
     if (result.success) {
       toast.success("Cliente adicionada!", {
-        description: "O dossiê de estilo já pode ser iniciado.",
+        description: "O perfil foi criado e a senha temporária foi gerada.",
         icon: <Check className="w-4 h-4 text-emerald-500" />
       })
       if ("vibrate" in navigator) navigator.vibrate([10, 30, 10])
-      setIsOpen(false)
-      router.refresh()
+      
+      if (result.action_link && result.temp_password) {
+        setInviteLink(result.action_link)
+        setTempPassword(result.temp_password)
+        setClientName(fullName)
+        setClientEmail(email)
+        router.refresh()
+      } else {
+        setIsOpen(false)
+        router.refresh()
+      }
     } else {
       toast.error(result.error || "Erro ao adicionar cliente")
       if ("vibrate" in navigator) navigator.vibrate(100)
     }
     setIsPending(false)
+  }
+
+  const handleCopyLink = () => {
+    if (inviteLink && tempPassword) {
+      const message = `Olá, ${clientName}! Seu painel exclusivo de Estilo já está pronto.\n\nAcesse o aplicativo: ${inviteLink}\nE-mail: ${clientEmail}\nSenha Temporária: ${tempPassword}\n\nPor favor, altere sua senha no primeiro acesso.`
+      navigator.clipboard.writeText(message)
+      toast.success("Mensagem copiada para a área de transferência!")
+    }
+  }
+
+  const handleCloseModal = () => {
+    setIsOpen(false)
+    setTimeout(() => {
+      setInviteLink(null)
+      setTempPassword(null)
+      setClientName("")
+      setClientEmail("")
+    }, 300)
   }
 
   return (
@@ -110,7 +142,11 @@ export function ClientsTable({ initialClients }: ClientsTableProps) {
           <DialogTrigger asChild>
             <Button 
               data-testid="add-client-desktop" 
-              onClick={() => setIsOpen(true)}
+              onClick={() => {
+                setIsOpen(true)
+                setInviteLink(null)
+                setTempPassword(null)
+              }}
               className="hidden md:flex bg-primary hover:bg-primary/90 text-primary-foreground gap-3 h-14 px-8 rounded-2xl shadow-xl shadow-primary/20 transition-all hover:scale-[1.02] font-bold uppercase tracking-widest text-xs"
             >
               <UserPlus className="w-5 h-5" /> Nova Cliente
@@ -124,48 +160,91 @@ export function ClientsTable({ initialClients }: ClientsTableProps) {
                 </span>
               </DialogTitle>
             </DialogHeader>
-            <form onSubmit={handleCreateClient} className="space-y-6">
-              <div className="space-y-3">
-                <Label htmlFor="full_name" className="text-[10px] text-muted-foreground uppercase tracking-[0.2em] font-bold ml-1">Nome Completo</Label>
-                <Input 
-                  id="full_name"
-                  name="fullName" 
-                  required 
-                  placeholder="Ex: Maria Carolina" 
-                  className="bg-secondary/30 border-transparent h-14 md:h-12 rounded-xl focus:ring-primary/20 text-base md:text-sm" 
-                />
+            {inviteLink && tempPassword ? (
+              <div className="space-y-6 text-center py-4">
+                <div className="size-16 rounded-full bg-emerald-500/10 flex items-center justify-center mx-auto mb-4">
+                  <Check className="w-8 h-8 text-emerald-500" />
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold mb-2">Cliente Cadastrada!</h3>
+                  <p className="text-sm text-muted-foreground mb-6">
+                    A conta de {clientName} foi criada. Envie os dados abaixo para ela acessar o aplicativo.
+                  </p>
+                </div>
+                
+                <div className="p-4 bg-secondary/50 rounded-xl border border-border/50 text-left">
+                  <p className="text-[10px] text-muted-foreground mb-1 uppercase tracking-widest font-bold">Link de Acesso</p>
+                  <p className="text-sm text-foreground mb-3 truncate">{inviteLink}</p>
+                  
+                  <p className="text-[10px] text-muted-foreground mb-1 uppercase tracking-widest font-bold">E-mail</p>
+                  <p className="text-sm text-foreground mb-3">{clientEmail}</p>
+
+                  <p className="text-[10px] text-muted-foreground mb-1 uppercase tracking-widest font-bold">Senha Temporária</p>
+                  <div className="bg-background border border-border rounded-lg p-2 inline-block">
+                    <p className="text-sm text-foreground font-mono">{tempPassword}</p>
+                  </div>
+                </div>
+
+                <div className="pt-4 flex flex-col gap-3">
+                  <Button 
+                    onClick={handleCopyLink}
+                    className="w-full bg-primary hover:bg-primary/90 text-primary-foreground h-12 rounded-xl font-bold uppercase tracking-widest text-[10px]"
+                  >
+                    Copiar Mensagem P/ WhatsApp
+                  </Button>
+                  <Button 
+                    variant="ghost" 
+                    onClick={handleCloseModal}
+                    className="w-full h-12 rounded-xl text-muted-foreground font-bold uppercase tracking-widest text-[10px]"
+                  >
+                    Fechar
+                  </Button>
+                </div>
               </div>
-              <div className="space-y-3">
-                <Label htmlFor="email" className="text-[10px] text-muted-foreground uppercase tracking-[0.2em] font-bold ml-1">E-mail</Label>
-                <Input 
-                  id="email"
-                  name="email" 
-                  type="email" 
-                  required 
-                  placeholder="maria@exemplo.com" 
-                  className="bg-secondary/30 border-transparent h-14 md:h-12 rounded-xl focus:ring-primary/20 text-base md:text-sm" 
-                />
-              </div>
-              <div className="pt-6 flex flex-col md:flex-row gap-3">
-                <Button 
-                  type="button" 
-                  variant="ghost" 
-                  onClick={() => setIsOpen(false)} 
-                  className="order-2 md:order-1 flex-1 h-14 md:h-12 rounded-xl text-muted-foreground font-bold uppercase tracking-widest text-[10px]"
-                >
-                  Cancelar
-                </Button>
-                <Button 
-                  data-testid="confirm-client-creation"
-                  type="submit" 
-                  disabled={isPending} 
-                  className="order-1 md:order-2 flex-1 bg-primary hover:bg-primary/90 text-primary-foreground h-14 md:h-12 rounded-xl shadow-lg shadow-primary/20 font-bold uppercase tracking-widest text-[10px] gap-2 active:scale-95 transition-transform"
-                >
-                  {isPending ? <Sparkles className="w-4 h-4 animate-spin" /> : <Check className="w-4 h-4" />}
-                  Confirmar Cadastro
-                </Button>
-              </div>
-            </form>
+            ) : (
+              <form onSubmit={handleCreateClient} className="space-y-6">
+                <div className="space-y-3">
+                  <Label htmlFor="full_name" className="text-[10px] text-muted-foreground uppercase tracking-[0.2em] font-bold ml-1">Nome Completo</Label>
+                  <Input 
+                    id="full_name"
+                    name="fullName" 
+                    required 
+                    placeholder="Ex: Maria Carolina" 
+                    className="bg-secondary/30 border-transparent h-14 md:h-12 rounded-xl focus:ring-primary/20 text-base md:text-sm" 
+                  />
+                </div>
+                <div className="space-y-3">
+                  <Label htmlFor="email" className="text-[10px] text-muted-foreground uppercase tracking-[0.2em] font-bold ml-1">E-mail</Label>
+                  <Input 
+                    id="email"
+                    name="email" 
+                    type="email" 
+                    required 
+                    placeholder="maria@exemplo.com" 
+                    className="bg-secondary/30 border-transparent h-14 md:h-12 rounded-xl focus:ring-primary/20 text-base md:text-sm" 
+                  />
+                </div>
+                <div className="pt-6 flex flex-col md:flex-row gap-3">
+                  <Button 
+                    type="button" 
+                    variant="ghost" 
+                    onClick={handleCloseModal} 
+                    className="order-2 md:order-1 flex-1 h-14 md:h-12 rounded-xl text-muted-foreground font-bold uppercase tracking-widest text-[10px]"
+                  >
+                    Cancelar
+                  </Button>
+                  <Button 
+                    data-testid="confirm-client-creation"
+                    type="submit" 
+                    disabled={isPending} 
+                    className="order-1 md:order-2 flex-1 bg-primary hover:bg-primary/90 text-primary-foreground h-14 md:h-12 rounded-xl shadow-lg shadow-primary/20 font-bold uppercase tracking-widest text-[10px] gap-2 active:scale-95 transition-transform"
+                  >
+                    {isPending ? <Sparkles className="w-4 h-4 animate-spin" /> : <Check className="w-4 h-4" />}
+                    Gerar Link de Acesso
+                  </Button>
+                </div>
+              </form>
+            )}
           </DialogContent>
         </Dialog>
       </motion.div>
@@ -181,7 +260,11 @@ export function ClientsTable({ initialClients }: ClientsTableProps) {
           >
             <Button
               data-testid="add-client-mobile"
-              onClick={() => setIsOpen(true)}
+              onClick={() => {
+                setIsOpen(true)
+                setInviteLink(null)
+                setTempPassword(null)
+              }}
               className="size-16 rounded-full bg-primary shadow-2xl shadow-primary/40 flex items-center justify-center p-0 active:scale-90 transition-transform"
             >
               <UserPlus className="size-7 text-primary-foreground" />

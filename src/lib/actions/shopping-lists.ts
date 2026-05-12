@@ -1,6 +1,6 @@
 "use server"
 
-import { createClient } from "@/lib/supabase/server"
+import { createClient, createAdminClient } from "@/lib/supabase/server"
 import { revalidatePath } from "next/cache"
 
 export async function getShoppingLists(clientId?: string) {
@@ -39,7 +39,9 @@ export async function createShoppingList(formData: {
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) throw new Error("Unauthorized")
 
-    const { data, error } = await supabase
+    const adminClient = createAdminClient()
+
+    const { data, error } = await adminClient
       .from('shopping_lists')
       .insert({
         ...formData,

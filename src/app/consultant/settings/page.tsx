@@ -7,7 +7,7 @@ export default async function ConsultantSettingsPage() {
   const { data: { user } } = await supabase.auth.getUser()
 
   if (!user) {
-    redirect("/auth/login")
+    redirect("/auth/consultant")
   }
 
   const { data: profile } = await supabase

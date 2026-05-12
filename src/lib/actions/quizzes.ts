@@ -1,6 +1,6 @@
 'use server'
 
-import { createClient } from '@/lib/supabase/server'
+import { createClient, createAdminClient } from '@/lib/supabase/server'
 import { QuizType, Quiz, QuizWithProfile } from '@/types/database'
 import { revalidatePath } from 'next/cache'
 
@@ -229,5 +229,72 @@ export async function approveColorAnalysis(requestId: string, season: string, no
      if ((e as Error & { digest?: string })?.digest === 'DYNAMIC_SERVER_USAGE' || (e as Error)?.message?.includes('Dynamic server usage')) throw e;
      console.error('Connection error in approveColorAnalysis:', e)
      return { success: false, error: 'Falha na conexão' }
+  }
+}
+
+export interface QuizConfiguration {
+  id: string;
+  consultant_id: string;
+  quiz_type: QuizType;
+  questions: any[];
+  created_at: string;
+  updated_at: string;
+}
+
+export async function getQuizConfigurations(): Promise<QuizConfiguration[]> {
+  try {
+    const supabase = await createClient()
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) return []
+
+    const { data, error } = await supabase
+      .from('quiz_configurations')
+      .select('*')
+      .eq('consultant_id', user.id)
+
+    if (error) {
+      console.error('Error fetching quiz configurations:', error)
+      return []
+    }
+    return data || []
+  } catch (e: unknown) {
+    if ((e as Error & { digest?: string })?.digest === 'DYNAMIC_SERVER_USAGE' || (e as Error)?.message?.includes('Dynamic server usage')) throw e;
+    console.error('Connection error in getQuizConfigurations:', e)
+    return []
+  }
+}
+
+export async function saveQuizConfiguration(quizType: QuizType, questions: any[]): Promise<{ success: boolean; error?: string }> {
+  try {
+    const supabase = await createClient()
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) return { success: false, error: 'Não autenticado' }
+
+    console.log('Upserting quiz config:', { consultant_id: user.id, quiz_type: quizType, questions });
+
+    const adminClient = createAdminClient()
+
+    const { error } = await adminClient
+      .from('quiz_configurations')
+      .upsert({
+        consultant_id: user.id,
+        quiz_type: quizType,
+        questions,
+        updated_at: new Date().toISOString()
+      }, { onConflict: 'consultant_id,quiz_type' })
+
+    if (error) {
+      console.error('Error saving quiz configuration from Supabase:', error)
+      return { success: false, error: error.message }
+    }
+
+    console.log('Quiz configuration saved successfully');
+
+    revalidatePath('/consultant/quizzes')
+    return { success: true }
+  } catch (e: unknown) {
+    if ((e as Error & { digest?: string })?.digest === 'DYNAMIC_SERVER_USAGE' || (e as Error)?.message?.includes('Dynamic server usage')) throw e;
+    console.error('Connection error in saveQuizConfiguration:', e)
+    return { success: false, error: 'Falha na conexão' }
   }
 }

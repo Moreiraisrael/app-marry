@@ -174,13 +174,53 @@ export function VirtualWardrobeClient({ initialItems, clients }: VirtualWardrobe
               </TabsContent>
               
               <TabsContent value="capsules" className="mt-0">
-                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <Card onClick={() => alert('Criação de cápsulas em desenvolvimento!')} className="border-dashed border-2 border-primary/20 bg-background/20 rounded-[2.5rem] p-12 flex flex-col items-center justify-center text-center group cursor-pointer hover:bg-primary/[0.02] transition-all min-h-[300px]">
-                       <div className="w-16 h-16 rounded-[1.5rem] bg-primary/5 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                          <FolderOpen className="w-8 h-8 text-primary/40" />
+                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {/* Add New Capsule Card */}
+                    <Card onClick={() => alert('Criação de cápsulas em desenvolvimento!')} className="border-dashed border-2 border-stone-200 bg-stone-50/50 rounded-[2rem] p-8 flex flex-col items-center justify-center text-center group cursor-pointer hover:border-primary/50 hover:bg-primary/5 transition-all min-h-[280px] shadow-sm hover:shadow-md">
+                       <div className="w-16 h-16 rounded-full bg-white shadow-sm flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500 border border-stone-100">
+                          <Plus className="w-6 h-6 text-stone-400 group-hover:text-primary transition-colors" />
                        </div>
-                       <h4 className="font-bold text-foreground text-xl mb-2">Nova Cápsula</h4>
-                       <p className="text-sm text-muted-foreground font-light max-w-[200px]">Agrupe peças para criar coleções temáticas e estratégias.</p>
+                       <h4 className="font-serif font-bold text-stone-900 text-xl mb-2">Nova Cápsula</h4>
+                       <p className="text-sm text-stone-500 font-light max-w-[200px] leading-relaxed">Crie coleções temáticas e estratégias para facilitar o dia a dia da sua cliente.</p>
+                    </Card>
+
+                    {/* Mock Capsule 1 */}
+                    <Card className="border-none bg-white rounded-[2rem] p-6 flex flex-col group cursor-pointer hover:shadow-2xl shadow-sm transition-all duration-500 min-h-[280px] relative overflow-hidden">
+                       <div className="absolute top-0 right-0 w-32 h-32 bg-rose-50 rounded-bl-[100px] -z-0 opacity-50 group-hover:scale-110 transition-transform duration-700" />
+                       <div className="flex justify-between items-start mb-auto relative z-10">
+                          <Badge className="bg-rose-100 text-rose-800 hover:bg-rose-200 border-none px-3 py-1 text-xs font-bold uppercase tracking-widest rounded-full">Viagem</Badge>
+                          <span className="text-xs font-bold text-stone-400">12 Peças</span>
+                       </div>
+                       <div className="relative z-10 mt-6">
+                          <h4 className="font-serif font-bold text-stone-900 text-2xl mb-2 group-hover:text-primary transition-colors">Paris Fashion Week</h4>
+                          <p className="text-sm text-stone-500 font-light line-clamp-2">Uma seleção de looks elegantes com sobreposições para o outono europeu.</p>
+                       </div>
+                       {/* Mock Image Thumbnails */}
+                       <div className="flex -space-x-4 mt-6 relative z-10">
+                         <div className="w-12 h-12 rounded-full border-2 border-white bg-stone-200 shadow-sm overflow-hidden"><img src="https://images.unsplash.com/photo-1591047139829-d91aecb6caea?q=80&w=200&auto=format&fit=crop" alt="Peça 1" className="w-full h-full object-cover" /></div>
+                         <div className="w-12 h-12 rounded-full border-2 border-white bg-stone-200 shadow-sm overflow-hidden"><img src="https://images.unsplash.com/photo-1584273143981-41c073dfe8f8?q=80&w=200&auto=format&fit=crop" alt="Peça 2" className="w-full h-full object-cover" /></div>
+                         <div className="w-12 h-12 rounded-full border-2 border-white bg-stone-200 shadow-sm overflow-hidden"><img src="https://images.unsplash.com/photo-1591369822096-ffd140ec948f?q=80&w=200&auto=format&fit=crop" alt="Peça 3" className="w-full h-full object-cover" /></div>
+                         <div className="w-12 h-12 rounded-full border-2 border-white bg-stone-100 shadow-sm flex items-center justify-center text-xs font-bold text-stone-600">+9</div>
+                       </div>
+                    </Card>
+
+                    {/* Mock Capsule 2 */}
+                    <Card className="border-none bg-white rounded-[2rem] p-6 flex flex-col group cursor-pointer hover:shadow-2xl shadow-sm transition-all duration-500 min-h-[280px] relative overflow-hidden">
+                       <div className="absolute top-0 right-0 w-32 h-32 bg-blue-50 rounded-bl-[100px] -z-0 opacity-50 group-hover:scale-110 transition-transform duration-700" />
+                       <div className="flex justify-between items-start mb-auto relative z-10">
+                          <Badge className="bg-blue-100 text-blue-800 hover:bg-blue-200 border-none px-3 py-1 text-xs font-bold uppercase tracking-widest rounded-full">Trabalho</Badge>
+                          <span className="text-xs font-bold text-stone-400">8 Peças</span>
+                       </div>
+                       <div className="relative z-10 mt-6">
+                          <h4 className="font-serif font-bold text-stone-900 text-2xl mb-2 group-hover:text-primary transition-colors">Executive Chic</h4>
+                          <p className="text-sm text-stone-500 font-light line-clamp-2">Alfaiataria moderna e peças estruturadas para reuniões importantes.</p>
+                       </div>
+                       {/* Mock Image Thumbnails */}
+                       <div className="flex -space-x-4 mt-6 relative z-10">
+                         <div className="w-12 h-12 rounded-full border-2 border-white bg-stone-200 shadow-sm overflow-hidden"><img src="https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?q=80&w=200&auto=format&fit=crop" alt="Peça 1" className="w-full h-full object-cover" /></div>
+                         <div className="w-12 h-12 rounded-full border-2 border-white bg-stone-200 shadow-sm overflow-hidden"><img src="https://images.unsplash.com/photo-1598554747436-c9293d6a588f?q=80&w=200&auto=format&fit=crop" alt="Peça 2" className="w-full h-full object-cover" /></div>
+                         <div className="w-12 h-12 rounded-full border-2 border-white bg-stone-100 shadow-sm flex items-center justify-center text-xs font-bold text-stone-600">+6</div>
+                       </div>
                     </Card>
                  </div>
               </TabsContent>

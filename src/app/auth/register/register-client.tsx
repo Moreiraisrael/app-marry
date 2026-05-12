@@ -94,22 +94,11 @@ export default function RegisterPage() {
               </div>
 
               <div className="space-y-4">
-                <Label className="text-xs text-neutral-500 uppercase tracking-widest font-bold ml-1 text-center block w-full">Eu sou uma...</Label>
-                <div className="grid grid-cols-2 gap-4">
-                  <label className="relative cursor-pointer group">
-                    <input type="radio" name="userType" value="client" defaultChecked className="peer sr-only" />
-                    <div className="p-4 rounded-2xl bg-neutral-900/40 border border-white/5 text-center transition-all peer-checked:border-amber-500/50 peer-checked:bg-amber-500/5 hover:bg-neutral-800/60">
-                      <Sparkles className="w-6 h-6 text-neutral-500 mb-2 mx-auto peer-checked:text-amber-500 group-hover:scale-110 transition-transform" />
-                      <p className="text-xs font-bold text-neutral-400 peer-checked:text-white uppercase tracking-tighter">Cliente</p>
-                    </div>
-                  </label>
-                  <label className="relative cursor-pointer group">
-                    <input type="radio" name="userType" value="consultant" className="peer sr-only" />
-                    <div className="p-4 rounded-2xl bg-neutral-900/40 border border-white/5 text-center transition-all peer-checked:border-amber-500/50 peer-checked:bg-amber-500/5 hover:bg-neutral-800/60">
-                      <GraduationCap className="w-6 h-6 text-neutral-500 mb-2 mx-auto peer-checked:text-amber-500 group-hover:scale-110 transition-transform" />
-                      <p className="text-xs font-bold text-neutral-400 peer-checked:text-white uppercase tracking-tighter">Consultora</p>
-                    </div>
-                  </label>
+                <input type="hidden" name="userType" value="consultant" />
+                <div className="p-4 rounded-2xl bg-amber-500/5 border border-amber-500/50 text-center">
+                  <GraduationCap className="w-6 h-6 text-amber-500 mb-2 mx-auto" />
+                  <p className="text-xs font-bold text-white uppercase tracking-tighter">Conta Consultora de Imagem</p>
+                  <p className="text-[10px] text-neutral-400 mt-2">Você poderá cadastrar suas clientes pelo painel após criar sua conta.</p>
                 </div>
               </div>
 
@@ -132,7 +121,7 @@ export default function RegisterPage() {
             <div className="pt-6 text-center border-t border-white/5">
               <p className="text-neutral-500 text-sm">
                 Já possui uma conta?{" "}
-                <Link href="/auth/login" className="text-white hover:text-amber-500 font-bold transition-colors">
+                <Link href="/auth/consultant" className="text-white hover:text-amber-500 font-bold transition-colors">
                   Acesse agora
                 </Link>
               </p>

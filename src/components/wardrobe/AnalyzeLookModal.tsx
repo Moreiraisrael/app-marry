@@ -91,14 +91,14 @@ export function AnalyzeLookModal({ clientId = "guest", trigger }: AnalyzeLookMod
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
         {trigger ? trigger : (
-          <Button className="w-full bg-white text-primary hover:bg-stone-50 font-bold rounded-xl h-12 relative z-10 transition-all">
+          <Button className="w-full bg-white text-primary hover:bg-stone-50 font-bold rounded-full h-12 relative z-10 transition-all">
             Analisar Look com IA
           </Button>
         )}
       </DialogTrigger>
 
       <DialogContent showCloseButton={false} className="p-0 border-none bg-transparent shadow-none max-w-2xl max-h-[90vh] overflow-y-auto overflow-x-hidden">
-        <Card className="border-stone-200 shadow-2xl bg-white rounded-[2.5rem] overflow-hidden">
+        <Card className="border-stone-200 shadow-2xl bg-[#fcfaf8] rounded-[2.5rem] overflow-hidden">
           <CardHeader className="p-8 pb-4 flex flex-row items-center justify-between border-b border-stone-100 bg-stone-50/50">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
@@ -150,7 +150,7 @@ export function AnalyzeLookModal({ clientId = "guest", trigger }: AnalyzeLookMod
                       onChange={handlePhotoSelect} 
                       className="absolute inset-0 w-full h-full opacity-0 cursor-pointer" 
                     />
-                    <Button variant="outline" className="h-12 px-8 rounded-xl border-stone-200 text-stone-600 font-medium hover:bg-stone-50 hover:text-stone-900 pointer-events-none">
+                    <Button variant="outline" className="h-12 px-8 rounded-full border-stone-200 text-stone-600 font-medium hover:bg-stone-50 hover:text-stone-900 pointer-events-none">
                       <UploadCloud className="w-5 h-5 mr-2" /> Trocar Foto
                     </Button>
                   </div>
@@ -260,7 +260,7 @@ export function AnalyzeLookModal({ clientId = "guest", trigger }: AnalyzeLookMod
               <Button 
                 onClick={handleAnalyze} 
                 disabled={isAnalyzing || !photoDataUrl}
-                className="w-full h-14 rounded-2xl bg-stone-900 hover:bg-stone-800 text-white font-bold shadow-xl shadow-stone-200 transition-all disabled:opacity-50 text-lg group"
+                className="w-full h-14 rounded-full bg-stone-900 hover:bg-stone-800 text-white font-bold shadow-xl shadow-stone-200 transition-all disabled:opacity-50 text-lg group"
               >
                 {isAnalyzing ? (
                   <>Processando na IA...</>
@@ -275,10 +275,10 @@ export function AnalyzeLookModal({ clientId = "guest", trigger }: AnalyzeLookMod
 
           {analysisResult && (
              <CardFooter className="p-8 pt-0 flex gap-4 bg-stone-50/50 border-t border-stone-100 mt-4 rounded-b-[2.5rem]">
-               <Button variant="outline" onClick={() => setAnalysisResult(null)} className="h-12 flex-1 rounded-xl border-stone-200">
+               <Button variant="outline" onClick={() => setAnalysisResult(null)} className="h-12 flex-1 rounded-full border-stone-200 font-medium">
                  Analisar Outro
                </Button>
-               <Button onClick={() => setIsOpen(false)} className="h-12 flex-1 rounded-xl bg-primary hover:bg-primary/90">
+               <Button onClick={() => setIsOpen(false)} className="h-12 flex-1 rounded-full bg-primary hover:bg-primary/90 font-bold">
                  Concluir
                </Button>
              </CardFooter>

@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card"
 import { Profile } from "@/types/database"
 import { createShoppingList } from "@/lib/actions/shopping-lists"
+import { toast } from "sonner"
 
 interface CreateShoppingListModalProps {
   clients: Profile[]
@@ -66,7 +67,13 @@ export function CreateShoppingListModal({ clients }: CreateShoppingListModalProp
       items: itemsPayload,
     })
 
-    if (result) setIsDone(true)
+    if (result) {
+      setIsDone(true)
+      toast.success("Lista criada com sucesso!")
+    } else {
+      toast.error("Erro ao criar lista. Verifique as configurações do banco ou tente novamente.")
+    }
+    
     setIsSubmitting(false)
   }
 

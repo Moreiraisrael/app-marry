@@ -10,7 +10,7 @@ export default async function ClientProfilePage() {
   } = await supabase.auth.getUser()
 
   if (!user) {
-    redirect('/auth/login')
+    redirect('/auth/client')
   }
 
   const { data: profile } = await supabase

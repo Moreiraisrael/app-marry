@@ -1,6 +1,6 @@
 'use server'
 
-import { createClient } from '@/lib/supabase/server'
+import { createClient, createAdminClient } from '@/lib/supabase/server'
 import { PartnerStore } from '@/types/database'
 import { revalidatePath } from 'next/cache'
 
@@ -36,7 +36,9 @@ export async function savePartnerStore(store: Partial<PartnerStore>): Promise<{ 
       return { success: false, error: 'Usuário não autenticado' }
     }
 
-    const { data, error } = await supabase
+    const adminClient = createAdminClient()
+
+    const { data, error } = await adminClient
       .from('partner_stores')
       .insert({
         name: store.name,
@@ -263,7 +265,9 @@ export async function batchImportPartnerStores(): Promise<{ success: boolean; er
   }
 ]
 
-    const { error } = await supabase
+    const adminClient = createAdminClient()
+
+    const { error } = await adminClient
       .from('partner_stores')
       .insert(stores)
 

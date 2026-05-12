@@ -58,6 +58,7 @@ export default function PartnerStoresPage() {
   // Form state
   const [storeName, setStoreName] = useState("")
   const [affiliateLink, setAffiliateLink] = useState("")
+  const [logoUrl, setLogoUrl] = useState("")
   const [category, setCategory] = useState("")
   const [isImporting, startImportTransition] = useTransition()
 
@@ -85,6 +86,7 @@ export default function PartnerStoresPage() {
       const result = await savePartnerStore({
         name: storeName,
         store_link: affiliateLink,
+        logo_url: logoUrl || null,
         category,
         is_active: true
       })
@@ -96,6 +98,7 @@ export default function PartnerStoresPage() {
         // Reset form and close dialog
         setStoreName("")
         setAffiliateLink("")
+        setLogoUrl("")
         setCategory("")
         setIsDialogOpen(false)
       } else {
@@ -175,6 +178,15 @@ export default function PartnerStoresPage() {
                 />
               </div>
               <div className="space-y-2">
+                <Label className="text-muted-foreground font-bold text-xs uppercase tracking-widest px-1">Logo da Loja (URL)</Label>
+                <Input 
+                  className="bg-primary/[0.02] border-primary/10 h-14 rounded-2xl focus:ring-primary/20" 
+                  placeholder="https://.../logo.png (Opcional)" 
+                  value={logoUrl}
+                  onChange={(e) => setLogoUrl(e.target.value)}
+                />
+              </div>
+              <div className="space-y-2">
                 <Label className="text-muted-foreground font-bold text-xs uppercase tracking-widest px-1">Categoria</Label>
                 <Select value={category} onValueChange={setCategory}>
                   <SelectTrigger className="bg-primary/[0.02] border-primary/10 h-14 rounded-2xl focus:ring-primary/20">
@@ -246,7 +258,18 @@ export default function PartnerStoresPage() {
                   <Card className="border-none bg-card/60 backdrop-blur-md shadow-sm hover:shadow-md transition-all rounded-[2.5rem] group overflow-hidden h-full flex flex-col">
                     <div className="h-40 bg-primary/5 flex shrink-0 items-center justify-center relative overflow-hidden group-hover:bg-primary/10 transition-colors duration-500">
                        <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-from)_0%,_transparent_100%)] from-primary"></div>
-                       <ShoppingBag className="w-16 h-16 text-primary/10 group-hover:scale-110 group-hover:text-primary/20 transition-all duration-700" />
+                       {store.logo_url ? (
+                         <div className="relative w-full h-full p-6 flex items-center justify-center">
+                           {/* eslint-disable-next-line @next/next/no-img-element */}
+                           <img 
+                             src={store.logo_url} 
+                             alt={`Logo ${store.name}`} 
+                             className="max-w-full max-h-full object-contain filter group-hover:scale-105 transition-transform duration-700"
+                           />
+                         </div>
+                       ) : (
+                         <ShoppingBag className="w-16 h-16 text-primary/10 group-hover:scale-110 group-hover:text-primary/20 transition-all duration-700" />
+                       )}
                     </div>
                     <div className="relative -mt-12 mx-8 bg-background rounded-[2rem] border border-primary/5 p-6 shadow-xl shadow-black/[0.02]">
                       <div className="flex justify-between items-center gap-2">

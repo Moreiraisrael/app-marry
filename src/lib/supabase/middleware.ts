@@ -31,26 +31,58 @@ export async function updateSession(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser()
 
-  const isAuthRoute = request.nextUrl.pathname.startsWith('/auth')
+  const isAuthRoute = request.nextUrl.pathname.startsWith('/auth') || request.nextUrl.pathname === '/'
   const isProtectedClient = request.nextUrl.pathname.startsWith('/client')
   const isProtectedConsultant = request.nextUrl.pathname.startsWith('/consultant')
   const isProtectedAdmin = request.nextUrl.pathname.startsWith('/admin')
 
   // Se o usuário não está autenticado e tenta acessar uma rota protegida
-  if (!user && (isProtectedClient || isProtectedConsultant || isProtectedAdmin)) {
-    const url = request.nextUrl.clone()
-    url.pathname = '/auth/login'
-    return NextResponse.redirect(url)
+  if (!user) {
+    if (isProtectedClient) {
+      const url = request.nextUrl.clone()
+      url.pathname = '/auth/client'
+      return NextResponse.redirect(url)
+    }
+    if (isProtectedConsultant || isProtectedAdmin) {
+      const url = request.nextUrl.clone()
+      url.pathname = '/auth/consultant'
+      return NextResponse.redirect(url)
+    }
   }
 
-  // Se o usuário já está autenticado e tenta acessar /auth, envia pro dashboard
-  if (user && isAuthRoute) {
-    // Nós idealmente redirecionaríamos com base no tipo de perfil (user_type)
-    // Como a resposta aqui pode ser rápida e ler o profile custa 1 call adicional:
-    // podemos apenas mandar pra um router / hub ou inferir pelo pathname se existe
-    const url = request.nextUrl.clone()
-    url.pathname = '/consultant/dashboard' // default provisório
-    return NextResponse.redirect(url)
+  // Lógica de Redirecionamento Baseada em Role (user_type)
+  if (user) {
+    let userType = user.user_metadata?.user_type
+
+    // Fallback: se não estiver nos metadados, busca no banco
+    if (!userType) {
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('user_type')
+        .eq('id', user.id)
+        .single()
+      userType = profile?.user_type
+    }
+
+    // Bloqueia acesso cruzado
+    if (isProtectedConsultant && userType === 'client') {
+      const url = request.nextUrl.clone()
+      url.pathname = '/client/dashboard'
+      return NextResponse.redirect(url)
+    }
+
+    if (isProtectedClient && userType !== 'client') {
+      const url = request.nextUrl.clone()
+      url.pathname = '/consultant/dashboard'
+      return NextResponse.redirect(url)
+    }
+
+    // Se tenta acessar rotas de auth (ex: /auth/login), redireciona pro dashboard
+    if (isAuthRoute) {
+      const url = request.nextUrl.clone()
+      url.pathname = userType === 'client' ? '/client/dashboard' : '/consultant/dashboard'
+      return NextResponse.redirect(url)
+    }
   }
 
   return supabaseResponse

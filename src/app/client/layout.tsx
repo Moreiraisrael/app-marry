@@ -18,7 +18,7 @@ export default async function ClientLayout({ children }: { children: React.React
         <ClientSidebar />
         <div className="flex flex-col flex-1 w-full relative">
           <Header title="Plataforma E.S.T.I.L.O." profile={profile} />
-          <main className="flex-1 p-8 overflow-auto">
+          <main className="flex-1 p-4 md:p-8 overflow-auto">
             {children}
           </main>
         </div>

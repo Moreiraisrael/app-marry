@@ -24,7 +24,7 @@ export default async function ConsultantLayout({ children }: { children: React.R
           }} />
         </div>
         
-        <div className="z-10 relative border-r border-border/40">
+        <div className="z-10 relative hidden md:block">
           <ConsultantSidebar />
         </div>
         

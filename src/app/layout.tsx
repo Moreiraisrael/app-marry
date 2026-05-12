@@ -19,9 +19,22 @@ const playfair = Playfair_Display({
   subsets: ["latin"],
 });
 
+export const viewport = {
+  themeColor: "#d97706",
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+};
+
 export const metadata: Metadata = {
   title: "Estilo App - Elegância Estratégica",
   description: "Plataforma premium de consultoria de imagem e estilo.",
+  manifest: "/manifest.webmanifest",
+  appleWebApp: {
+    capable: true,
+    title: "Estilo App",
+    statusBarStyle: "black-translucent",
+  },
 };
 
 export default function RootLayout({

@@ -7,6 +7,7 @@ import {
 import { Button } from "@/components/ui/button"
 import { getQuizzes } from "@/lib/actions/quizzes"
 import { QuizListItem } from "@/components/quizzes/QuizListItem"
+import { ConfigureTestsModal } from "@/components/quizzes/ConfigureTestsModal"
 import Link from "next/link"
 
 export const dynamic = 'force-dynamic'
@@ -31,9 +32,7 @@ export default async function ConsultantQuizzesPage() {
           </p>
         </div>
         <div className="flex gap-4">
-           <Button variant="outline" className="h-12 border-primary/20 bg-background/50 text-foreground hover:bg-primary/5 rounded-2xl px-6 gap-2 transition-all">
-            <ClipboardCheck className="w-4 h-4" /> Configurar Testes
-          </Button>
+           <ConfigureTestsModal />
         </div>
       </div>
 

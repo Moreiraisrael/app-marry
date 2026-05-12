@@ -31,21 +31,34 @@ export async function signIn(formData: FormData): Promise<{ error?: string } | n
     return { error: 'Erro: ' + error.message }
   }
 
-  // Sincronizar perfil após login bem-sucedido (Resiliente)
+  let redirectUrl = '/consultant/dashboard'
+
+  // Sincronizar perfil e checar user_type após login bem-sucedido
   try {
     const { data: { user } } = await supabase.auth.getUser()
     if (user) {
-      const { error: upsertError } = await supabase
+      // Obter o perfil para verificar o tipo de usuário
+      const { data: profile } = await supabase
         .from('profiles')
-        .upsert({
-          id: user.id,
-          full_name: user.user_metadata.full_name || user.email?.split('@')[0],
-          email: user.email,
+        .select('user_type')
+        .eq('id', user.id)
+        .single()
+
+      if (profile?.user_type === 'client') {
+        redirectUrl = '/client/dashboard'
+      }
+
+      // Sincronizar dados básicos
+      const { error: updateError } = await supabase
+        .from('profiles')
+        .update({
+          full_name: user.user_metadata?.full_name || user.email?.split('@')[0],
           updated_at: new Date().toISOString()
         })
+        .eq('id', user.id)
       
-      if (upsertError) {
-        console.error('Profile sync warning:', upsertError.message)
+      if (updateError) {
+        console.error('Profile sync warning:', updateError.message)
       }
     }
   } catch (e) {
@@ -53,7 +66,7 @@ export async function signIn(formData: FormData): Promise<{ error?: string } | n
   }
 
   revalidatePath('/', 'layout')
-  redirect('/consultant/dashboard') // Default redirect, can be refined based on user_type
+  redirect(redirectUrl)
 }
 
 export async function signUp(formData: FormData): Promise<{ error?: string; success?: string }> {
@@ -115,5 +128,5 @@ export async function signOut(): Promise<void> {
   const supabase = await createClient()
   await supabase.auth.signOut()
   revalidatePath('/', 'layout')
-  redirect('/auth/login')
+  redirect('/')
 }

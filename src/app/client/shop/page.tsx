@@ -82,28 +82,40 @@ export default async function ClientShopPage() {
         </div>
       </section>
 
-      <section className="space-y-8">
-        <div className="flex items-center justify-between border-b border-stone-100 pb-6">
-           <h2 className="text-3xl font-bold text-foreground flex items-center gap-3">
-             <ShoppingBag className="w-6 h-6 text-primary" /> Sugestões Recentes
-           </h2>
-           <span className="text-[10px] font-bold text-primary/60 uppercase tracking-[0.2em]">{allProducts.length} ITENS</span>
-        </div>
-        
-        {allProducts.length === 0 ? (
-          <div className="py-20 text-center space-y-6 bg-stone-50/50 rounded-[3rem] border border-dashed border-stone-200">
-             <div className="w-20 h-20 rounded-[1.5rem] bg-white mx-auto flex items-center justify-center shadow-sm">
-                <ShoppingBag className="w-8 h-8 text-stone-300" />
+      <section className="space-y-16">
+        {shoppingLists.length === 0 || allProducts.length === 0 ? (
+          <div className="py-32 text-center space-y-8 bg-white/50 backdrop-blur-sm rounded-[3rem] border border-dashed border-stone-200">
+             <div className="w-24 h-24 rounded-[2rem] bg-white mx-auto flex items-center justify-center shadow-sm border border-stone-100">
+                <ShoppingBag className="w-10 h-10 text-stone-300" />
              </div>
-             <div className="space-y-2">
-                <h3 className="font-bold text-xl text-stone-900">Sua vitrine está sendo montada</h3>
-                <p className="text-stone-500 max-w-xs mx-auto text-sm">Em breve sua consultora enviará as melhores recomendações de compra.</p>
+             <div className="space-y-3">
+                <h3 className="font-serif text-3xl text-stone-900 tracking-tight">Sua vitrine está vazia</h3>
+                <p className="text-stone-500 max-w-sm mx-auto text-lg font-light leading-relaxed">Sua consultora em breve disponibilizará seleções exclusivas para o seu estilo.</p>
              </div>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
-             {allProducts.map((product, idx) => (
-               <ProductCard key={idx} {...product} />
+          <div className="space-y-20">
+             {(shoppingLists as unknown as ShoppingList[]).filter(list => list.items && list.items.length > 0).map((list) => (
+               <div key={list.id} className="space-y-8 relative">
+                 <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-stone-100 pb-6">
+                   <div className="space-y-2">
+                     <span className="text-[10px] font-bold text-primary uppercase tracking-[0.2em]">Curadoria Exclusiva</span>
+                     <h2 className="text-3xl font-serif text-stone-900 tracking-tight">{list.title || "Seleção Especial"}</h2>
+                   </div>
+                   <div className="text-left md:text-right">
+                     <span className="text-[10px] font-bold text-stone-400 uppercase tracking-[0.2em] block mb-1">Total Estimado</span>
+                     <span className="text-xl font-medium text-stone-900">
+                       R$ {(list.total_amount || (list.items as unknown as Product[]).reduce((acc, curr) => acc + curr.price, 0)).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+                     </span>
+                   </div>
+                 </div>
+                 
+                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                    {(list.items as unknown as Product[]).map((product, idx) => (
+                      <ProductCard key={product.id || idx} {...product} />
+                    ))}
+                 </div>
+               </div>
              ))}
           </div>
         )}
