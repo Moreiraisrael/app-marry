@@ -17,6 +17,7 @@ export default function ColorimetryPage() {
   const [currentSeason, setCurrentSeason] = useState(colorimetrySeasons[0]);
   const [uploadedImage, setUploadedImage] = useState<string | null>(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const [skinAnalysis, setSkinAnalysis] = useState<{ hex: string, isWarm: boolean, isLight: boolean } | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Extrair as propriedades da estação atual
@@ -117,9 +118,12 @@ export default function ColorimetryPage() {
       
       const selectedSeason = colorimetrySeasons.find(s => s.id === seasonId) || colorimetrySeasons[0];
       
+      const hexColor = `#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}`;
+      
       // Simula tempo adicional de processamento para UX
       setTimeout(() => {
         setCurrentSeason(selectedSeason);
+        setSkinAnalysis({ hex: hexColor, isWarm, isLight });
         setIsAnalyzing(false);
       }, 3500);
     };
@@ -295,6 +299,34 @@ export default function ColorimetryPage() {
               <p className="text-[10px] lg:text-xs font-bold text-[#8A7969] tracking-[0.15em] uppercase transition-all">
                 {isAnalyzing ? "Mapeando contrastes" : currentSeason.tags}
               </p>
+              
+              {skinAnalysis && !isAnalyzing && (
+                <div className="mt-6 pt-6 border-t border-[#8A7969]/10 animate-in fade-in slide-in-from-bottom-2 duration-700">
+                  <div className="flex flex-col items-center gap-3">
+                    <span className="text-[#8A7969] text-[10px] font-bold tracking-widest uppercase">
+                      Tonalidade Detectada
+                    </span>
+                    <div className="flex flex-col sm:flex-row items-center gap-4 bg-white/50 px-6 py-4 rounded-2xl">
+                      <div 
+                        className="w-12 h-12 rounded-full border-4 border-white shadow-md transition-all hover:scale-110"
+                        style={{ backgroundColor: skinAnalysis.hex }}
+                        title={`Cor predominante: ${skinAnalysis.hex}`}
+                      />
+                      <div className="text-center sm:text-left">
+                        <p className="text-sm font-bold text-[#4A3B32]">
+                          {skinAnalysis.isWarm ? 'Subtom Quente' : 'Subtom Frio'}
+                        </p>
+                        <p className="text-xs text-neutral-500 font-medium">
+                          {skinAnalysis.isLight ? 'Pele Clara/Luminosa' : 'Pele Profunda/Intensa'}
+                        </p>
+                        <p className="text-[10px] text-neutral-400 mt-1 uppercase tracking-wider">
+                          HEX: {skinAnalysis.hex.toUpperCase()}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
             </CardContent>
           </Card>
 
