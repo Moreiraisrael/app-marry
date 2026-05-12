@@ -301,27 +301,35 @@ export default function ColorimetryPage() {
               </p>
               
               {skinAnalysis && !isAnalyzing && (
-                <div className="mt-6 pt-6 border-t border-[#8A7969]/10 animate-in fade-in slide-in-from-bottom-2 duration-700">
-                  <div className="flex flex-col items-center gap-3">
-                    <span className="text-[#8A7969] text-[10px] font-bold tracking-widest uppercase">
-                      Tonalidade Detectada
+                <div className="mt-6 pt-6 border-t border-[#8A7969]/10 animate-in fade-in slide-in-from-bottom-2 duration-700 w-full text-left">
+                  <div className="flex flex-col items-center gap-3 w-full">
+                    <span className="text-[#8A7969] text-[10px] font-bold tracking-widest uppercase text-center">
+                      Análise de Pele e Tonalidade
                     </span>
-                    <div className="flex flex-col sm:flex-row items-center gap-4 bg-white/50 px-6 py-4 rounded-2xl">
-                      <div 
-                        className="w-12 h-12 rounded-full border-4 border-white shadow-md transition-all hover:scale-110"
-                        style={{ backgroundColor: skinAnalysis.hex }}
-                        title={`Cor predominante: ${skinAnalysis.hex}`}
-                      />
-                      <div className="text-center sm:text-left">
-                        <p className="text-sm font-bold text-[#4A3B32]">
-                          {skinAnalysis.isWarm ? 'Subtom Quente' : 'Subtom Frio'}
-                        </p>
-                        <p className="text-xs text-neutral-500 font-medium">
-                          {skinAnalysis.isLight ? 'Pele Clara/Luminosa' : 'Pele Profunda/Intensa'}
-                        </p>
-                        <p className="text-[10px] text-neutral-400 mt-1 uppercase tracking-wider">
-                          HEX: {skinAnalysis.hex.toUpperCase()}
-                        </p>
+                    <div className="flex flex-col w-full gap-4 bg-white/60 p-4 rounded-2xl border border-rose-50 shadow-sm">
+                      <div className="flex items-center gap-4">
+                        <div 
+                          className="w-14 h-14 rounded-full border-4 border-white shadow-md transition-all hover:scale-105 shrink-0"
+                          style={{ backgroundColor: skinAnalysis.hex }}
+                          title={`Cor predominante: ${skinAnalysis.hex}`}
+                        />
+                        <div className="text-left flex-1">
+                          <h4 className="text-sm font-bold text-[#4A3B32] mb-1">
+                            Tom: {skinAnalysis.isLight ? 'Claro / Luminoso' : 'Profundo / Intenso'}
+                          </h4>
+                          <p className="text-xs text-neutral-600 font-medium mb-1">
+                            Subtom: <span className="text-rose-600 font-bold">{skinAnalysis.isWarm ? 'Quente (Dourado)' : 'Frio (Rosado/Oliva)'}</span>
+                          </p>
+                          <p className="text-[10px] text-neutral-400 uppercase tracking-wider flex items-center gap-1">
+                            <Palette className="w-3 h-3" /> HEX: {skinAnalysis.hex.toUpperCase()}
+                          </p>
+                        </div>
+                      </div>
+                      
+                      <div className="text-xs text-neutral-500 italic bg-white/50 p-3 rounded-xl border border-rose-50/50 leading-relaxed text-center">
+                        {skinAnalysis.isWarm 
+                          ? "A tonalidade da sua pele reflete calor. Tons terrosos, dourados e cores banhadas de sol vão harmonizar com você e trazer uma aparência saudável e radiante." 
+                          : "A tonalidade da sua pele reflete frescor. Cores puras, prateadas e pigmentos mais azulados vão valorizar sua luminosidade natural e destacar seus traços."}
                       </div>
                     </div>
                   </div>
